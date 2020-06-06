@@ -4,7 +4,7 @@ local Controller = Component:extend()
 Controller.inputControlled = true
 
 function Controller:initialize(actor)
-	actor.inputControlled = self.inputControlled
+  actor.inputControlled = self.inputControlled
 end
 
 return Controller

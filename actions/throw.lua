@@ -10,10 +10,10 @@ Throw.name = "throw"
 Throw.targets = {targets.Item, ThrowTarget}
 
 function Throw:perform(level)
-	local thrown = self.targetActors[1]
-	local target = self.targetActors[2]
+  local thrown = self.targetActors[1]
+  local target = self.targetActors[2]
 
-	level:moveActor(thrown, target.position)
+  level:moveActor(thrown, target.position)
 end
 
 return Throw

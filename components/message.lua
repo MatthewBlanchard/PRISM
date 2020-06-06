@@ -3,11 +3,11 @@ local Component = require "component"
 local Message = Component:extend()
 
 function Message:__new()
-	self.messages = {}
+  self.messages = {}
 end
 
 function Message:initialize(actor)
-	actor.messages = self.messages
+  actor.messages = self.messages
 end
 
 return Message

@@ -12,59 +12,59 @@ local info = {}
 targets = require "target"
 
 for k, item in pairs(love.filesystem.getDirectoryItems("actions")) do
-    fileName = "actions/" .. item
-    love.filesystem.getInfo(fileName, info)
-    if info.type == "file" then
-        fileName = string.gsub(fileName, ".lua", "")
-        local name = string.gsub(item:sub(1,1):upper()..item:sub(2), ".lua", "")
+  fileName = "actions/" .. item
+  love.filesystem.getInfo(fileName, info)
+  if info.type == "file" then
+    fileName = string.gsub(fileName, ".lua", "")
+    local name = string.gsub(item:sub(1, 1):upper()..item:sub(2), ".lua", "")
 
-        actions[name] = require(fileName)
-    end
+    actions[name] = require(fileName)
+  end
 end
 
 for k, item in pairs(love.filesystem.getDirectoryItems("actions/reactions")) do
-    fileName = "actions/reactions/" .. item
-    love.filesystem.getInfo(fileName, info)
-    if info.type == "file" then
-        fileName = string.gsub(fileName, ".lua", "")
-        local name = string.gsub(item:sub(1,1):upper()..item:sub(2), ".lua", "")
+  fileName = "actions/reactions/" .. item
+  love.filesystem.getInfo(fileName, info)
+  if info.type == "file" then
+    fileName = string.gsub(fileName, ".lua", "")
+    local name = string.gsub(item:sub(1, 1):upper()..item:sub(2), ".lua", "")
 
-        reactions[name] = require(fileName)
-    end
+    reactions[name] = require(fileName)
+  end
 end
 
 for k, item in pairs(love.filesystem.getDirectoryItems("components")) do
-    fileName = "components/" .. item
-    love.filesystem.getInfo(fileName, info)
-    if info.type == "file" then
-        fileName = string.gsub(fileName, ".lua", "")
-        local name = string.gsub(item:sub(1,1):upper()..item:sub(2), ".lua", "")
+  fileName = "components/" .. item
+  love.filesystem.getInfo(fileName, info)
+  if info.type == "file" then
+    fileName = string.gsub(fileName, ".lua", "")
+    local name = string.gsub(item:sub(1, 1):upper()..item:sub(2), ".lua", "")
 
-        components[name] = require(fileName)
-    end
+    components[name] = require(fileName)
+  end
 end
 
 
 for k, item in pairs(love.filesystem.getDirectoryItems("conditions")) do
-    fileName = "conditions/" .. item
-    love.filesystem.getInfo(fileName, info)
-    if info.type == "file" then
-        fileName = string.gsub(fileName, ".lua", "")
-        local name = string.gsub(item:sub(1,1):upper()..item:sub(2), ".lua", "")
+  fileName = "conditions/" .. item
+  love.filesystem.getInfo(fileName, info)
+  if info.type == "file" then
+    fileName = string.gsub(fileName, ".lua", "")
+    local name = string.gsub(item:sub(1, 1):upper()..item:sub(2), ".lua", "")
 
-        conditions[name] = require(fileName)
-    end
+    conditions[name] = require(fileName)
+  end
 end
 
 for k, item in pairs(love.filesystem.getDirectoryItems("actors")) do
-    fileName = "actors/" .. item
-    love.filesystem.getInfo(fileName, info)
-    if info.type == "file" then
-        fileName = string.gsub(fileName, ".lua", "")
-        local name = string.gsub(item:sub(1,1):upper()..item:sub(2), ".lua", "")
+  fileName = "actors/" .. item
+  love.filesystem.getInfo(fileName, info)
+  if info.type == "file" then
+    fileName = string.gsub(fileName, ".lua", "")
+    local name = string.gsub(item:sub(1, 1):upper()..item:sub(2), ".lua", "")
 
-        actors[name] = require(fileName)
-    end
+    actors[name] = require(fileName)
+  end
 end
 
 local Level = require "level"
@@ -77,47 +77,47 @@ game = {}
 
 
 function love.load()
-    display = ROT.Display(66, 66, 1, nil, {.09, .09, .09})
-    map = ROT.Map.Rogue(display:getWidth(), 50)
+  display = ROT.Display(66, 66, 1, nil, {.09, .09, .09})
+  map = ROT.Map.Rogue(display:getWidth(), 50)
 
-    local interface = Interface(display)
-    local level = Level(map)
+  local interface = Interface(display)
+  local level = Level(map)
 
-    game.level = level
-    game.interface = interface
+  game.level = level
+  game.interface = interface
 
-    player = actors.Player()
+  player = actors.Player()
+  local x, y = level:getRandomWalkableTile()
+  player.position.x = x
+  player.position.y = y
+  level:addActor(player)
+
+  for i = 1, 20 do
+    local monster = actors.Monster()
     local x, y = level:getRandomWalkableTile()
-    player.position.x = x
-    player.position.y = y
-    level:addActor(player)
+    monster.position.x = x
+    monster.position.y = y
+    level:addActor(monster)
+  end
 
-    for i = 1, 20 do
-        local monster = actors.Monster()
-        local x, y = level:getRandomWalkableTile()
-        monster.position.x = x
-        monster.position.y = y
-        level:addActor(monster)
-    end
-
-    for i = 1, 5 do
-        local potion = actors.Potion()
-        local x, y = level:getRandomWalkableTile()
-        potion.position.x = x
-        potion.position.y = y
-        level:addActor(potion)
-    end
-
+  for i = 1, 5 do
     local potion = actors.Potion()
-    local armor = actors.Armor()
-    table.insert(player.inventory, potion)
-    table.insert(player.inventory, armor)
+    local x, y = level:getRandomWalkableTile()
+    potion.position.x = x
+    potion.position.y = y
+    level:addActor(potion)
+  end
+
+  local potion = actors.Potion()
+  local armor = actors.Armor()
+  table.insert(player.inventory, potion)
+  table.insert(player.inventory, armor)
 end
 
 function love.draw()
-    display:clear()
-        game.interface:draw(display)
-    display:draw()
+  display:clear()
+  game.interface:draw(display)
+  display:draw()
 end
 
 function love.update(dt)
@@ -131,5 +131,5 @@ function love.update(dt)
 end
 
 function love.keypressed(key, scancode)
-    game.interface:handleKeyPress(key, scancode)
+  game.interface:handleKeyPress(key, scancode)
 end

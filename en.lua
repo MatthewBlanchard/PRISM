@@ -77,7 +77,7 @@ local CATEGORY_S_ES = {
   "acropolis", "chaos", "lens", "aegis", "cosmos", "mantis", "alias", "dais",
   "marquis", "asbestos", "digitalis", "metropolis", "atlas", "epidermis",
   "pathos", "bathos", "ethos", "pelvis", "bias", "gas", "polis", "caddis",
-	"glottis", "rhinoceros", "cannabis", "glottis", "sassafras", "canvas", "ibis",
+  "glottis", "rhinoceros", "cannabis", "glottis", "sassafras", "canvas", "ibis",
   "trellis"
 }
 
@@ -93,8 +93,8 @@ local uncountable = {
 
   -- words
   "bison", "flounder", "pliers", "bream", "gallows", "proceedings", "breeches",
-  "graffiti", "rabies","britches", "headquarters", "salmon", "carp", "herpes",
-	"scissors", "chassis", "high-jinks", "sea-bass", "clippers", "homework",
+  "graffiti", "rabies", "britches", "headquarters", "salmon", "carp", "herpes",
+  "scissors", "chassis", "high-jinks", "sea-bass", "clippers", "homework",
   "series", "cod", "innings", "shears", "contretemps", "jackanapes", "species",
   "corps", "mackerel", "swine", "debris", "measles", "trout", "diabetes",
   "mews", "tuna", "djinn", "mumps", "whiting", "eland", "news", "wildebeest",
@@ -188,7 +188,7 @@ local function inflector(mode)
 
   categoryRule(CATEGORY_EN_INA, "en", "ina")
   categoryRule(CATEGORY_A_ATA, "a", "ata")
-	categoryRule(CATEGORY_IS_IDES, "is", "ides")
+  categoryRule(CATEGORY_IS_IDES, "is", "ides")
   categoryRule(CATEGORY_US_US, "", "")
   categoryRule(CATEGORY_O_I, "o", "i")
   categoryRule(CATEGORY_NONE_I, "", "i")
