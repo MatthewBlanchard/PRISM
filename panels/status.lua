@@ -3,7 +3,7 @@ local Panel = require "panel"
 local StatusPanel = Panel:extend()
 
 function StatusPanel:__new(display, parent)
-  Panel.__new(self, display, parent, 1, 51, 15, 3)
+  Panel.__new(self, display, parent, 1, 40, 15, 3)
 end
 
 function StatusPanel:draw()
