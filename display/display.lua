@@ -3,11 +3,11 @@
 local Display = {}
 local util = require 'display.util'
 Display.defaultTileset = {
-   path = 'display/wanderlust_16x16.png',
+   path = 'display/cp437_12x12.png',
    perRow = 16,
    perColumn = 16,
-   charWidth = 16,
-   charHeight = 16,
+   charWidth = 12,
+   charHeight = 12,
 }
 
 --- Constructor.
@@ -18,7 +18,7 @@ Display.defaultTileset = {
 -- @tparam[opt] table dfg Default foreground color as a table defined as {r,g,b,a}
 -- @tparam[opt] table dbg Default background color
 -- @tparam[opt=false] boolean fullOrFlags In Love 0.8.0: Use fullscreen In Love 0.9.0: a table defined for love.graphics.setMode
--- @tparam[opt={path = 'cp437.png', perRow = 32, charHeight = 16, charWidth = 9}] table Information for custom tilesets
+-- @tparam[opt={path = 'cp437_12x12.png', perRow = 16, perColumn = 16, charHeight = 12, charWidth = 12}] table Information for custom tilesets
 -- @tparam[opt=false] boolean noWindow Whether to setMode or not
 -- @return nil
 function Display:new(w, h, scale, dfg, dbg, fullOrFlags, tilesetInfo, window)
@@ -218,6 +218,35 @@ function Display:clear(c, x, y, w, h, fg, bg)
    end
 end
 
+--- Write.
+-- Writes a string to the screen
+-- @tparam string s The string to be written
+-- @tparam[opt=1] int x The x-position where the string will be written
+-- @tparam[opt=1] int y The y-position where the string will be written
+-- @tparam[opt] table fg The color used to write the provided string
+-- @tparam[opt] table bg the color used to fill in the string's background
+function Display:write(s, x, y, fg, bg)
+   if type(s) == "number" then
+      self:writeChar(s, x, y, fg, bg)
+      return nil
+   end
+
+   util.assert(s, "Display:write() must have string as param")
+   x = self:_validateX(x, s)
+   y = self:_validateY(y, s)
+   fg = self:_validateForegroundColor(fg)
+   bg = self:_validateBackgroundColor(bg)
+
+   self:_writeValidatedString(s, x, y, fg, bg)
+end
+
+--- Write.
+-- Writes a char (index) to the screen
+-- @tparam number index The char to be written
+-- @tparam[opt=1] int x The x-position where the char will be written
+-- @tparam[opt=1] int y The y-position where the char will be written
+-- @tparam[opt] table fg The color used to write the provided char 
+-- @tparam[opt] table bg the color used to fill in the char's background
 function Display:writeChar(index, x, y, fg, bg)
    x = self:_validateX(x)
    y = self:_validateY(y)
@@ -229,21 +258,8 @@ function Display:writeChar(index, x, y, fg, bg)
    self.chars[x-1][y] = index
 end
 
---- Write.
--- Writes a string to the screen
--- @tparam string s The string to be written
--- @tparam[opt=1] int x The x-position where the string will be written
--- @tparam[opt=1] int y The y-position where the string will be written
--- @tparam[opt] table fg The color used to write the provided string
--- @tparam[opt] table bg the color used to fill in the string's background
-function Display:write(s, x, y, fg, bg)
-   util.assert(s, "Display:write() must have string as param")
-   x = self:_validateX(x, s)
-   y = self:_validateY(y, s)
-   fg = self:_validateForegroundColor(fg)
-   bg = self:_validateBackgroundColor(bg)
-
-   self:_writeValidatedString(s, x, y, fg, bg)
+function Display:writeCharCentre(index, y, fg, bg)
+   self:writeChar(index, self.widthInChars / 2, fg, bg)
 end
 
 --- Write Center.
@@ -253,14 +269,18 @@ end
 -- @tparam[opt] table fg The color used to write the provided string
 -- @tparam[opt] table bg the color used to fill in the string's background
 function Display:writeCenter(s, y, fg, bg)
+   if type(s) == "number" then
+      writeCharCentre(s, y, fg, bg)
+   end
    util.assert(s, "Display:writeCenter() must have string as param")
-   util.assert(#s<self.widthInChars, "Length of ",s," is greater than screen width")
+   util.assert(#s < self.widthInChars, "Length of ", s, " is greater than screen width")
+
    y = y and y or math.floor((self:getHeightInChars() - 1) / 2)
-   y = self:_validateY(y, s)
+   y = self:_validateY(y)
    fg = self:_validateForegroundColor(fg)
    bg = self:_validateBackgroundColor(bg)
 
-   local x = math.floor((self.widthInChars-#s)/2)
+   local x = math.floor((self.widthInChars - #s) / 2)
    self:_writeValidatedString(s, x, y, fg, bg)
 end
 

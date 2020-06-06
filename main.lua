@@ -78,8 +78,8 @@ game = {}
 
 
 function love.load()
-  display = Display:new(45, 45, 1, nil, {.09, .09, .09}, nil, nil, true)
-  map = ROT.Map.Rogue(display:getWidth(), 30)
+  display = Display:new(66, 66, 1, nil, {.09, .09, .09})
+  map = ROT.Map.Rogue(display:getWidth(), 50)
 
   local interface = Interface(display)
   local level = Level(map)
