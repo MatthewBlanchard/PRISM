@@ -8,9 +8,9 @@ local Dungeon = ROT.Map:extend("Dungeon")
 -- @tparam int width Width in cells of the map
 -- @tparam int height Height in cells of the map
 function Dungeon:init(width, height)
-    Dungeon.super.init(self, width, height)
-    self._rooms    ={}
-    self._corridors={}
+  Dungeon.super.init(self, width, height)
+  self._rooms = {}
+  self._corridors = {}
 end
 
 --- Get rooms
@@ -27,13 +27,13 @@ function Dungeon:getRooms() return self._rooms end
 -- Should probably take a callback instead like Room:getDoors().
 
 function Dungeon:getDoors()
-    local result={}
-    for _, room in ipairs(self._rooms) do
-        for _, x, y in room._doors:each() do
-            result[#result + 1] = { x = x, y = y }
-        end
+  local result = {}
+  for _, room in ipairs(self._rooms) do
+    for _, x, y in room._doors:each() do
+      result[#result + 1] = { x = x, y = y }
     end
-    return result
+  end
+  return result
 end
 
 --- Get corridors
@@ -42,34 +42,34 @@ end
 function Dungeon:getCorridors() return self._corridors end
 
 function Dungeon:_getDetail(name, x, y)
-    local t = self[name]
-    for i = 1, #t do
-        if t[i].x == x and t[i].y == y then return t[i], i end
-    end
+  local t = self[name]
+  for i = 1, #t do
+    if t[i].x == x and t[i].y == y then return t[i], i end
+  end
 end
 
 function Dungeon:_setDetail(name, x, y, value)
-    local detail, i = self:_getDetail(name, x, y)
-    if detail then
-        if value then
-            detail.value = value
-        else
-            table.remove(self[name], i)
-        end
-    elseif value then
-        local t = self[name]
-        detail = { x = x, y = y, value = value }
-        t[#t + 1] = detail
+  local detail, i = self:_getDetail(name, x, y)
+  if detail then
+    if value then
+      detail.value = value
+    else
+      table.remove(self[name], i)
     end
-    return detail
+  elseif value then
+    local t = self[name]
+    detail = { x = x, y = y, value = value }
+    t[#t + 1] = detail
+  end
+  return detail
 end
 
 function Dungeon:getWall(x, y)
-    return self:_getDetail('_walls', x, y)
+  return self:_getDetail('_walls', x, y)
 end
 
 function Dungeon:setWall(x, y, value)
-    return self:_setDetail('_walls', x, y, value)
+  return self:_setDetail('_walls', x, y, value)
 end
 
 return Dungeon
