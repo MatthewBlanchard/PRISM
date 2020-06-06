@@ -28,14 +28,6 @@ function Panel:write(c, x, y, fg, bg)
   display:write(c, self.x + x - 1, self.y + y - 1, fg, bg)
 end
 
-function Panel:writeChar(c, x, y, fg, bg)
-  if x < 1 or x > self.w or y < 1 or y > self.h then
-    error("Tried to write out of bounds to a panel!")
-  end
-
-  display:writeChar(c, self.x + x - 1, self.y + y - 1, fg, bg)
-end
-
 function Panel:handleKeyPress(keypress)
   if keypress == "backspace" then
     game.interface:pop()
