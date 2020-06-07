@@ -69,6 +69,7 @@ end
 
 local Level = require "level"
 local Interface = require "interface"
+local Display = require "display.display"
 
 ------
 -- Global
@@ -77,7 +78,7 @@ game = {}
 
 
 function love.load()
-  display = ROT.Display(66, 66, 1, nil, {.09, .09, .09})
+  display = Display:new(66, 66, 1, nil, {.09, .09, .09})
   map = ROT.Map.Rogue(display:getWidth(), 50)
 
   local interface = Interface(display)
