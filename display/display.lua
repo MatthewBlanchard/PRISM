@@ -3,11 +3,11 @@
 local Display = {}
 local util = require 'display.util'
 Display.defaultTileset = {
-   path = 'display/cp437_12x12.png',
+   path = 'display/cp437_15x15.png',
    perRow = 16,
-   perColumn = 16,
-   charWidth = 12,
-   charHeight = 12,
+   perColumn = 17,
+   charWidth = 15,
+   charHeight = 15,
 }
 
 --- Constructor.
@@ -253,9 +253,9 @@ function Display:writeChar(index, x, y, fg, bg)
    fg = self:_validateForegroundColor(fg)
    bg = self:_validateBackgroundColor(bg)
 
-   self.backgroundColors[x-1][y] = bg
-   self.foregroundColors[x-1][y] = fg
-   self.chars[x-1][y] = index
+   self.backgroundColors[x][y] = bg
+   self.foregroundColors[x][y] = fg
+   self.chars[x][y] = index
 end
 
 function Display:writeCharCentre(index, y, fg, bg)

@@ -78,8 +78,8 @@ game = {}
 
 
 function love.load()
-  display = Display:new(66, 66, 1, nil, {.09, .09, .09})
-  map = ROT.Map.Rogue(display:getWidth(), 50)
+  display = Display:new(80, 50, 1, nil, {.09, .09, .09}, nil, nil, true)
+  map = ROT.Map.Rogue(display:getWidth(), 47)
 
   local interface = Interface(display)
   local level = Level(map)
@@ -113,6 +113,8 @@ function love.load()
   local armor = actors.Armor()
   table.insert(player.inventory, potion)
   table.insert(player.inventory, armor)
+
+  love.keyboard.setKeyRepeat(true)
 end
 
 function love.draw()

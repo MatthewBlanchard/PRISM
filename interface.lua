@@ -82,13 +82,13 @@ function Interface:draw()
           else
             finalColor = lightCol
           end
-          self:write(fov[x][y] == 0 and "." or "#", x, y, finalColor)
+          self:write(fov[x][y] == 0 and "." or 256, x, y, finalColor)
         else
           local amCol = 
-          self:write(fov[x][y] == 0 and "." or "#", x, y, ambientColor)
+          self:write(fov[x][y] == 0 and "." or 256, x, y, ambientColor)
         end
       elseif explored[x] and explored[x][y] then
-        self:write(explored[x][y] == 0 and "." or "#", x, y, ambientColor)
+        self:write(explored[x][y] == 0 and "." or 256, x, y, ambientColor)
       end
     end
   end

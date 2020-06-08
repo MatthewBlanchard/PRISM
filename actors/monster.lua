@@ -3,7 +3,7 @@ local Vector2 = require "vector"
 
 local Monster = Actor:extend()
 
-Monster.char = "z"
+Monster.char = 258
 Monster.name = "zombie"
 Monster.color = {90 / 230, 161 / 230, 74 / 230}
 
