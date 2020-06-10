@@ -9,6 +9,17 @@ actors = {}
 -- This is horrible please stop.
 local info = {}
 
+for k, item in pairs(love.filesystem.getDirectoryItems("components")) do
+  fileName = "components/" .. item
+  love.filesystem.getInfo(fileName, info)
+  if info.type == "file" then
+    fileName = string.gsub(fileName, ".lua", "")
+    local name = string.gsub(item:sub(1, 1):upper()..item:sub(2), ".lua", "")
+
+    components[name] = require(fileName)
+  end
+end
+
 targets = require "target"
 
 for k, item in pairs(love.filesystem.getDirectoryItems("actions")) do
@@ -32,18 +43,6 @@ for k, item in pairs(love.filesystem.getDirectoryItems("actions/reactions")) do
     reactions[name] = require(fileName)
   end
 end
-
-for k, item in pairs(love.filesystem.getDirectoryItems("components")) do
-  fileName = "components/" .. item
-  love.filesystem.getInfo(fileName, info)
-  if info.type == "file" then
-    fileName = string.gsub(fileName, ".lua", "")
-    local name = string.gsub(item:sub(1, 1):upper()..item:sub(2), ".lua", "")
-
-    components[name] = require(fileName)
-  end
-end
-
 
 for k, item in pairs(love.filesystem.getDirectoryItems("conditions")) do
   fileName = "conditions/" .. item
