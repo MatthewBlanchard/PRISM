@@ -68,8 +68,6 @@ function Level:update(dt, inputAction)
     assert(not (action == nil))
     self:performAction(action)
     self:updateLighting(false, dt)
-
-    return nil
   end
 end
 
