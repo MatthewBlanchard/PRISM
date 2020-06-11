@@ -44,16 +44,7 @@ Potion.lightEffect = components.Light.effects.pulse({ 0.3, 0.0, 0.0, 1 }, 3, .5)
 Potion.components = {
   components.Light({ 0.1, 0.0, 0.0, 1}, 3, Potion.lightEffect),
   components.Item(),
-  components.Usable{Drink},
-  components.Stats
-  {
-    STR = 0,
-    DEX = 0,
-    INT = 0,
-    CON = 0,
-    maxHP = 1,
-    AC = 5
-  }
+  components.Usable{Drink}
 }
 
 return Potion

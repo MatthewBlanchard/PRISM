@@ -29,15 +29,6 @@ Door.blocksVision = true
 
 Door.components = {
   components.Usable({Open}, Open),
-  components.Stats
-  {
-    STR = 0,
-    DEX = 0,
-    INT = 0,
-    CON = 0,
-    maxHP = 10,
-    AC = 10
-  },
 }
 
 return Door
