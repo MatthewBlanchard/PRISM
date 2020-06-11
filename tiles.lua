@@ -4,6 +4,7 @@ local tiles = {
 	door_open = 272,
 	player = 304,
 	potion = 353,
+	poof = 288,
 	zombie = 305,
 	wall = 256,
 	floor = 261
