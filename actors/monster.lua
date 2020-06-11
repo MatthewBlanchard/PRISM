@@ -9,7 +9,7 @@ Monster.name = "zombie"
 Monster.color = {90 / 230, 161 / 230, 74 / 230}
 
 Monster.components = {
-  components.Sight{ range = 12, fov = true, explored = false },
+  components.Sight{ range = 12, fov = true, explored = true },
   components.Move(),
   components.Stats
   {

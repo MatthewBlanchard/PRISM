@@ -3,7 +3,6 @@ local Action = require "action"
 targets.Pickup = targets.Item()
 targets.Pickup.name = "pickup"
 
-print(targets.Pickup.requirements[1])
 function targets.Pickup:validate(owner, actor)
   if actor == owner then
     return false
@@ -19,7 +18,6 @@ function targets.Pickup:validate(owner, actor)
     return false
   end
 
-  print(targets.Target.validate(self, owner, actor))
   return targets.Target.validate(self, owner, actor)
 end
 

@@ -51,7 +51,6 @@ function Target:validate(owner, actor)
     range = owner:getRange(self.rtype, actor) <= self.range
   end
 
-  print(self.name, range, self:checkRequirements(actor), self.range)
   return self:checkRequirements(actor) and range
 end
 
@@ -60,17 +59,13 @@ function Target:checkRequirements(actor)
 
   for k, component in pairs(actor.components) do
     for k, req in pairs(self.requirements) do
-      print "yeet"
       if component:is(req) then
         table.insert(foundreqs, component)
       end
     end
   end
 
-  print(#self.requirements)
-  --	print(#foundreqs, #self.requirements)
   if #foundreqs == #self.requirements then
-    --	print "YEET"
     return true
   end
 
