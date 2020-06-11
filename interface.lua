@@ -95,10 +95,22 @@ function Interface:draw()
   end
 
   for k, actor in pairs(seenActors) do
-    local x, y = actor.position.x, actor.position.y
-    if light[x] and light[x][y] then
-      local lightValue = math.min(value(light[x][y]), 0.5)
-      self:write(actor.char, x, y, clerp(ambientColor, actor.color, lightValue / 0.5))
+    if not actor:hasComponent(components.Move) then
+      local x, y = actor.position.x, actor.position.y
+      if light[x] and light[x][y] then
+        local lightValue = math.min(value(light[x][y]), 0.5)
+        self:write(actor.char, x, y, clerp(ambientColor, actor.color, lightValue / 0.5))
+      end
+    end
+  end
+
+  for k, actor in pairs(seenActors) do
+    if actor:hasComponent(components.Move) then
+      local x, y = actor.position.x, actor.position.y
+      if light[x] and light[x][y] then
+        local lightValue = math.min(value(light[x][y]), 0.5)
+        self:write(actor.char, x, y, clerp(ambientColor, actor.color, lightValue / 0.5))
+      end
     end
   end
 

@@ -118,7 +118,7 @@ end
 
 function Actor:removeCondition(condition)
   for i = 1, #self.conditions do
-    if self.conditions[i] == condition then
+    if self.conditions[i]:is(condition) then
       table.remove(self.conditions, i)
       return true
     end
