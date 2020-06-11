@@ -1,7 +1,7 @@
 local Actor = require "actor"
 
 local Armor = Actor:extend()
-Armor.char = "["
+Armor.char = 354
 Armor.name = "armor"
 
 Armor.components = {

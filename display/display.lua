@@ -5,7 +5,7 @@ local util = require 'display.util'
 Display.defaultTileset = {
    path = 'display/cp437_15x15.png',
    perRow = 16,
-   perColumn = 17,
+   perColumn = 24,
    charWidth = 15,
    charHeight = 15,
 }

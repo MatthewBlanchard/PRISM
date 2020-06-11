@@ -37,7 +37,7 @@ local Potion = Actor:extend()
 Potion.name = "potion"
 Potion.color = {1, 0, 0, 1}
 Potion.emissive = true
-Potion.char = "!"
+Potion.char = 353
 Potion.lightEffect = components.Light.effects.pulse({ 0.3, 0.0, 0.0, 1 }, 3, .5)
 
 Potion.components = {

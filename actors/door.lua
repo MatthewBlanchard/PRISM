@@ -13,7 +13,7 @@ Open.targets = {targetDoor}
 
 function Open:perform(level)
   local door = self.targetActors[1]
-  door.char = "-"
+  door.char = 272
   door.passable = true
   door.blocksVision = false
   game.level:invalidateLighting()
@@ -21,7 +21,7 @@ end
 
 local Door = Actor:extend()
 
-Door.char = "+"
+Door.char = 273
 Door.name = "door"
 Door.passable = false
 Door.blocksVision = true
