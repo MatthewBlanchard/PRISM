@@ -36,10 +36,27 @@ end
 
 local Condition = Object:extend()
 
+Condition.onActions = {}
+Condition.afterActions = {}
+
 function Condition:__new(type)
   self.type = self.type or type
-  self.onActions = self.onActions or {}
-  self.afterActions = self.afterActions or {}
+
+  local oldOnActions, oldAfterActions = self.onActions, self.afterActions
+  self.onActions = {}
+  self.afterActions = {}
+
+  if oldOnActions then
+    for k, v in pairs(oldOnActions) do
+      self.onActions[k] = v
+    end
+  end
+
+  if oldAfterActions then
+    for k, v in pairs(oldAfterActions) do
+      self.afterActions[k] = v
+    end
+  end
 end
 
 function Condition:getActionEvents(type, level, action)

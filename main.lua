@@ -113,6 +113,8 @@ function love.load()
   table.insert(player.inventory, potion)
   table.insert(player.inventory, armor)
   table.insert(player.inventory, actors.Wand_of_swapping())
+  table.insert(player.inventory, actors.Ring_of_protection())
+
 
   love.keyboard.setKeyRepeat(true)
 end
