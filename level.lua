@@ -44,6 +44,8 @@ function Level:update(dt, inputAction)
     initialized = true
   end
 
+  -- if we are waiting for an actor we check if we got an action if not we keep
+  -- on waiting
   if waitingFor then
     if inputAction then
       self:performAction(inputAction)
@@ -56,18 +58,29 @@ function Level:update(dt, inputAction)
   end
 
   while true do
+    -- check if we should quit before we move onto the next actor
+    if self.shouldQuit then return love.event.push('quit') end
+
+    -- grab the next actor off the scheduler and update it's fov
     local actor = self.scheduler:next()
     self:updateFOV(actor)
 
+    -- if we find a player controlled actor we set waitingFor and return it
+    -- this hands things off to the interface which generates a command for
+    -- the actor
     if actor.inputControlled then
       waitingFor = actor
       return waitingFor
     end
 
+    -- if we don't have a player controlled actor we ask the actor for it's
+    -- next action through it's controller
     local action = actor:act()
     assert(not (action == nil))
     self:performAction(action)
     self:updateLighting(false, dt)
+
+    -- we continue to the next actor
   end
 end
 
@@ -146,7 +159,10 @@ function Level:updateSeenActors(actor)
   actor.seenActors = {}
 
   for k, other in pairs(self.actors) do
-    if actor.fov[other.position.x] and actor.fov[other.position.x][other.position.y] then
+    if (other:isVisible() or actor == other) and
+    actor.fov[other.position.x] and
+    actor.fov[other.position.x][other.position.y]
+    then
       table.insert(actor.seenActors, other)
     end
   end
@@ -184,7 +200,17 @@ function Level:removeActor(actor)
     self:updateFOV(actor)
   end
 
+  self:checkLoseCondition()
+end
 
+function Level:checkLoseCondition()
+  local foundPlayerActor = false
+
+  for i, v in ipairs(self.actors) do
+    foundPlayerActor = foundPlayerActor or v.inputControlled
+  end
+
+  self.shouldQuit = not foundPlayerActor
 end
 
 function Level:destroyActor(actor)
@@ -198,11 +224,11 @@ function Level:destroyActor(actor)
     end
   end
 
+  self:removeActor(actor)
+
   if actor.blocksVision then
     self:invalidateLighting()
   end
-
-  self:removeActor(actor)
 end
 
 function Level:moveActor(actor, pos)

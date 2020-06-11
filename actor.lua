@@ -4,6 +4,7 @@ local Tiles = require "tiles"
 
 local Actor = Object:extend()
 Actor.passable = true
+Actor.visible = true
 Actor.color = {1, 1, 1, 1}
 Actor.emissive = false
 Actor.char = Tiles["player"]
@@ -42,6 +43,17 @@ function Actor:__new()
   end
 
   self:initializeComponents()
+end
+
+function Actor:isVisible()
+  local visible = not self.visible
+  for k, cond in pairs(self:getConditions()) do
+    if cond.isVisible then
+      visible = visible or not cond.isVisible()
+    end
+  end
+
+  return not visible
 end
 
 function Actor:draw(display)

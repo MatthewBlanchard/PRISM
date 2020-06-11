@@ -17,8 +17,8 @@ end
 function InventoryPanel:draw()
   local actor = game.curActor
 
-  local w = string.len("Inventory    ")
-  self:write("Inventory    ", 1, 1, {1, 1, 1, 1}, {.3, .3, .3, 1})
+  local w = string.len("Inventory                      ")
+  self:write("Inventory                      ", 1, 1, {1, 1, 1, 1}, {.3, .3, .3, 1})
   if actor.inventory and #actor.inventory > 0 then
     for i = 1, #actor.inventory do
       local bg = {.1, .1, .1, 1}

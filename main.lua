@@ -114,6 +114,7 @@ function love.load()
   table.insert(player.inventory, armor)
   table.insert(player.inventory, actors.Wand_of_random_teleportation())
   table.insert(player.inventory, actors.Ring_of_protection())
+  table.insert(player.inventory, actors.Cloak_of_invisibility())
 
 
   love.keyboard.setKeyRepeat(true)
