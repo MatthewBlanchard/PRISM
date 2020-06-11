@@ -19,7 +19,7 @@ function Zap:perform(level)
 end
 
 local WandOfSwapping = Actor:extend()
-WandOfSwapping.name = "Wand of Soul Exchange"
+WandOfSwapping.name = "Wand of Swapping"
 WandOfSwapping.color = {0.1, 0.1, 1, 1}
 WandOfSwapping.char = "/"
 
