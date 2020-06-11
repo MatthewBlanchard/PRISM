@@ -22,7 +22,6 @@ function SelectorPanel:__new(display, parent, action, targets)
   Panel.__new(self, display, parent, 1, 1, display:getWidth(), display:getHeight())
   self.action = action
   self.blinkFunc = blink(0.3)
-  print(#targets)
   self.targets = targets or {}
 end
 
@@ -97,7 +96,6 @@ function SelectorPanel:handleKeyPress(keypress)
     table.insert(self.targets, self.curTarget)
     self.targetIndex = nil
 
-    print(#self.targets)
     if #self.targets == self.action:getNumTargets() then
       game.interface:reset()
       game.interface:setAction(self.action(game.curActor, self.targets))

@@ -8,8 +8,10 @@ local function DrinkEffect(actor, heal)
   return function(dt, interface)
     t = t + dt
 
-    interface:write(dmgstring, position.x + xoffset, position.y, color)
-    if t > .3 then return false end
+    local color = {.1, 1, .1, 1}
+    interface:write("%", actor.position.x, actor.position.y, color)
+    interface:write(tostring(heal), actor.position.x + 1, actor.position.y, color)
+    if t > .3 then return true end
   end
 end
 
@@ -25,12 +27,10 @@ end
 function Drink:perform(level)
   local heal = 5
   local target = self.targetActors[1]
-  target.name = "bottle"
-  target.color = {.5, .5, .5, 1}
-  target:removeComponent(components.Light)
-  target:removeComponent(components.Usable)
 
+  level:destroyActor(target)
   self.owner:setHP(self.owner:getHP() + 5)
+  level:addEffect(DrinkEffect(self.owner, 5))
 end
 
 local Potion = Actor:extend()
