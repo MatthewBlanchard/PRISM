@@ -1,6 +1,19 @@
 local Actor = require "actor"
 local Action = require "action"
 local Condition = require "condition"
+local Tiles = require "tiles"
+
+local function PoofEffect(pos1, pos2)
+  local t = 0
+  return function(dt, interface)
+    t = t + dt
+
+    local color = {.4, .4, .4, 1}
+    interface:write(Tiles["poof"], pos1.x, pos1.y, color)
+    interface:write(Tiles["poof"], pos2.x, pos2.y, color)
+    if t > .3 then return true end
+  end
+end
 
 local ZapTarget = targets.Target()
 ZapTarget.name = "ZapTarget"
@@ -16,6 +29,7 @@ function Zap:perform(level)
   local position = self.owner.position
 
   self.owner.position, target.position = target.position, self.owner.position
+  level:addEffect(PoofEffect(self.owner.position, target.position))
 end
 
 local WandOfSwapping = Actor:extend()
