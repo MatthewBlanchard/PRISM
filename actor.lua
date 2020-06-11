@@ -1,11 +1,12 @@
 local Object = require "object"
 local Vector2 = require "vector"
+local Tiles = require "tiles"
 
 local Actor = Object:extend()
 Actor.passable = true
 Actor.color = {1, 1, 1, 1}
 Actor.emissive = false
-Actor.char = 304
+Actor.char = Tiles["player"]
 Actor.name = "actor"
 Actor.conjugate = true
 Actor.heshe = "it"
