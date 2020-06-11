@@ -1,7 +1,8 @@
 local Actor = require "actor"
+local Tiles = require "tiles"
 
 local Armor = Actor:extend()
-Armor.char = "["
+Armor.char = Tiles["armor"]
 Armor.name = "armor"
 
 Armor.components = {

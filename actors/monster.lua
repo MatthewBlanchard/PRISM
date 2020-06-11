@@ -1,9 +1,10 @@
 local Actor = require "actor"
 local Vector2 = require "vector"
+local Tiles = require "tiles"
 
 local Monster = Actor:extend()
 
-Monster.char = 258
+Monster.char = Tiles["zombie"]
 Monster.name = "zombie"
 Monster.color = {90 / 230, 161 / 230, 74 / 230}
 

@@ -1,6 +1,7 @@
 local Actor = require "actor"
 local Action = require "action"
 local Condition = require "condition"
+local Tiles = require "tiles"
 
 local function DrinkEffect(actor, heal)
   local t = 0
@@ -37,7 +38,7 @@ local Potion = Actor:extend()
 Potion.name = "potion"
 Potion.color = {1, 0, 0, 1}
 Potion.emissive = true
-Potion.char = "!"
+Potion.char = Tiles["potion"]
 Potion.lightEffect = components.Light.effects.pulse({ 0.3, 0.0, 0.0, 1 }, 3, .5)
 
 Potion.components = {
