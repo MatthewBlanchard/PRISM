@@ -13,22 +13,19 @@ Zap.targets = {targets.Item, ZapTarget}
 
 function Zap:perform(level)
   local target = self.targetActors[2]
+  local position = self.owner.position
 
-  if self.owner.inputControlled and not target.inputControlled then
-    target.inputControlled = true
-    self.owner.inputControlled = false
-    self.owner.act = target.act
-  end
+  self.owner.position, target.position = target.position, self.owner.position
 end
 
-local WandOfSoulExchange = Actor:extend()
-WandOfSoulExchange.name = "Wand of Soul Exchange"
-WandOfSoulExchange.color = {0.1, 0.1, 1, 1}
-WandOfSoulExchange.char = "/"
+local WandOfSwapping = Actor:extend()
+WandOfSwapping.name = "Wand of Soul Exchange"
+WandOfSwapping.color = {0.1, 0.1, 1, 1}
+WandOfSwapping.char = "/"
 
-WandOfSoulExchange.components = {
+WandOfSwapping.components = {
   components.Item(),
   components.Usable{Zap},
 }
 
-return WandOfSoulExchange
+return WandOfSwapping

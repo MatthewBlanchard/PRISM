@@ -112,7 +112,7 @@ function love.load()
   local armor = actors.Armor()
   table.insert(player.inventory, potion)
   table.insert(player.inventory, armor)
-  table.insert(player.inventory, actors.Wand_of_soul_exchange())
+  table.insert(player.inventory, actors.Wand_of_swapping())
 
   love.keyboard.setKeyRepeat(true)
 end
