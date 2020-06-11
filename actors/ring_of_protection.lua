@@ -2,7 +2,7 @@ local Actor = require "actor"
 local Tiles = require "tiles"
 
 local RingOfProtection = Actor:extend()
-RingOfProtection.char = "o"
+RingOfProtection.char = Tiles["ring"]
 RingOfProtection.name = "Ring of Protection"
 
 RingOfProtection.components = {

@@ -35,7 +35,7 @@ end
 local WandOfSwapping = Actor:extend()
 WandOfSwapping.name = "Wand of Swapping"
 WandOfSwapping.color = {0.1, 0.1, 1, 1}
-WandOfSwapping.char = "/"
+WandOfSwapping.char = Tiles["wand"]
 
 WandOfSwapping.components = {
   components.Item(),
