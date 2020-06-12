@@ -29,7 +29,7 @@ end
 local WandOfRandomTeleportation = Actor:extend()
 WandOfRandomTeleportation.name = "Wand of Random Teleportation"
 WandOfRandomTeleportation.color = {0.1, 0.1, .7, 1}
-WandOfRandomTeleportation.char = "/"
+WandOfRandomTeleportation.char = Tiles["wand_pointy"]
 
 WandOfRandomTeleportation.components = {
   components.Item(),
