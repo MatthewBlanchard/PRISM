@@ -3,19 +3,6 @@ local Action = require "action"
 local Condition = require "condition"
 local Tiles = require "tiles"
 
-local function DrinkEffect(actor, heal)
-  local t = 0
-  local lastflip = 9
-  return function(dt, interface)
-    t = t + dt
-
-    local color = {.1, 1, .1, 1}
-    interface:write(Tiles["heal"], actor.position.x, actor.position.y, color)
-    interface:write(tostring(heal), actor.position.x + 1, actor.position.y, color)
-    if t > .5 then return true end
-  end
-end
-
 local Eat = Action:extend()
 Eat.name = "eat"
 Eat.targets = {targets.Item}
