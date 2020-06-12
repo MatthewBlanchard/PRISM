@@ -26,7 +26,7 @@ Player.components = {
   {
     defaultAttack = 
     {
-      name = "Short Sword",
+      name = "Stronk Fists",
       stat = "STR",
       dice = "3d6"
     }

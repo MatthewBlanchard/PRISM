@@ -41,9 +41,9 @@ Attack.name = "attack"
 Attack.targets = {targets.Creature}
 
 function Attack:perform(level)
-  local roll = self.owner:rollCheck(self.owner.attack.stat)
+  local roll = self.owner:rollCheck(self.owner.wielded.stat)
   local target = self:getTarget(1)
-  local dmg = ROT.Dice.roll(self.owner.attack.dice) + self.owner:getStatBonus(self.owner.attack.stat)
+  local dmg = ROT.Dice.roll(self.owner.wielded.dice) + self.owner:getStatBonus(self.owner.wielded.stat)
 
   if roll >= target:getAC() then
     local damage = target:getReaction(reactions.Damage)(target, self.owner, dmg)

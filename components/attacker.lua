@@ -10,9 +10,11 @@ end
 
 function Attacker:initialize(actor)
   actor.defaultAttack = self.defaultAttack
-  actor.attack = self.defaultAttack
+  actor.wielded = self.defaultAttack
 
   actor:addAction(actions.Attack)
+  actor:addAction(actions.Wield)
+  actor:addAction(actions.Unwield)
 end
 
 return Attacker

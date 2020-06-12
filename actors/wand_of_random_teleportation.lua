@@ -24,6 +24,7 @@ function Zap:perform(level)
 
   local x, y = level:getRandomWalkableTile()
   self.owner.position = { x = x, y = y}
+  level:addEffect(PoofEffect(self.owner.position))
 end
 
 local WandOfRandomTeleportation = Actor:extend()
