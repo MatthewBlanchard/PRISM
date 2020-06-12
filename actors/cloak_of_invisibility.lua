@@ -2,7 +2,7 @@ local Actor = require "actor"
 local Tiles = require "tiles"
 
 local CloakOfInvisibility = Actor:extend()
-CloakOfInvisibility.char = Tiles["armor"]
+CloakOfInvisibility.char = Tiles["cloak"]
 CloakOfInvisibility.name = "Cloak of Invisibility"
 
 CloakOfInvisibility.components = {
