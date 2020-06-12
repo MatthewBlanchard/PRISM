@@ -1,17 +1,16 @@
 local Condition = require "condition"
 
-local EquipCondition = Condition()
+local WieldCondition = Condition()
 
-EquipCondition:afterAction(actions.Equip,
+WieldCondition:afterAction(actions.Wield,
   function(self, level, action)
-    print "EQUIP"
     for k, effect in pairs(self.effects) do
       action.owner:applyCondition(effect)
     end
   end
 ):where(Condition.ownerIsTarget)
 
-EquipCondition:afterAction(actions.Unequip,
+WieldCondition:afterAction(actions.Unwield,
   function(self, level, action)
     for k, effect in pairs(self.effects) do
       action.owner:removeCondition(effect)
@@ -19,13 +18,13 @@ EquipCondition:afterAction(actions.Unequip,
   end
 ):where(Condition.ownerIsTarget)
 
-EquipCondition:onAction(actions.Drop,
+WieldCondition:onAction(actions.Drop,
   function(self, level, action)
-    print "EQUIPDROP"
-    local equipment = action:getTarget(1)
-    local unequip = action.owner:getAction(actions.Unequip)(action.owner, equipment)
-    level:performAction(unequip)
+    local weapon = action:getTarget(1)
+    local unwield = action.owner:getAction(actions.Unwield)(action.owner, weapon)
+    level:performAction(unwield)
   end
 ):where(Condition.ownerIsTarget)
 
-return EquipCondition
+print(Condition.ownerIsTarget)
+return WieldCondition
