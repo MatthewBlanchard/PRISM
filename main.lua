@@ -109,6 +109,15 @@ function love.load()
     level:addActor(potion)
   end
 
+  for i = 1, 5 do
+    local chest = actors.Chest()
+    table.insert(chest.inventory, actors.Ring_of_protection())
+    local x, y = level:getRandomWalkableTile()
+    chest.position.x = x
+    chest.position.y = y
+    level:addActor(chest)
+  end
+
   table.insert(player.inventory, actors.Potion())
   table.insert(player.inventory, actors.Armor())
   table.insert(player.inventory, actors.Wand_of_random_teleportation())

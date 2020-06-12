@@ -1,6 +1,7 @@
 local tiles = {
 	armor = 354,
 	cloak = 357,
+	chest = 276,
 	door_closed = 273,
 	door_open = 272,
 	floor = 261,
@@ -15,7 +16,9 @@ local tiles = {
 	wall = 256,
 	wand = 355,
 	wand_pointy = 371,
-	zombie = 305
+	zombie = 305,
+
+	b_top_left = 315
 }
 
 return tiles
