@@ -5,6 +5,7 @@ reactions = {}
 actions = {}
 components = {}
 actors = {}
+effects = require "effects"
 
 -- This is horrible please stop.
 local info = {}
@@ -108,14 +109,12 @@ function love.load()
     level:addActor(potion)
   end
 
-  local potion = actors.Potion()
-  local armor = actors.Armor()
-  table.insert(player.inventory, potion)
-  table.insert(player.inventory, armor)
+  table.insert(player.inventory, actors.Potion())
+  table.insert(player.inventory, actors.Armor())
   table.insert(player.inventory, actors.Wand_of_random_teleportation())
   table.insert(player.inventory, actors.Ring_of_protection())
   table.insert(player.inventory, actors.Cloak_of_invisibility())
-
+  table.insert(player.inventory, actors.Parsnip())
 
   love.keyboard.setKeyRepeat(true)
 end

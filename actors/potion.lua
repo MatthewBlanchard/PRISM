@@ -3,19 +3,6 @@ local Action = require "action"
 local Condition = require "condition"
 local Tiles = require "tiles"
 
-local function DrinkEffect(actor, heal)
-  local t = 0
-  local lastflip = 9
-  return function(dt, interface)
-    t = t + dt
-
-    local color = {.1, 1, .1, 1}
-    interface:write("%", actor.position.x, actor.position.y, color)
-    interface:write(tostring(heal), actor.position.x + 1, actor.position.y, color)
-    if t > .3 then return true end
-  end
-end
-
 local Drink = Action:extend()
 Drink.name = "drink"
 Drink.targets = {targets.Item}
@@ -31,11 +18,11 @@ function Drink:perform(level)
 
   level:destroyActor(target)
   self.owner:setHP(self.owner:getHP() + 5)
-  level:addEffect(DrinkEffect(self.owner, 5))
+  level:addEffect(effects.HealEffect(self.owner, 5))
 end
 
 local Potion = Actor:extend()
-Potion.name = "potion"
+Potion.name = "Potion of Healing"
 Potion.color = {1, 0, 0, 1}
 Potion.emissive = true
 Potion.char = Tiles["potion"]
