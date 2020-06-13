@@ -1,4 +1,5 @@
 local Object = require "object"
+local Scheduler = require "scheduler"
 
 local Level = Object:extend()
 
@@ -11,7 +12,7 @@ function Level:__new(map)
   self.actors = {}
   self.effects = {}
 
-  self.scheduler = ROT.Scheduler.Simple:new()
+  self.scheduler = Scheduler()
 
   self.fov = ROT.FOV.Recursive(self:getVisibilityCallback())
 
@@ -255,7 +256,7 @@ function Level:moveActor(actor, pos)
   end
 end
 
-function Level:performAction(action)
+function Level:performAction(action, free)
   self:triggerActionEvents("onActions", action)
 
   self:addMessage(action)
@@ -263,8 +264,8 @@ function Level:performAction(action)
 
   self:triggerActionEvents("afterActions", action)
 
-  if not action.reaction and self:hasActor(action.owner) then
-    self.scheduler:add(action.owner)
+  if not action.reaction and not free and self:hasActor(action.owner) then
+    self.scheduler:addTime(action.owner, action.time)
   end
 end
 

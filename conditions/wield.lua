@@ -21,8 +21,13 @@ WieldCondition:afterAction(actions.Unwield,
 WieldCondition:onAction(actions.Drop,
   function(self, level, action)
     local weapon = action:getTarget(1)
+
+    if not (action.owner.wielded == weapon) then
+      return
+    end
+
     local unwield = action.owner:getAction(actions.Unwield)(action.owner, weapon)
-    level:performAction(unwield)
+    level:performAction(unwield, true)
   end
 ):where(Condition.ownerIsTarget)
 

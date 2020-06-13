@@ -21,10 +21,15 @@ EquipCondition:afterAction(actions.Unequip,
 
 EquipCondition:onAction(actions.Drop,
   function(self, level, action)
-    print "EQUIPDROP"
     local equipment = action:getTarget(1)
+
+    print(action.owner.slots[equipment.slot], equipment.slot)
+    if not (action.owner.slots[equipment.slot] == equipment) then
+      return
+    end
+
     local unequip = action.owner:getAction(actions.Unequip)(action.owner, equipment)
-    level:performAction(unequip)
+    level:performAction(unequip, true)
   end
 ):where(Condition.ownerIsTarget)
 
