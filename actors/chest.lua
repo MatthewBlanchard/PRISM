@@ -20,6 +20,7 @@ function Open:perform(level)
   item.position.x = chest.position.x
   item.position.y = chest.position.y
   level:addActor(item)
+  level:addEffect(effects.OpenEffect(chest))
 end
 
 local Chest = Actor:extend()
