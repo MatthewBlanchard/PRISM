@@ -29,6 +29,8 @@ effects.OpenEffect = function(actor)
     if t < .5 then
       local c = cmul(color, t / 0.5)
       interface:write(Tiles["pointy_poof"], actor.position.x, actor.position.y, c)
+    elseif t < .8 then
+      interface:write(Tiles["chest_open"], actor.position.x, actor.position.y, actor.color)
     else
       return true
     end
