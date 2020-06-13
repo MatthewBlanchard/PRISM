@@ -88,7 +88,7 @@ function love.load()
 
   table.insert(player.inventory, actors.Potion())
   table.insert(player.inventory, actors.Armor())
-  table.insert(player.inventory, actors.Shortsword())
+  table.insert(player.inventory, actors.Wand_of_lethargy())
   table.insert(player.inventory, actors.Parsnip())
   table.insert(player.inventory, actors.Slippers_of_swiftness())
 
