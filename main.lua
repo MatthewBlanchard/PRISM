@@ -120,11 +120,10 @@ function love.load()
 
   table.insert(player.inventory, actors.Potion())
   table.insert(player.inventory, actors.Armor())
-  table.insert(player.inventory, actors.Wand_of_random_teleportation())
-  table.insert(player.inventory, actors.Ring_of_protection())
-  table.insert(player.inventory, actors.Cloak_of_invisibility())
   table.insert(player.inventory, actors.Shortsword())
   table.insert(player.inventory, actors.Parsnip())
+  table.insert(player.inventory, actors.Slippers_of_swiftness())
+
 
   love.keyboard.setKeyRepeat(true)
 end

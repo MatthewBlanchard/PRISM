@@ -32,6 +32,7 @@ end
 
 function Event:where(condFunc)
   table.insert(self.conditionals, condFunc)
+  return e
 end
 
 local Condition = Object:extend()
@@ -48,6 +49,7 @@ function Condition:__new(type)
 
   if oldOnActions then
     for k, v in pairs(oldOnActions) do
+      print(k, v.action.name, v, v.fire)
       self.onActions[k] = v
     end
   end
@@ -77,6 +79,7 @@ end
 function Condition:onAction(action, func)
   local e = Event(action, func)
 
+  print(e, e.fire)
   table.insert(self.onActions, e)
   return e
 end

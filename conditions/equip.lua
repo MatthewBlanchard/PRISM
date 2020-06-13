@@ -4,7 +4,6 @@ local EquipCondition = Condition()
 
 EquipCondition:afterAction(actions.Equip,
   function(self, level, action)
-    print "EQUIP"
     for k, effect in pairs(self.effects) do
       action.owner:applyCondition(effect)
     end

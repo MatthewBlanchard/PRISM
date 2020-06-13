@@ -36,6 +36,7 @@ Player.components = {
   components.Equipper{
     "armor",
     "ring",
+    "boots",
     "cloak"
   }
 }

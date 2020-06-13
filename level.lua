@@ -274,7 +274,7 @@ function Level:triggerActionEvents(type, action)
     local e = condition:getActionEvents(type, self, action)
     if e then
       for k, event in pairs(e) do
-        e:fire(self, action)
+        event:fire(self, action)
       end
     end
   end
