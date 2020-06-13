@@ -7,65 +7,33 @@ components = {}
 actors = {}
 effects = require "effects"
 
--- This is horrible please stop.
-local info = {}
 
-for k, item in pairs(love.filesystem.getDirectoryItems("components")) do
-  fileName = "components/" .. item
-  love.filesystem.getInfo(fileName, info)
-  if info.type == "file" then
-    fileName = string.gsub(fileName, ".lua", "")
-    local name = string.gsub(item:sub(1, 1):upper()..item:sub(2), ".lua", "")
+local function loadItems(directoryName, items, recurse)
+  local info = {}
 
-    components[name] = require(fileName)
+  for k, item in pairs(love.filesystem.getDirectoryItems(directoryName)) do
+    fileName = directoryName .. "/" .. item
+    love.filesystem.getInfo(fileName, info)
+    if info.type == "file" then
+      fileName = string.gsub(fileName, ".lua", "")
+      local name = string.gsub(item:sub(1, 1):upper()..item:sub(2), ".lua", "")
+      print(fileName)
+      print(name)
+
+      items[name] = require(fileName)
+    elseif info.type == "directory" and recurse then
+      print(fileName)
+      loadItems(fileName, items)
+    end
   end
 end
 
+loadItems("components", components)
 targets = require "target"
-
-for k, item in pairs(love.filesystem.getDirectoryItems("actions")) do
-  fileName = "actions/" .. item
-  love.filesystem.getInfo(fileName, info)
-  if info.type == "file" then
-    fileName = string.gsub(fileName, ".lua", "")
-    local name = string.gsub(item:sub(1, 1):upper()..item:sub(2), ".lua", "")
-
-    actions[name] = require(fileName)
-  end
-end
-
-for k, item in pairs(love.filesystem.getDirectoryItems("actions/reactions")) do
-  fileName = "actions/reactions/" .. item
-  love.filesystem.getInfo(fileName, info)
-  if info.type == "file" then
-    fileName = string.gsub(fileName, ".lua", "")
-    local name = string.gsub(item:sub(1, 1):upper()..item:sub(2), ".lua", "")
-
-    reactions[name] = require(fileName)
-  end
-end
-
-for k, item in pairs(love.filesystem.getDirectoryItems("conditions")) do
-  fileName = "conditions/" .. item
-  love.filesystem.getInfo(fileName, info)
-  if info.type == "file" then
-    fileName = string.gsub(fileName, ".lua", "")
-    local name = string.gsub(item:sub(1, 1):upper()..item:sub(2), ".lua", "")
-
-    conditions[name] = require(fileName)
-  end
-end
-
-for k, item in pairs(love.filesystem.getDirectoryItems("actors")) do
-  fileName = "actors/" .. item
-  love.filesystem.getInfo(fileName, info)
-  if info.type == "file" then
-    fileName = string.gsub(fileName, ".lua", "")
-    local name = string.gsub(item:sub(1, 1):upper()..item:sub(2), ".lua", "")
-
-    actors[name] = require(fileName)
-  end
-end
+loadItems("actions", actions, false)
+loadItems("actions/reactions", reactions, true)
+loadItems("conditions", conditions, true)
+loadItems("actors", actors, true)
 
 local Level = require "level"
 local Interface = require "interface"
