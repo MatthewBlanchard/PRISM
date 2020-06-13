@@ -1,4 +1,4 @@
-local Object = require "Object"
+local Object = require "object"
 
 local Scheduler = Object:extend()
 

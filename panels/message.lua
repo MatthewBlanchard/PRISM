@@ -7,7 +7,7 @@ Message.handlers = {}
 Message.inflector = inflector()
 
 function Message:__new(display, parent)
-  Panel.__new(self, display, parent, 16, 47, 50, 3)
+  Panel.__new(self, display, parent, 18, 46, 45, 5)
   self.messages = {}
 end
 
@@ -27,11 +27,12 @@ function Message:update(dt)
 end
 
 function Message:draw()
+  self:drawBorders()
   for i = 1, 3 do
     local message = self.messages[#self.messages - (i - 1)]
     if self.messages[#self.messages - (i - 1)] then
       local msg = message:sub(1, 1):upper()..message:sub(2)
-      self:write(msg, 1, i, {1 / i, 1 / i, 1 / i, 1})
+      self:write(msg, 2, i + 1, {1 / i, 1 / i, 1 / i, 1})
     end
   end
 end
