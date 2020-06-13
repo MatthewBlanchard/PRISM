@@ -16,6 +16,7 @@ local tiles = {
 	poof = 288,
 	rat = 306,
 	ring = 356,
+	shortsword = 358,
 	stairs_up = 274,
 	stairs_down = 275,
 	wall = 256,
@@ -23,7 +24,22 @@ local tiles = {
 	wand_pointy = 371,
 	zombie = 305,
 
-	b_top_left = 315
+	b_top_left_corner = 315,
+	b_top_left = 316,
+	b_top_middle = 334,
+	b_top_right = 318,
+	b_top_right_corner = 319,
+	b_left_top = 331,
+	b_left_middle = 332,
+	b_left_bottom = 363,
+	b_left_bottom_corner = 379,
+	b_bottom_left = 380,
+	b_bottom_middle = 364,
+	b_bottom_right = 382,
+	b_bottom_right_corner = 383,
+	b_right_bottom = 367,
+	b_right_top = 335,
+	b_right_middle = 366
 }
 
 return tiles

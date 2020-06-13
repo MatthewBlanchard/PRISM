@@ -2,8 +2,8 @@ local Actor = require "actor"
 local Tiles = require "tiles"
 
 local Shortsword = Actor:extend()
-Shortsword.char = Tiles["armor"]
-Shortsword.name = "armor"
+Shortsword.char = Tiles["shortsword"]
+Shortsword.name = "shortsword"
 
 Shortsword.components = {
   components.Item(),

@@ -28,7 +28,7 @@ function Zap:perform(level)
 end
 
 local WandOfRandomTeleportation = Actor:extend()
-WandOfRandomTeleportation.name = "Wand of Random Teleportation"
+WandOfRandomTeleportation.name = "Wand of Displacement"
 WandOfRandomTeleportation.color = {0.1, 0.1, .7, 1}
 WandOfRandomTeleportation.char = Tiles["wand_pointy"]
 
