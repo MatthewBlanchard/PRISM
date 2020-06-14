@@ -87,7 +87,7 @@ function love.load()
   table.insert(player.inventory, actors.Armor())
   table.insert(player.inventory, actors.Wand_of_lethargy())
   table.insert(player.inventory, actors.Parsnip())
-  table.insert(player.inventory, actors.Slippers_of_swiftness())
+  table.insert(player.inventory, actors.Ring_of_regeneration())
 
 
   love.keyboard.setKeyRepeat(true)
