@@ -8,8 +8,8 @@ function Event:__new(action, resolutionFunc)
   self.conditionals = {}
 end
 
-function Event:fire(level, action)
-  self.resolve(self.owner.actor, level, action)
+function Event:fire(level, action, condition)
+  self.resolve(self.owner.actor, level, action, condition)
 end
 
 function Event:shouldFire(level, action)
@@ -39,25 +39,27 @@ local Condition = Object:extend()
 
 Condition.onActions = {}
 Condition.afterActions = {}
+Condition.onTicks = {}
 
 function Condition:__new(type)
   self.type = self.type or type
 
   local oldOnActions, oldAfterActions = self.onActions, self.afterActions
+  local oldOnTick = self.onTicks
   self.onActions = {}
   self.afterActions = {}
+  self.onTicks = {}
 
-  if oldOnActions then
-    for k, v in pairs(oldOnActions) do
-      print(k, v.action.name, v, v.fire)
-      self.onActions[k] = v
-    end
+  for k, v in pairs(oldOnActions) do
+    self.onActions[k] = v
   end
 
-  if oldAfterActions then
-    for k, v in pairs(oldAfterActions) do
-      self.afterActions[k] = v
-    end
+  for k, v in pairs(oldAfterActions) do
+    self.afterActions[k] = v
+  end
+
+  for k, v in pairs(oldOnTick) do
+    self.onTicks[k] = v
   end
 end
 
@@ -67,7 +69,7 @@ function Condition:getActionEvents(type, level, action)
 
   for k, event in pairs(self[type]) do
     event.owner = self
-    if event:shouldFire(level, action) then
+    if type == "onTicks" or event:shouldFire(level, action) then
       table.insert(e, event)
       shouldret = true
     end
@@ -79,8 +81,14 @@ end
 function Condition:onAction(action, func)
   local e = Event(action, func)
 
-  print(e, e.fire)
   table.insert(self.onActions, e)
+  return e
+end
+
+function Condition:onTick(func)
+  local e = Event(nil, func)
+
+  table.insert(self.onTicks, e)
   return e
 end
 

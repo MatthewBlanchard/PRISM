@@ -31,5 +31,4 @@ WieldCondition:onAction(actions.Drop,
   end
 ):where(Condition.ownerIsTarget)
 
-print(Condition.ownerIsTarget)
 return WieldCondition

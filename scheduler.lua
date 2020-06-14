@@ -68,7 +68,6 @@ end
 
 function Scheduler:debugPrint()
   for i, schedTable in ipairs(self.queue) do
-    print(i, schedTable.time, schedTable.actor.name)
   end
 end
 

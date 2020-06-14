@@ -17,12 +17,9 @@ local function loadItems(directoryName, items, recurse)
     if info.type == "file" then
       fileName = string.gsub(fileName, ".lua", "")
       local name = string.gsub(item:sub(1, 1):upper()..item:sub(2), ".lua", "")
-      print(fileName)
-      print(name)
 
       items[name] = require(fileName)
     elseif info.type == "directory" and recurse then
-      print(fileName)
       loadItems(fileName, items)
     end
   end

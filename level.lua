@@ -42,6 +42,10 @@ function Level:update(dt, inputAction)
       self.scheduler:add(actor)
     end
 
+    -- we add a special tick to the scheduler that's used for durations and
+    -- damage over time effects
+    self.scheduler:add("tick")
+
     initialized = true
   end
 
@@ -64,24 +68,30 @@ function Level:update(dt, inputAction)
 
     -- grab the next actor off the scheduler and update it's fov
     local actor = self.scheduler:next()
-    self:updateFOV(actor)
 
-    -- if we find a player controlled actor we set waitingFor and return it
-    -- this hands things off to the interface which generates a command for
-    -- the actor
-    if actor.inputControlled then
-      waitingFor = actor
-      return waitingFor
+    if actor == "tick" then
+      self.scheduler:addTime(actor, 100)
+      self:triggerActionEvents("onTicks", action)
+    else
+      self:updateFOV(actor)
+
+      -- if we find a player controlled actor we set waitingFor and return it
+      -- this hands things off to the interface which generates a command for
+      -- the actor
+      if actor.inputControlled then
+        waitingFor = actor
+        return waitingFor
+      end
+
+      -- if we don't have a player controlled actor we ask the actor for it's
+      -- next action through it's controller
+      local action = actor:act()
+      assert(not (action == nil))
+      self:performAction(action)
+      self:updateLighting(false, dt)
+
+      -- we continue to the next actor
     end
-
-    -- if we don't have a player controlled actor we ask the actor for it's
-    -- next action through it's controller
-    local action = actor:act()
-    assert(not (action == nil))
-    self:performAction(action)
-    self:updateLighting(false, dt)
-
-    -- we continue to the next actor
   end
 end
 
@@ -270,11 +280,24 @@ function Level:performAction(action, free)
 end
 
 function Level:triggerActionEvents(type, action)
+  if type == "onTicks" then
+    for actor in self:eachActor() do
+      for i, condition in ipairs(actor:getConditions()) do
+        local e = condition:getActionEvents("onTicks", self)
+        if not e then return end
+        for i, event in ipairs(e) do
+          event:fire(self, actor, condition)
+        end
+      end
+    end
+    return
+  end
+
   for k, condition in pairs(action.owner:getConditions()) do
     local e = condition:getActionEvents(type, self, action)
     if e then
       for k, event in pairs(e) do
-        event:fire(self, action)
+        event:fire(self, action, condition)
       end
     end
   end
@@ -286,7 +309,7 @@ function Level:triggerActionEvents(type, action)
       local e = condition:getActionEvents(type, self, action)
       if e then
         for k, event in pairs(e) do
-          event:fire(self, action)
+          event:fire(self, action, condition)
         end
       end
     end

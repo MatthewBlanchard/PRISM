@@ -22,7 +22,6 @@ EquipCondition:onAction(actions.Drop,
   function(self, level, action)
     local equipment = action:getTarget(1)
 
-    print(action.owner.slots[equipment.slot], equipment.slot)
     if not (action.owner.slots[equipment.slot] == equipment) then
       return
     end
