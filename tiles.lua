@@ -9,6 +9,7 @@ local tiles = {
 	door_open = 272,
 	floor = 261,
 	heal = 289,
+	key = 369,
 	parsnip = 368,
 	player = 304,
 	pointy_poof = 290,
