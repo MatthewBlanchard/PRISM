@@ -7,7 +7,7 @@ Message.handlers = {}
 Message.inflector = inflector()
 
 function Message:__new(display, parent)
-  Panel.__new(self, display, parent, 18, 46, 45, 5)
+  Panel.__new(self, display, parent, 4, 45, 75, 5)
   self.messages = {}
 end
 

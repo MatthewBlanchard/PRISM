@@ -43,7 +43,7 @@ game = {}
 
 
 function love.load()
-  display = Display:new(80, 50, 1, nil, {.09, .09, .09}, nil, nil, true)
+  display = Display:new(81, 49, 1, nil, {.09, .09, .09}, nil, nil, true)
   map = ROT.Map.Rogue(display:getWidth() - 11, 44)
 
   local interface = Interface(display)
@@ -84,7 +84,7 @@ function love.load()
     actors.Wand_of_swapping,
     actors.Wand_of_random_teleportation
   }
-  for i = 1, 5 do
+  for i = 1, 4 do
     local chest = actors.Chest()
     table.insert(chest.inventory, chestContents[math.random(#chestContents)]())
     local x, y = level:getRandomWalkableTile()
@@ -93,13 +93,20 @@ function love.load()
     level:addActor(chest)
   end
 
+  local chest = actors.Chest()
+  local key = actors.Key()
+  local x, y = level:getRandomWalkableTile()
+  chest.position.x = x
+  chest.position.y = y
+  chest:setKey(chest, key)
+  level:addActor(chest)
+
+  table.insert(player.inventory, key)
   table.insert(player.inventory, actors.Potion())
   table.insert(player.inventory, actors.Armor())
   table.insert(player.inventory, actors.Wand_of_lethargy())
   table.insert(player.inventory, actors.Parsnip())
   table.insert(player.inventory, actors.Ring_of_regeneration())
-
-
   love.keyboard.setKeyRepeat(true)
 end
 
