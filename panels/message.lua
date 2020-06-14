@@ -15,9 +15,11 @@ function Message:update(dt)
   local actor = game.curActor
 
   if actor:hasComponent(components.Message) then
-    for i = 1, #actor.messages do
-      if actor.messages[i].targetActors and not actor.messages[i].silent then
-        local s = Message.generateString(actor.messages[i])
+    for i, message in ipairs(actor.messages) do
+      if type(message) == "string" then
+        table.insert(self.messages, message)
+      elseif message.targetActors and not message.silent then
+        local s = Message.generateString(message)
         table.insert(self.messages, s)
       end
     end

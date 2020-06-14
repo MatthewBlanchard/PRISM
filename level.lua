@@ -316,7 +316,16 @@ function Level:triggerActionEvents(type, action)
   end
 end
 
-function Level:addMessage(message)
+function Level:addMessage(message, actor)
+  -- if they specified an actor we check if they have a message component and
+  -- send them and specifically them that message
+  if actor and actor:hasComponent(components.Message) then
+    table.insert(actor.messages, message)
+    return
+  end
+
+  -- if actor wasn't specified we send the message to each actor who can see the
+  -- message's owner and has a message component
   for actor in self:eachActor(components.Message) do
     if actor:hasComponent(components.Sight) then
       for k, v in pairs(actor.seenActors) do
