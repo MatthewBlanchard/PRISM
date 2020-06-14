@@ -46,6 +46,7 @@ function Attack:perform(level)
   local dmg = ROT.Dice.roll(self.owner.wielded.dice) + self.owner:getStatBonus(self.owner.wielded.stat)
 
   if roll >= target:getAC() then
+    self.hit = true
     local damage = target:getReaction(reactions.Damage)(target, self.owner, dmg)
     level:performAction(damage)
     level:addEffect(AttackEffect(self.owner.position, target.position, dmg, true))

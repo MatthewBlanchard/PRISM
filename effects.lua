@@ -15,6 +15,18 @@ effects.HealEffect = function(actor, heal)
   end
 end
 
+effects.PoisonEffect = function(actor, damage)
+  local t = 0
+  return function(dt, interface)
+    t = t + dt
+
+    local color = {.1, .7, .1, 1}
+    interface:write(Tiles["pointy_poof"], actor.position.x, actor.position.y, color)
+    interface:write(tostring(damage), actor.position.x + 1, actor.position.y, color)
+    if t > .2 then return true end
+  end
+end
+
 local function cmul(c1, s)
   return {c1[1] * s, c1[2] * s, c1[3] * s}
 end

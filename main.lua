@@ -102,11 +102,8 @@ function love.load()
   level:addActor(chest)
 
   table.insert(player.inventory, key)
-  table.insert(player.inventory, actors.Potion())
-  table.insert(player.inventory, actors.Armor())
-  table.insert(player.inventory, actors.Wand_of_lethargy())
   table.insert(player.inventory, actors.Parsnip())
-  table.insert(player.inventory, actors.Ring_of_regeneration())
+  table.insert(player.inventory, actors.Dagger_of_venom())
   love.keyboard.setKeyRepeat(true)
 end
 

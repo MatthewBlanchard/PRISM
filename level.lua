@@ -279,19 +279,23 @@ function Level:performAction(action, free)
   end
 end
 
+local dummy = {} -- just to avoid making garbage
 function Level:triggerActionEvents(type, action)
   if type == "onTicks" then
-    for actor in self:eachActor() do
+    for _, actor in ipairs(self.actors) do
       for i, condition in ipairs(actor:getConditions()) do
-        local e = condition:getActionEvents("onTicks", self)
-        if not e then return end
+        local e = condition:getActionEvents("onTicks", self) or dummy
         for i, event in ipairs(e) do
           event:fire(self, actor, condition)
         end
       end
     end
+
     return
   end
+
+
+  if not action then return nil end
 
   for k, condition in pairs(action.owner:getConditions()) do
     local e = condition:getActionEvents(type, self, action)
@@ -305,11 +309,13 @@ function Level:triggerActionEvents(type, action)
   if not action:getTargets() then return end
 
   for k, actor in pairs(action:getTargets()) do
-    for k, condition in pairs(actor:getConditions()) do
-      local e = condition:getActionEvents(type, self, action)
-      if e then
-        for k, event in pairs(e) do
-          event:fire(self, action, condition)
+    if actor.getConditions then
+      for k, condition in pairs(actor:getConditions()) do
+        local e = condition:getActionEvents(type, self, action)
+        if e then
+          for k, event in pairs(e) do
+            event:fire(self, action, condition)
+          end
         end
       end
     end
