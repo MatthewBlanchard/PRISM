@@ -14,7 +14,7 @@ Player.components = {
 
   components.Stats
   {
-    STR = 20,
+    STR = 10,
     DEX = 10,
     INT = 10,
     CON = 10,
@@ -28,7 +28,7 @@ Player.components = {
     {
       name = "Stronk Fists",
       stat = "STR",
-      dice = "3d6"
+      dice = "1d1"
     }
   },
 
