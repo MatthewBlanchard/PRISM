@@ -12,7 +12,7 @@ local function loadItems(directoryName, items, recurse)
   local info = {}
 
   for k, item in pairs(love.filesystem.getDirectoryItems(directoryName)) do
-    fileName = directoryName .. "/" .. item
+    local fileName = directoryName .. "/" .. item
     love.filesystem.getInfo(fileName, info)
     if info.type == "file" then
       fileName = string.gsub(fileName, ".lua", "")
@@ -43,16 +43,17 @@ game = {}
 
 
 function love.load()
-  display = Display:new(81, 49, 1, nil, {.09, .09, .09}, nil, nil, true)
-  map = ROT.Map.Rogue(display:getWidth() - 11, 44)
+  local display = Display:new(81, 49, 1, nil, {.09, .09, .09}, nil, nil, true)
+  local map = ROT.Map.Rogue(display:getWidth() - 11, 44)
 
   local interface = Interface(display)
   local level = Level(map)
 
   game.level = level
   game.interface = interface
+  game.display = display
 
-  player = actors.Player()
+  local player = actors.Player()
   local x, y = level:getRandomWalkableTile()
   player.position.x = x
   player.position.y = y
@@ -108,9 +109,10 @@ function love.load()
 end
 
 function love.draw()
-  display:clear()
-  game.interface:draw(display)
-  display:draw()
+  if not game.display then return end
+  game.display:clear()
+  game.interface:draw(game.display)
+  game.display:draw()
 end
 
 function love.update(dt)

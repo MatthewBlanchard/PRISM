@@ -1,6 +1,7 @@
 local Condition = require "condition"
 
-local Regeneration = Condition()
+local Regeneration = Condition:extend()
+Regeneration.name = "regeneration"
 
 Regeneration:onTick(
   function(self, level, actor, condition)

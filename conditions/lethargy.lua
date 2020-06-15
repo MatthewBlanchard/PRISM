@@ -1,16 +1,9 @@
 local Condition = require "condition"
 
-local Lethargy = Condition()
+local Lethargy = Condition:extend()
+Lethargy.duration = 1000
+Lethargy.name = "lethargy"
 
-Lethargy:onTick(
-  function(self, level, actor, condition)
-    condition.time = (condition.time or 0) + 100
-
-    if condition.time > 1000 then
-      actor:removeCondition(condition)
-    end
-  end
-)
 
 Lethargy:onAction(actions.Move,
   function(self, level, action)

@@ -1,6 +1,7 @@
 local Condition = require "condition"
 
-local WieldCondition = Condition()
+local WieldCondition = Condition:extend()
+WieldCondition.name = "wielded"
 
 WieldCondition:afterAction(actions.Wield,
   function(self, level, action)

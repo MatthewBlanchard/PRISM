@@ -270,7 +270,7 @@ end
 -- @tparam[opt] table bg the color used to fill in the string's background
 function Display:writeCenter(s, y, fg, bg)
    if type(s) == "number" then
-      writeCharCentre(s, y, fg, bg)
+      self:writeCharCentre(s, y, fg, bg)
    end
    util.assert(s, "Display:writeCenter() must have string as param")
    util.assert(#s < self.widthInChars, "Length of ", s, " is greater than screen width")

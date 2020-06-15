@@ -1,6 +1,8 @@
 local Condition = require "condition"
 
-local Swiftness = Condition()
+local Swiftness = Condition:extend()
+Swiftness.name = "swiftness"
+
 
 Swiftness:onAction(actions.Move,
   function(self, level, action)

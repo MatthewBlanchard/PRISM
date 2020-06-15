@@ -33,7 +33,7 @@ function InventoryPanel:draw()
       local inventoryString = i .. " " .. actor.inventory[i].name
       inventoryString = correctWidth(inventoryString, w)
       self:write(inventoryString, 2, 2 + i, {1, 1, 1, 1})
-      self:write(actor.inventory[i].char, 3, 2 + i, actor.inventory[i].color, bg)
+      self:write(actor.inventory[i].char, 3, 2 + i, actor.inventory[i].color)
     end
 
     if inventorySize < height - 3 then 

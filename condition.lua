@@ -32,7 +32,6 @@ end
 
 function Event:where(condFunc)
   table.insert(self.conditionals, condFunc)
-  return e
 end
 
 local Condition = Object:extend()
@@ -41,9 +40,8 @@ Condition.onActions = {}
 Condition.afterActions = {}
 Condition.onTicks = {}
 
-function Condition:__new(type)
-  self.type = self.type or type
-
+function Condition:extend()
+  local self = Object.extend(self)
   local oldOnActions, oldAfterActions = self.onActions, self.afterActions
   local oldOnTick = self.onTicks
   self.onActions = {}
@@ -60,6 +58,22 @@ function Condition:__new(type)
 
   for k, v in pairs(oldOnTick) do
     self.onTicks[k] = v
+  end 
+
+  return self
+end
+
+function Condition:__new()
+  if self.duration then
+    self:onTick(
+      function(self, level, actor, condition)
+        condition.time = (condition.time or 0) + 100
+
+        if condition.time > condition.duration then
+          actor:removeCondition(condition)
+        end
+      end
+    )
   end
 end
 

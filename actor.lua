@@ -65,7 +65,7 @@ function Actor:addComponent(component)
     error("Unsupported component added to actor!")
   end
 
-  table.insert(comp, component)
+  table.insert(self.components, component)
 end
 
 function Actor:removeComponent(component)

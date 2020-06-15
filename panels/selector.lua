@@ -1,6 +1,6 @@
 local Panel = require "panel"
 
-function blink(period)
+local function blink(period)
   local t = 0
   return function(dt)
     t = t + dt
@@ -30,15 +30,15 @@ function SelectorPanel:draw()
   local blinkString = self.blink and target.char or "X"
   local blinkColor = self.blink and target.color or {.6, 0, 0, 1}
 
-  display:write(blinkString, target.position.x, target.position.y, blinkColor)
-  display:write(target.name, target.position.x + 2, target.position.y)
+  self.display:write(blinkString, target.position.x, target.position.y, blinkColor)
+  self.display:write(target.name, target.position.x + 2, target.position.y)
 end
 
 function SelectorPanel:update(dt)
   self.blink = self.blinkFunc(dt)
 
   if not self.targetIndex then
-    self:tabTarget(actor)
+    self:tabTarget()
   end
 end
 

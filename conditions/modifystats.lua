@@ -1,6 +1,7 @@
 local Condition = require "condition"
 
 local ModifyStats = Condition:extend()
+ModifyStats.name = "stats"
 
 function ModifyStats:__new(options)
   Condition.__new(self)

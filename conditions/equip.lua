@@ -1,6 +1,7 @@
 local Condition = require "condition"
 
-local EquipCondition = Condition()
+local EquipCondition = Condition:extend()
+EquipCondition.name = "equipped"
 
 EquipCondition:afterAction(actions.Equip,
   function(self, level, action)

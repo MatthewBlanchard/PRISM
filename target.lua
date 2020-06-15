@@ -33,7 +33,7 @@ end
 function Target:validate(owner, actor)
   local range
 
-  if owner == actor and not canTargetSelf then return false end
+  if owner == actor and not self.canTargetSelf then return false end
 
   if self.range == 0 then
     if owner:hasComponent(components.Inventory) then

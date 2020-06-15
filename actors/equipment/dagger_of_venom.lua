@@ -16,7 +16,7 @@ Dagger_of_Venom.components = {
     time = 75,
     effects = {
       conditions.Onhit(
-        conditions.Poisoned(1, 1000),
+        conditions.Poisoned,
         1 -- chance to apply effect
       )
     }

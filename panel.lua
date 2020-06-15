@@ -70,7 +70,7 @@ function Panel:write(c, x, y, fg, bg)
     error("Tried to write out of bounds to a panel!")
   end
 
-  display:write(c, self.x + x - 1, self.y + y - 1, fg, bg)
+  self.display:write(c, self.x + x - 1, self.y + y - 1, fg, bg)
 end
 
 function Panel:handleKeyPress(keypress)

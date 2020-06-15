@@ -1,7 +1,7 @@
 local Condition = require "condition"
 
-local OnHit = Condition()
-OnHit.name = "onhit condition"
+local OnHit = Condition:extend()
+OnHit.name = "OnHit"
 
 function OnHit:__new(toApply, chance)
   Condition.__new(self)

@@ -1,6 +1,7 @@
 local Condition = require "condition"
 
 local Invisible = Condition:extend()
+Invisible.name = "invisible"
 
 function Invisible:__new()
   Condition.__new(self)

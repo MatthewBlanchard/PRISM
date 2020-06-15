@@ -71,7 +71,7 @@ function Level:update(dt, inputAction)
 
     if actor == "tick" then
       self.scheduler:addTime(actor, 100)
-      self:triggerActionEvents("onTicks", action)
+      self:triggerActionEvents("onTicks")
     else
       self:updateFOV(actor)
 
