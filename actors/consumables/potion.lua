@@ -7,18 +7,13 @@ local Drink = Action:extend()
 Drink.name = "drink"
 Drink.targets = {targets.Item}
 
-function Drink:__new(owner, target)
-  Action.__new(self, owner, target)
-  self.name = "drink"
-end
-
 function Drink:perform(level)
   local heal = 5
   local target = self.targetActors[1]
 
   level:destroyActor(target)
-  self.owner:setHP(self.owner:getHP() + 5)
-  level:addEffect(effects.HealEffect(self.owner, 5))
+  self.owner:setHP(self.owner:getHP() + heal)
+  level:addEffect(effects.HealEffect(self.owner, heal))
 end
 
 local Potion = Actor:extend()

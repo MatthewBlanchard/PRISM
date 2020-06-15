@@ -142,7 +142,8 @@ local movementTranslation = {
 
 local keybinds = {
   i = "inventory",
-  p = "pickup"
+  p = "pickup",
+  l = "log"
 }
 
 function Interface:handleKeyPress(keypress)
@@ -154,6 +155,10 @@ function Interface:handleKeyPress(keypress)
   if game.curActor:hasComponent(components.Inventory) then
     if keybinds[keypress] == "inventory" then
       self:push(Inventory(self.display, self))
+    end
+
+    if keybinds[keypress] == "log" then
+      self.messagePanel:toggleHeight()
     end
 
     if keybinds[keypress] == "pickup" then

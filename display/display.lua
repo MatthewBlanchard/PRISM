@@ -240,6 +240,24 @@ function Display:write(s, x, y, fg, bg)
    self:_writeValidatedString(s, x, y, fg, bg)
 end
 
+function Display:writeFormatted(s, x, y, bg)
+   if type(s) ~= "table" then
+      util.assert(s, "Display:writeFormatted() must have table as param")
+      return
+   end
+
+   local currentX = x
+   local currentFg = nil
+   for i = 1, #s do 
+      if type(s[i]) == "string" then 
+         self:write(s[i], currentX, y, currentFg, bg)
+         currentX = currentX + #s[i]
+      elseif type(s[i]) == "table" then
+         currentFg = s[i]
+      end
+   end
+end
+
 --- Write.
 -- Writes a char (index) to the screen
 -- @tparam number index The char to be written

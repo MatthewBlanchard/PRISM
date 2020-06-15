@@ -5,9 +5,11 @@ local Message = Panel:extend()
 
 Message.handlers = {}
 Message.inflector = inflector()
+Message.initialHeight = 5
+Message.toggledHeight = 11
 
 function Message:__new(display, parent)
-  Panel.__new(self, display, parent, 4, 45, 75, 5)
+  Panel.__new(self, display, parent, 4, 45, 75, Message.initialHeight)
   self.messages = {}
 end
 
@@ -30,12 +32,23 @@ end
 
 function Message:draw()
   self:drawBorders()
-  for i = 1, 3 do
+  for i = 1, self.h - 2 do
     local message = self.messages[#self.messages - (i - 1)]
     if self.messages[#self.messages - (i - 1)] then
       local msg = message:sub(1, 1):upper()..message:sub(2)
-      self:write(msg, 2, i + 1, {1 / i, 1 / i, 1 / i, 1})
+      local fadeAmount = (self.h == 11) and i / 3 or i
+      self:write(msg, 2, i + 1, {1 / fadeAmount, 1 / fadeAmount, 1 / fadeAmount, 1})
     end
+  end
+end
+
+function Message:toggleHeight()
+  if self.h == Message.initialHeight then 
+    self.h = Message.toggledHeight
+    self.y = self.y - (Message.toggledHeight - Message.initialHeight)
+  else
+    self.h = Message.initialHeight
+    self.y = self.y + (Message.toggledHeight - Message.initialHeight)
   end
 end
 

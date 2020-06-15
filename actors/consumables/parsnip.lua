@@ -7,11 +7,6 @@ local Eat = Action:extend()
 Eat.name = "eat"
 Eat.targets = {targets.Item}
 
-function Eat:__new(owner, target)
-  Action.__new(self, owner, target)
-  self.name = "eat"
-end
-
 function Eat:perform(level)
   local heal = 2
   local target = self.targetActors[1]

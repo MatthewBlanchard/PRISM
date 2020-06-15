@@ -22,6 +22,7 @@ local tiles = {
 	potion = 353,
 	poof = 288,
 	pot = 280,
+	prism = 375,
 	rat = 306,
 	ring = 356,
 	shortsword = 358,

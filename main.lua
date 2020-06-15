@@ -102,6 +102,7 @@ function love.load()
   chest:setKey(chest, key)
   level:addActor(chest)
 
+  table.insert(player.inventory, actors.Prism())
   table.insert(player.inventory, key)
   table.insert(player.inventory, actors.Parsnip())
   table.insert(player.inventory, actors.Dagger_of_venom())
