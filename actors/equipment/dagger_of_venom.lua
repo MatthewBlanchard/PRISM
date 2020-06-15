@@ -2,7 +2,7 @@ local Actor = require "actor"
 local Tiles = require "tiles"
 
 local Dagger_of_Venom = Actor:extend()
-Dagger_of_Venom.char = Tiles["shortsword"]
+Dagger_of_Venom.char = Tiles["dagger"]
 Dagger_of_Venom.name = "Dagger of Venom"
 Dagger_of_Venom.color = {0.1, 1, 0.1}
 
