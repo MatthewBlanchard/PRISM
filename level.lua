@@ -34,6 +34,7 @@ end
 local initialized
 local waitingFor
 function Level:update(dt, inputAction)
+  self.dt = dt
   if not lightinit then self:updateLighting(false, dt or 0) lightinit = true end
 
   -- if our scheduler is not initialized we need to populate it first
@@ -54,7 +55,6 @@ function Level:update(dt, inputAction)
   if waitingFor then
     if inputAction then
       self:performAction(inputAction)
-      self:updateLighting(false, dt)
       waitingFor = nil
       return nil
     else
@@ -88,8 +88,6 @@ function Level:update(dt, inputAction)
       local action = actor:act()
       assert(not (action == nil))
       self:performAction(action)
-      self:updateLighting(false, dt)
-
       -- we continue to the next actor
     end
   end
@@ -260,6 +258,11 @@ function Level:moveActor(actor, pos)
   if actor.blocksVision then
     self.lighting:setFOV(self.fov)
   end
+
+  if actor.light or actor.blocksVision then
+    self:updateLighting(false, self.dt)
+  end
+  
 
   for seen in self:eachActor(components.Sight) do
     self:updateSeenActors(seen)
