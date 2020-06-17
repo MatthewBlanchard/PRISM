@@ -207,7 +207,7 @@ end
 function Display:clear(c, x, y, w, h, fg, bg)
    c = c or ' '
    w = w or self.widthInChars
-   local s = c:rep(self.widthInChars)
+   local s = c:rep(w)
    x = self:_validateX(x, s)
    y = self:_validateY(y)
    h = self:_validateHeight(y, h)

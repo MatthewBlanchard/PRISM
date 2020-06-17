@@ -2,7 +2,7 @@ local Actor = require "actor"
 local Tiles = require "tiles"
 
 local SlippersOfSwiftness = Actor:extend()
-SlippersOfSwiftness.char = Tiles["cloak"]
+SlippersOfSwiftness.char = Tiles["boots"]
 SlippersOfSwiftness.name = "Slippers of Swiftness"
 
 SlippersOfSwiftness.components = {

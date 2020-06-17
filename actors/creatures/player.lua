@@ -21,6 +21,7 @@ Player.components = {
     maxHP = 10,
     AC = 10
   },
+  components.Progression(),
 
   components.Attacker
   {

@@ -34,7 +34,7 @@ function Message:draw()
   self:drawBorders()
   for i = 1, self.h - 2 do
     local message = self.messages[#self.messages - (i - 1)]
-    if self.messages[#self.messages - (i - 1)] then
+    if message then
       local msg = message:sub(1, 1):upper()..message:sub(2)
       local fadeAmount = (self.h == 11) and i / 3 or i
       self:write(msg, 2, i + 1, {1 / fadeAmount, 1 / fadeAmount, 1 / fadeAmount, 1})

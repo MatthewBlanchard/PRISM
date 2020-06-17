@@ -18,6 +18,10 @@ end
 function Panel:draw(x, y)
 end
 
+function Panel:clear()
+  self.display:clear(nil, self.x, self.y, self.w, self.h)
+end
+
 function Panel:drawBorders(width, height)
   local w = width or self.w
   local h = height or self.h
