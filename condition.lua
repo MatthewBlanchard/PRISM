@@ -63,18 +63,16 @@ function Condition:extend()
   return self
 end
 
-function Condition:__new()
-  if self.duration then
-    self:onTick(
-      function(self, level, actor, condition)
-        condition.time = (condition.time or 0) + 100
+function Condition:setDuration(duration)
+  self:onTick(
+    function(self, level, actor, condition)
+      condition.time = (condition.time or 0) + 100
 
-        if condition.time > condition.duration then
-          actor:removeCondition(condition)
-        end
+      if condition.time > duration then
+        actor:removeCondition(condition)
       end
-    )
-  end
+    end
+  )
 end
 
 function Condition:getActionEvents(type, level, action)
