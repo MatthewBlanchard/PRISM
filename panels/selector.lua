@@ -17,6 +17,7 @@ end
 
 local SelectorPanel = Panel:extend()
 SelectorPanel.interceptInput = true
+SelectorPanel.blinkColor = {.6, 0, 0, 1}
 
 function SelectorPanel:__new(display, parent, action, targets)
   Panel.__new(self, display, parent, 1, 1, display:getWidth(), display:getHeight())
@@ -27,10 +28,9 @@ end
 
 function SelectorPanel:draw()
   local target = self.curTarget
-  local blinkString = self.blink and target.char or "X"
-  local blinkColor = self.blink and target.color or {.6, 0, 0, 1}
-
-  self:writeOffset(blinkString, target.position.x, target.position.y, blinkColor)
+  if not self.blink then
+    self:writeOffset("X", target.position.x, target.position.y, SelectorPanel.blinkColor)
+  end
   self:writeOffset(target.name, target.position.x + 2, target.position.y)
 end
 

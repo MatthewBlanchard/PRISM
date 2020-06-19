@@ -25,6 +25,7 @@ local tiles = {
 	prism = 375,
 	rat = 306,
 	ring = 356,
+	shoes = 376,
 	shortsword = 358,
 	stairs_up = 274,
 	stairs_down = 275,

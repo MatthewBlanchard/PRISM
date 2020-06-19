@@ -107,4 +107,6 @@ function targets.Unwield:validate(owner, actor)
   return Target.validate(self, owner, actor) and owner.wielded == actor
 end
 
+targets.Position = Target()
+
 return targets
