@@ -23,12 +23,12 @@ function AttackEffect(source, position, dmg, hit)
     local dmgstring = tostring(dmg)
     local dmglen = string.len(dmgstring)
 
-    interface:write(char, position.x, position.y, color)
+    interface:writeOffset(char, position.x, position.y, color)
 
     if hit then
       local xoffset = math.min(dirx * dmglen, 1)
       local xoffset = xoffset == 0 and 1 or xoffset
-      interface:write(dmgstring, position.x + xoffset, position.y, color)
+      interface:writeOffset(dmgstring, position.x + xoffset, position.y, color)
     end
 
     t = t + dt

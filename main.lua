@@ -7,7 +7,7 @@ components = {}
 actors = {}
 effects = require "effects"
 
-
+love.graphics.setDefaultFilter("nearest", "nearest")
 local function loadItems(directoryName, items, recurse)
   local info = {}
 
@@ -127,5 +127,6 @@ function love.update(dt)
 end
 
 function love.keypressed(key, scancode)
+  if not game.curActor then return end
   game.interface:handleKeyPress(key, scancode)
 end

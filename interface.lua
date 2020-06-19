@@ -13,6 +13,8 @@ function Interface:__new(display)
   Panel.__new(self, display)
   self.statusPanel = Status(display)
   self.messagePanel = Message(display)
+  self.viewX = math.floor(display.widthInChars/2)
+  self.viewY = math.floor(display.heightInChars/2)
   self.stack = {}
 end
 
@@ -63,18 +65,19 @@ function Interface:draw()
   local light = game.level.effectlight
   local ambientColor = {.175, .175, .175}
 
-  for x = 1, game.level.width do
-    for y = 1, game.level.height do
+  local sx, sy = game.curActor.position.x, game.curActor.position.y
+  for x = sx - self.viewX, sx + self.viewX do
+    for y = sy - self.viewY, sy + self.viewY do
+      local mx = (x - (sx - self.viewX))+1
+      local my = (y - (sy - self.viewY))+1
       if fov[x] and fov[x][y] then
-        if light[x] and light[x][y] and value(light[x][y]) > .05 then
+        if light[x] and light[x][y] and value(light[x][y]) > 0.05 then
           -- okay we're gonna first establish our light color and then
           -- do a bit of blending to keep it in line with the ambient
           -- fog of war
           local finalColor
           local lightCol = light[x][y]
           local lightValue = value(lightCol)
-          local inverseLightValue = math.abs(lightValue - 1)
-
           local ambientValue = value({.175, .375, .175})
 
           if lightValue < ambientValue then
@@ -83,23 +86,24 @@ function Interface:draw()
           else
             finalColor = lightCol
           end
-          self:write(fov[x][y] == 0 and Tiles["floor"] or Tiles["wall"], x, y, finalColor)
+          self:write(fov[x][y] == 0 and Tiles["floor"] or Tiles["wall"], mx, my, finalColor)
         else
-          local amCol = 
-          self:write(fov[x][y] == 0 and Tiles["floor"] or Tiles["wall"], x, y, ambientColor)
+          self:write(fov[x][y] == 0 and Tiles["floor"] or Tiles["wall"], mx, my, ambientColor)
         end
       elseif explored[x] and explored[x][y] then
-        self:write(explored[x][y] == 0 and Tiles["floor"] or Tiles["wall"], x, y, ambientColor)
+        self:write(explored[x][y] == 0 and Tiles["floor"] or Tiles["wall"], mx, my, ambientColor)
       end
     end
   end
 
+  local offx = (sx - self.viewX) - 1
+  local offy = (sy - self.viewY) - 1
   for k, actor in pairs(seenActors) do
     if not actor:hasComponent(components.Move) then
       local x, y = actor.position.x, actor.position.y
       if light[x] and light[x][y] then
         local lightValue = math.min(value(light[x][y]), 0.5)
-        self:write(actor.char, x, y, clerp(ambientColor, actor.color, lightValue / 0.5))
+        self:write(actor.char, x-offx, y-offy, clerp(ambientColor, actor.color, lightValue / 0.5))
       end
     end
   end
@@ -109,7 +113,7 @@ function Interface:draw()
       local x, y = actor.position.x, actor.position.y
       if light[x] and light[x][y] then
         local lightValue = math.min(value(light[x][y]), 0.5)
-        self:write(actor.char, x, y, clerp(ambientColor, actor.color, lightValue / 0.5))
+        self:write(actor.char, x-offx, y-offy, clerp(ambientColor, actor.color, lightValue / 0.5))
       end
     end
   end
@@ -124,6 +128,15 @@ function Interface:draw()
 
   if not self:peek() then return end
   self:peek():draw()
+end
+
+function Interface:writeOffset(toWrite, x, y, fg, bg)
+  local mx = (x - (game.curActor.position.x - self.viewX)) + 1
+  local my = (y - (game.curActor.position.y - self.viewY)) + 1
+
+  if mx > 0 and mx < self.w and my > 0 and my < self.h then
+    self:write(toWrite, mx, my, fg, bg)
+  end
 end
 
 local movementTranslation = {

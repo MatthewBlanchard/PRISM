@@ -9,7 +9,7 @@ local function PoofEffect(pos1)
     t = t + dt
 
     local color = {.4, .4, .4, 1}
-    interface:write(Tiles["poof"], pos1.x, pos1.y, color)
+    interface:writeOffset(Tiles["poof"], pos1.x, pos1.y, color)
     if t > .3 then return true end
   end
 end
