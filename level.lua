@@ -184,6 +184,10 @@ function Level:addActor(actor)
   if initialized and actor:hasComponent(components.Controller, components.Aicontroller) then
     self.scheduler:add(actor)
   end
+
+  if actor:hasComponent(components.Sight) then
+    self:updateFOV(actor)
+  end
 end
 
 function Level:hasActor(actor)
