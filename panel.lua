@@ -15,6 +15,16 @@ function Panel:__new(display, parent, x, y, w, h)
   self.panels = {}
 end
 
+function Panel:getRoot()
+  local parent = self.parent
+  local prev = self
+  while parent do
+    prev = parent
+    parent = parent.parent
+  end
+  return prev
+end
+
 function Panel:draw(x, y)
 end
 

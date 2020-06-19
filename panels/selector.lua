@@ -24,14 +24,19 @@ function SelectorPanel:__new(display, parent, action, targets)
   self.action = action
   self.blinkFunc = blink(0.3)
   self.targets = targets or {}
+  self.movementTranslation = self:getRoot().movementTranslation
 end
 
 function SelectorPanel:draw()
-  local target = self.curTarget
+  local position = self:getTargetPosition()
   if not self.blink then
-    self:writeOffset("X", target.position.x, target.position.y, SelectorPanel.blinkColor)
+    self:writeOffset("X", position.x, position.y, SelectorPanel.blinkColor)
   end
-  self:writeOffset(target.name, target.position.x + 2, target.position.y)
+  if self.curTarget.name then self:writeOffset(self.curTarget.name, position.x + 2, position.y) end
+end
+
+function SelectorPanel:getTargetPosition()
+  return self.curTarget.position and self.curTarget.position or self.curTarget
 end
 
 function SelectorPanel:update(dt)
@@ -45,7 +50,6 @@ end
 function SelectorPanel:tabTarget(actor)
   local n = 1
   local currentTarget = #self.targets + 1
-
 
   if #self:getValidTargets(currentTarget) < 1 then
     game.interface:reset()
@@ -62,6 +66,10 @@ function SelectorPanel:tabTarget(actor)
 
   self.targetIndex = n
   self.curTarget = self:getValidTargets(currentTarget)[n]
+end
+
+function SelectorPanel:moveTarget(direction)
+  self.curTarget = self:getTargetPosition() + direction
 end
 
 function SelectorPanel:getValidTargets(index)
@@ -92,6 +100,8 @@ function SelectorPanel:handleKeyPress(keypress)
 
   if keypress == "tab" then
     self:tabTarget(self.curActor)
+  elseif self.action.targets[#self.targets + 1].positional and self.movementTranslation[keypress] then
+    self:moveTarget(self.movementTranslation[keypress])
   elseif keypress == "return" then
     table.insert(self.targets, self.curTarget)
     self.targetIndex = nil

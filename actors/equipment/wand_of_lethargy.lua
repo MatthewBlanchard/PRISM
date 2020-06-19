@@ -7,6 +7,7 @@ local ZapTarget = targets.Target()
 ZapTarget.name = "ZapTarget"
 ZapTarget.requirements = {components.Stats}
 ZapTarget.range = 6
+ZapTarget.positional = true
 
 local Zap = Action:extend()
 Zap.name = "zap"

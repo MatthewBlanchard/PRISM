@@ -128,7 +128,7 @@ function Interface:draw()
   self:peek():draw()
 end
 
-local movementTranslation = {
+Interface.movementTranslation = {
   -- cardinal
   w = Vector2(0, - 1),
   s = Vector2(0, 1),
@@ -142,7 +142,7 @@ local movementTranslation = {
   c = Vector2(1, 1)
 }
 
-local keybinds = {
+Interface.keybinds = {
   i = "inventory",
   p = "pickup",
   l = "log"
@@ -155,15 +155,15 @@ function Interface:handleKeyPress(keypress)
   end
 
   if game.curActor:hasComponent(components.Inventory) then
-    if keybinds[keypress] == "inventory" then
+    if self.keybinds[keypress] == "inventory" then
       self:push(Inventory(self.display, self))
     end
 
-    if keybinds[keypress] == "log" then
+    if self.keybinds[keypress] == "log" then
       self.messagePanel:toggleHeight()
     end
 
-    if keybinds[keypress] == "pickup" then
+    if self.keybinds[keypress] == "pickup" then
       local item
       for k, i in pairs(game.curActor.seenActors) do
         if actions.Pickup:validateTarget(1, game.curActor, i) then
@@ -174,8 +174,8 @@ function Interface:handleKeyPress(keypress)
   end
 
   -- we're dealing with a directional command here
-  if movementTranslation[keypress] and game.curActor:hasComponent(components.Move) then
-    local targetPosition = game.curActor.position + movementTranslation[keypress]
+  if self.movementTranslation[keypress] and game.curActor:hasComponent(components.Move) then
+    local targetPosition = game.curActor.position + self.movementTranslation[keypress]
 
     local enemy
     for k, actor in pairs(game.curActor.seenActors) do
@@ -197,7 +197,7 @@ function Interface:handleKeyPress(keypress)
       return self:setAction(game.curActor:getAction(actions.Attack)(game.curActor, enemy))
     end
 
-    return self:setAction(game.curActor:getAction(actions.Move)(game.curActor, movementTranslation[keypress]))
+    return self:setAction(game.curActor:getAction(actions.Move)(game.curActor, self.movementTranslation[keypress]))
   end
 end
 
