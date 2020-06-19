@@ -13,8 +13,8 @@ function Interface:__new(display)
   Panel.__new(self, display)
   self.statusPanel = Status(display)
   self.messagePanel = Message(display)
-  self.viewX = math.floor(display.widthInChars/2)
-  self.viewY = math.floor(display.heightInChars/2)
+  self.viewX = math.floor(display.widthInChars/2) - self.statusPanel.w
+  self.viewY = math.floor(display.heightInChars/2) - self.messagePanel.h
   self.stack = {}
 end
 

@@ -3,7 +3,8 @@ local Panel = require "panel"
 local StatusPanel = Panel:extend()
 
 function StatusPanel:__new(display, parent)
-  Panel.__new(self, display, parent, 64, 1, 17, 11)
+  local x, y = game.display:getWidth() - 17, game.display:getHeight()
+  Panel.__new(self, display, parent, x, 1, 17, 11)
 end
 
 function StatusPanel:draw()

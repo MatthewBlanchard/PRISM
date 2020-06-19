@@ -9,7 +9,7 @@ Message.initialHeight = 5
 Message.toggledHeight = 11
 
 function Message:__new(display, parent)
-  Panel.__new(self, display, parent, 4, 45, 75, Message.initialHeight)
+  Panel.__new(self, display, parent, 1, game.display:getHeight() - Message.initialHeight + 1, game.display:getWidth(), Message.initialHeight)
   self.messages = {}
 end
 

@@ -43,15 +43,18 @@ game = {}
 
 
 function love.load()
-  local display = Display:new(81, 49, 1, nil, {.09, .09, .09}, nil, nil, true)
+  local scale = 1
+  local w, h = math.floor(81/scale), math.floor(49/scale)
+  local display = Display:new(w, h, scale, nil, {.09, .09, .09}, nil, nil, true)
   local map = ROT.Map.Rogue(display:getWidth() - 11, 44)
+
+  game.display = display
 
   local interface = Interface(display)
   local level = Level(map)
 
   game.level = level
   game.interface = interface
-  game.display = display
 
   local player = actors.Player()
   local x, y = level:getRandomWalkableTile()
