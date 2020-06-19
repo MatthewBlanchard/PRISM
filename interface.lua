@@ -68,8 +68,6 @@ function Interface:draw()
   local sx, sy = game.curActor.position.x, game.curActor.position.y
   for x = sx - self.viewX, sx + self.viewX do
     for y = sy - self.viewY, sy + self.viewY do
-      local mx = (x - (sx - self.viewX))+1
-      local my = (y - (sy - self.viewY))+1
       if fov[x] and fov[x][y] then
         if light[x] and light[x][y] and value(light[x][y]) > 0.05 then
           -- okay we're gonna first establish our light color and then
@@ -86,12 +84,12 @@ function Interface:draw()
           else
             finalColor = lightCol
           end
-          self:write(fov[x][y] == 0 and Tiles["floor"] or Tiles["wall"], mx, my, finalColor)
+          self:writeOffset(fov[x][y] == 0 and Tiles["floor"] or Tiles["wall"], x, y, finalColor)
         else
-          self:write(fov[x][y] == 0 and Tiles["floor"] or Tiles["wall"], mx, my, ambientColor)
+          self:writeOffset(fov[x][y] == 0 and Tiles["floor"] or Tiles["wall"], x, y, ambientColor)
         end
       elseif explored[x] and explored[x][y] then
-        self:write(explored[x][y] == 0 and Tiles["floor"] or Tiles["wall"], mx, my, ambientColor)
+        self:writeOffset(explored[x][y] == 0 and Tiles["floor"] or Tiles["wall"], x, y, ambientColor)
       end
     end
   end
@@ -103,7 +101,7 @@ function Interface:draw()
       local x, y = actor.position.x, actor.position.y
       if light[x] and light[x][y] then
         local lightValue = math.min(value(light[x][y]), 0.5)
-        self:write(actor.char, x-offx, y-offy, clerp(ambientColor, actor.color, lightValue / 0.5))
+        self:writeOffset(actor.char, x, y, clerp(ambientColor, actor.color, lightValue / 0.5))
       end
     end
   end
@@ -113,7 +111,7 @@ function Interface:draw()
       local x, y = actor.position.x, actor.position.y
       if light[x] and light[x][y] then
         local lightValue = math.min(value(light[x][y]), 0.5)
-        self:write(actor.char, x-offx, y-offy, clerp(ambientColor, actor.color, lightValue / 0.5))
+        self:writeOffset(actor.char, x, y, clerp(ambientColor, actor.color, lightValue / 0.5))
       end
     end
   end
