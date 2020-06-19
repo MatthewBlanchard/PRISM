@@ -128,15 +128,6 @@ function Interface:draw()
   self:peek():draw()
 end
 
-function Interface:writeOffset(toWrite, x, y, fg, bg)
-  local mx = (x - (game.curActor.position.x - self.viewX)) + 1
-  local my = (y - (game.curActor.position.y - self.viewY)) + 1
-
-  if mx > 0 and mx < self.w and my > 0 and my < self.h then
-    self:write(toWrite, mx, my, fg, bg)
-  end
-end
-
 local movementTranslation = {
   -- cardinal
   w = Vector2(0, - 1),

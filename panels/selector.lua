@@ -30,8 +30,8 @@ function SelectorPanel:draw()
   local blinkString = self.blink and target.char or "X"
   local blinkColor = self.blink and target.color or {.6, 0, 0, 1}
 
-  self.display:write(blinkString, target.position.x, target.position.y, blinkColor)
-  self.display:write(target.name, target.position.x + 2, target.position.y)
+  self:writeOffset(blinkString, target.position.x, target.position.y, blinkColor)
+  self:writeOffset(target.name, target.position.x + 2, target.position.y)
 end
 
 function SelectorPanel:update(dt)

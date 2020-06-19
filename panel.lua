@@ -53,6 +53,17 @@ function Panel:drawBorders(width, height)
   self:drawVertical(Tiles["b_right_bottom"], half_height + 2, half_height * 2 + 1, w)
 end
 
+function Panel:writeOffset(toWrite, x, y, fg, bg)
+  local interface = game.interface
+  local mx = (x - (game.curActor.position.x - interface.viewX)) + 1
+  local my = (y - (game.curActor.position.y - interface.viewY)) + 1
+
+  if mx > 0 and mx < self.w and my > 0 and my < self.h then
+    self:write(toWrite, mx, my, fg, bg)
+  end
+end
+
+
 function Panel:drawHorizontal(c, first, last, y) 
   for i = first, last do 
     self:write(c, 1 + i, y, Panel.borderColor)
