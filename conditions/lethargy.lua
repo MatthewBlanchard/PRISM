@@ -4,7 +4,6 @@ local Lethargy = Condition:extend()
 Lethargy.duration = 1000
 Lethargy.name = "lethargy"
 
-
 Lethargy:onAction(actions.Move,
   function(self, level, action)
     action.time = action.time * 4
