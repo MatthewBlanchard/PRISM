@@ -21,8 +21,10 @@ function Level:__new(map)
 
   map:create(self:getMapCallback())
 
+  -- temporary code before we get more complicated level gen in
+  -- just pop a few doors where rotLove's level gen indicates
   if not map._doors then return end
-  for k, d in pairs(map._doors) do
+  for k, d in ipairs(map._doors) do
     local door = actors.Door()
     door.position.x = d.x
     door.position.y = d.y
@@ -66,10 +68,12 @@ function Level:update(dt, inputAction)
     -- check if we should quit before we move onto the next actor
     if self.shouldQuit then return love.event.push('quit') end
 
-    -- grab the next actor off the scheduler and update it's fov
+    -- grab the next actor off the scheduler 
     local actor = self.scheduler:next()
 
     if actor == "tick" then
+      -- We found the special actor tick which triggers recurring condition effects
+      -- like damage over time. It's also used to track durations.
       self.scheduler:addTime(actor, 100)
       self:triggerActionEvents("onTicks")
     else
@@ -104,6 +108,8 @@ end
 function Level:updateFOV(actor)
   actor.seenActors = {}
 
+  -- check if actor.fov exists and if so we're gonna trash it and start anew
+  -- TODO: find a better way to do this that doesn't trash the garbage collector
   if actor.fov then
     actor.fov = {}
     self.fov:compute(actor.position.x, actor.position.y, actor.sight, self:getFOVCallback(actor))
@@ -119,36 +125,37 @@ local lightinit = false
 function Level:updateLighting(effect, dt)
   self.light = {}
 
-  for k, actor in pairs(self.actors) do
-    if actor:hasComponent(components.Light) then
-      local x, y = actor.position.x, actor.position.y
+  for actor in self:eachActor(components.Light) do
+    local x, y = actor.position.x, actor.position.y
 
-      local light
-      if actor.lightEffect then
-        light = cmul(actor.lightEffect(dt), actor.lightIntensity)
-      else
-        light = cmul(actor.light, actor.lightIntensity)
-      end
+    local light
+    -- Check if we should be manipulating the light with lightingEffects
+    -- like flickering or pulsing.
+    if actor.lightEffect and effect then
+      light = cmul(actor.lightEffect(dt), actor.lightIntensity)
+    else
+      light = cmul(actor.light, actor.lightIntensity)
+    end
 
-      local curLight = self.lighting:getLight(x, y)
-      if curLight then
-        self.lighting:setLight(x, y, ROT.Color.add(light, curLight))
-      else
-        self.lighting:setLight(x, y, light)
-      end
+    -- We don't want to overwrite an exisitng light so if light exists in that cell
+    -- we add the two together instead
+    local curLight = self.lighting:getLight(x, y)
+    if curLight then
+      self.lighting:setLight(x, y, ROT.Color.add(light, curLight))
+    else
+      self.lighting:setLight(x, y, light)
     end
   end
 
-  if effect then
-    self.lighting:compute(self:getLightingEffectCallback())
-  else
-    self.lighting:compute(self:getLightingCallback())
-  end
+  -- We maintain two seperate light buffers. If effect is truthy we give the lighting engine
+  -- a callback that fills the effects buffer which does not get used in gameplay and is for
+  -- display purposes.
+  local callback = effect and self:getLightingEffectCallback() or self:getLightingCallback()
+  self.lighting:compute(callback)
 
-  for k, actor in pairs(self.actors) do
-    if actor:hasComponent(components.Light) then
+  -- Once we've accumulated our light we clear the buffer of the existing lights.
+  for actor in self:eachActor(components.Light) do
       self.lighting:setLight(actor.position.x, actor.position.y, nil)
-    end
   end
 end
 
@@ -157,17 +164,22 @@ function Level:updateEffectLighting(dt)
 end
 
 function Level:addEffect(effect)
-  table.insert(self.effects, effect)
+  -- we push the effect onto the effects stack and then the interface
+  -- resolves these
+  table.insert(self.effects, 1, effect)
 end
 
-function Level:invalidateLighting()
+function Level:invalidateLighting(actor)
+  if actor and not actor.blocksVision then return end
+
+  -- This resets out lighting. rotLove doesn't offer a better way to do this.
   self.lighting:setFOV(self.fov)
 end
 
 function Level:updateSeenActors(actor)
   actor.seenActors = {}
 
-  for k, other in pairs(self.actors) do
+  for k, other in ipairs(self.actors) do
     if (other:isVisible() or actor == other) and
     actor.fov[other.position.x] and
     actor.fov[other.position.x][other.position.y]
@@ -199,31 +211,24 @@ function Level:hasActor(actor)
 end
 
 function Level:removeActor(actor)
-  for k, v in pairs(self.actors) do
+  for k, v in ipairs(self.actors) do
     if v == actor then
       table.remove(self.actors, k)
     end
   end
 
-  if initialized then --and actor:hasComponent(components.Controller, components.Aicontroller) then
-    self.scheduler:remove(actor)
+  self.scheduler:remove(actor)
+
+  -- loop through actors with the sight component and recompute their FOV
+
+  -- TODO: more intelligently recompute FOVs by checking if the actor effects FOV
+  -- or is in the sightActor's seenActor list
+  for sightActor in self:eachActor(components.Sight) do
+    self:updateFOV(sightActor)
   end
 
-  for actor in self:eachActor(components.Sight) do
-    self:updateFOV(actor)
-  end
-
+  -- We check to make sure there is a player controlled actor left.
   self:checkLoseCondition()
-end
-
-function Level:checkLoseCondition()
-  local foundPlayerActor = false
-
-  for i, v in ipairs(self.actors) do
-    foundPlayerActor = foundPlayerActor or v.inputControlled
-  end
-
-  self.shouldQuit = not foundPlayerActor
 end
 
 function Level:destroyActor(actor)
@@ -244,20 +249,35 @@ function Level:destroyActor(actor)
   end
 end
 
+function Level:checkLoseCondition()
+  local foundPlayerActor = false
+
+  for i, v in ipairs(self.actors) do
+    foundPlayerActor = foundPlayerActor or v.inputControlled
+  end
+
+  -- set the shouldQuit flag which will be checked in Level.update
+  self.shouldQuit = not foundPlayerActor
+end
+
 function Level:moveActor(actor, pos)
-  for invActor in self:eachActor() do
-    if invActor:hasComponent(components.Inventory) then
-      local hasItem = invActor:hasItem(actor)
-      if hasItem then
-        self:addActor(actor)
-        table.remove(invActor.inventory, hasItem)
-      end
+  -- if this actor exists in another actor's inventory we first remove the item
+  -- from their inventory, and then add it to the level.
+  for invActor in self:eachActor(components.Inventory) do
+    local hasItem = invActor:hasItem(actor)
+    if hasItem then
+      self:addActor(actor)
+      table.remove(invActor.inventory, hasItem)
     end
   end
 
+  -- we copy the position here so that the caller doesn't have to worry about
+  -- allocating a new table
   actor.position = pos:copy()
 
-  self:updateFOV(actor)
+  if actor:hasComponent(components.Sight) then
+    self:updateFOV(actor)
+  end
 
   if actor.blocksVision then
     self.lighting:setFOV(self.fov)
@@ -267,7 +287,6 @@ function Level:moveActor(actor, pos)
     self:updateLighting(false, self.dt)
   end
   
-
   for seen in self:eachActor(components.Sight) do
     self:updateSeenActors(seen)
   end
@@ -281,6 +300,8 @@ function Level:performAction(action, free)
 
   self:triggerActionEvents("afterActions", action)
 
+  -- if this isn't a reaction or free action and the level contains the acting actor
+  -- we update it's place in the scheduler
   if not action.reaction and not free and self:hasActor(action.owner) then
     self.scheduler:addTime(action.owner, action.time)
   end
@@ -301,13 +322,12 @@ function Level:triggerActionEvents(type, action)
     return
   end
 
-
   if not action then return nil end
   
-  for k, condition in pairs(action.owner:getConditions()) do
+  for k, condition in ipairs(action.owner:getConditions()) do
     local e = condition:getActionEvents(type, self, action)
     if e then
-      for k, event in pairs(e) do
+      for k, event in ipairs(e) do
         event:fire(condition, self, action.owner, action)
       end
     end
@@ -315,12 +335,12 @@ function Level:triggerActionEvents(type, action)
 
   if not action:getTargets() then return end
 
-  for k, actor in pairs(action:getTargets()) do
+  for k, actor in ipairs(action:getTargets()) do
     if actor.getConditions then
-      for k, condition in pairs(actor:getConditions()) do
+      for k, condition in ipairs(actor:getConditions()) do
         local e = condition:getActionEvents(type, self, action)
         if e then
-          for k, event in pairs(e) do
+          for k, event in ipairs(e) do
             event:fire(condition, self, actor, action)
           end
         end
@@ -341,7 +361,7 @@ function Level:addMessage(message, actor)
   -- message's owner and has a message component
   for actor in self:eachActor(components.Message) do
     if actor:hasComponent(components.Sight) then
-      for k, v in pairs(actor.seenActors) do
+      for k, v in ipairs(actor.seenActors) do
         if v == message.owner then
           table.insert(actor.messages, message)
         end

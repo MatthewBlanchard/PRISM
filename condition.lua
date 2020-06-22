@@ -1,5 +1,7 @@
 local Object = require "object"
 
+-- This is a private class that is exclusively instantiated by Condition.
+-- It's returned by Condition's"onX" function cycle.
 local Event = Object:extend()
 
 function Event:__new(action, resolutionFunc)
@@ -30,6 +32,8 @@ function Event:shouldFire(level, action)
   return true
 end
 
+-- This can be called on the events returned by Condition to add additional and arbitrary
+-- requirements. For an example check out wield.lua
 function Event:where(condFunc)
   table.insert(self.conditionals, condFunc)
 end
@@ -42,6 +46,10 @@ Condition.onTicks = {}
 
 function Condition:extend()
   local self = Object.extend(self)
+
+  -- Since we're defining these as static elements in a table that shouldn't be changed
+  -- on instantiated objects we have to copy these tables or all changes will end up on the base
+  -- class.
   local oldOnActions, oldAfterActions = self.onActions, self.afterActions
   local oldOnTick = self.onTicks
   self.onActions = {}
@@ -63,6 +71,7 @@ function Condition:extend()
   return self
 end
 
+-- a helper function to handle condition durations
 function Condition:setDuration(duration)
   self:onTick(
     function(self, level, actor)
