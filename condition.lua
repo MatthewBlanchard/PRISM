@@ -8,8 +8,8 @@ function Event:__new(action, resolutionFunc)
   self.conditionals = {}
 end
 
-function Event:fire(level, action, condition)
-  self.resolve(self.owner.actor, level, action, condition)
+function Event:fire(condition, level, actor, action)
+  self.resolve(condition, level, actor, action)
 end
 
 function Event:shouldFire(level, action)
@@ -65,11 +65,11 @@ end
 
 function Condition:setDuration(duration)
   self:onTick(
-    function(self, level, actor, condition)
-      condition.time = (condition.time or 0) + 100
+    function(self, level, actor)
+      self.time = (self.time or 0) + 100
 
-      if condition.time > duration then
-        actor:removeCondition(condition)
+      if self.time > duration then
+        actor:removeCondition(self)
       end
     end
   )

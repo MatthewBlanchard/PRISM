@@ -10,11 +10,11 @@ function OnHit:__new(toApply, chance)
 end
 
 OnHit:afterAction(actions.Attack,
-  function(self, level, action, condition)
+  function(self, level, actor, action)
     local defender = action:getTarget(1)
-    if action.hit and defender ~= self then
-      if math.random() <= condition.chance then
-        defender:applyCondition(condition.toApply())
+    if action.hit and defender ~= actor then
+      if math.random() <= self.chance then
+        defender:applyCondition(self.toApply())
       end
     end
   end

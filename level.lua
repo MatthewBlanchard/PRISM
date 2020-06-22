@@ -293,7 +293,7 @@ function Level:triggerActionEvents(type, action)
       for i, condition in ipairs(actor:getConditions()) do
         local e = condition:getActionEvents("onTicks", self) or dummy
         for i, event in ipairs(e) do
-          event:fire(self, actor, condition)
+          event:fire(condition, self, actor)
         end
       end
     end
@@ -303,12 +303,12 @@ function Level:triggerActionEvents(type, action)
 
 
   if not action then return nil end
-
+  
   for k, condition in pairs(action.owner:getConditions()) do
     local e = condition:getActionEvents(type, self, action)
     if e then
       for k, event in pairs(e) do
-        event:fire(self, action, condition)
+        event:fire(condition, self, action.owner, action)
       end
     end
   end
@@ -321,7 +321,7 @@ function Level:triggerActionEvents(type, action)
         local e = condition:getActionEvents(type, self, action)
         if e then
           for k, event in pairs(e) do
-            event:fire(self, action, condition)
+            event:fire(condition, self, actor, action)
           end
         end
       end

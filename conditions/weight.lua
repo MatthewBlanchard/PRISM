@@ -8,7 +8,7 @@ Weight.stats = {
 }
 
 Weight:onAction(actions.Move,
-  function(self, level, action)
+  function(self, level, actor, action)
     action.time = action.time * 1.25
   end
 )

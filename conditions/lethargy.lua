@@ -5,7 +5,7 @@ Lethargy.duration = 1000
 Lethargy.name = "lethargy"
 
 Lethargy:onAction(actions.Move,
-  function(self, level, action)
+  function(self, level, actor, action)
     action.time = action.time * 4
   end
 )
