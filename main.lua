@@ -63,8 +63,6 @@ function love.load()
     level:addActor(actor)
   end
 
-  spawnActor(actors.Player())
-
   for i = 1, 20 do
     spawnActor(actors.Monster())
   end
@@ -96,6 +94,8 @@ function love.load()
 
   spawnActor(chest)
   spawnActor(actors.Prism())
+  local player = actors.Player()
+  spawnActor(player)
 
   table.insert(player.inventory, key)
   table.insert(player.inventory, actors.Parsnip())
