@@ -1,5 +1,9 @@
 local tiles = {
 	arrow_down = 291,
+
+	bubble_exclamation = 292,
+	bubble_surprise = 293,
+
 	armor = 354,
 	belt = 370,
 	boots = 372,
@@ -13,6 +17,7 @@ local tiles = {
 	door_open = 272,
 	floor = 261,
 	gloves = 373,
+	gobbo = 357,
 	heal = 289,
 	key = 369,
 	pants = 374,
@@ -25,14 +30,20 @@ local tiles = {
 	prism = 375,
 	rat = 306,
 	ring = 356,
+	scroll = 361,
 	shoes = 376,
 	shortsword = 358,
+	spider = 358,
 	stairs_up = 274,
 	stairs_down = 275,
 	wall = 256,
 	wand = 355,
 	wand_pointy = 371,
 	zombie = 305,
+
+	rocks_1 = 262,
+	rocks_2 = 263,
+	rocks_3 = 264,
 
 	b_top_left_corner = 315,
 	b_top_left = 316,
