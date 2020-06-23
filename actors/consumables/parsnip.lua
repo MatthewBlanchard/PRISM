@@ -18,6 +18,7 @@ end
 
 local Parsnip = Actor:extend()
 Parsnip.name = "Parsnip"
+Parsnip.description = "A bland root vegetable."
 Parsnip.color = {0.97, 0.93, 0.55, 1}
 Parsnip.emissive = false
 Parsnip.char = Tiles["parsnip"]
