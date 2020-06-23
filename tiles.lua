@@ -3,6 +3,11 @@ local tiles = {
 
 	bubble_exclamation = 292,
 	bubble_surprise = 293,
+	bubble_question = 294,
+	bubble_sleep = 295,
+	bubble_lines = 296,
+	bubble_ellipsis = 297,
+	bubble_heart = 298,
 
 	armor = 354,
 	belt = 370,
