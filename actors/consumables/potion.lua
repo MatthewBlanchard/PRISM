@@ -18,6 +18,7 @@ end
 
 local Potion = Actor:extend()
 Potion.name = "Potion of Healing"
+Potion.description = "Heals you for 5 HP."
 Potion.color = {1, 0, 0, 1}
 Potion.emissive = true
 Potion.char = Tiles["potion"]

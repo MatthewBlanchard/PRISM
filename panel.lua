@@ -106,6 +106,24 @@ function Panel:writeFormatted(s, x, y, bg)
   self.display:writeFormatted(s, self.x + x - 1, self.y + y - 1, bg)
 end
 
+function Panel:writeText(s, x, y, maxWidth)
+  if x < 1 or y < 1 or y > self.h then 
+    error("Tried to write out of bounds to a panel!")
+  end
+
+  self.display:drawText(self.x + x - 1, self.y + y - 1, s, maxWidth)
+end
+
+function Panel:correctWidth(s, w)
+  if string.len(s) < w then
+    return s .. string.rep(" ", w - string.len(s))
+  elseif string.len(s) > w then
+    return string.sub(s, 1, w)
+  else
+    return s
+  end
+end
+
 function Panel:handleKeyPress(keypress)
   if keypress == "backspace" then
     game.interface:pop()
