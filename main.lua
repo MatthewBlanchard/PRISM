@@ -56,26 +56,19 @@ function love.load()
   game.level = level
   game.interface = interface
 
-  local player = actors.Player()
-  local x, y = level:getRandomWalkableTile()
-  player.position.x = x
-  player.position.y = y
-  level:addActor(player)
+  local spawnActor = function(actor)
+    local x, y = level:getRandomWalkableTile()
+    actor.position.x = x
+    actor.position.y = y
+    level:addActor(actor)
+  end
 
   for i = 1, 20 do
-    local monster = actors.Monster()
-    local x, y = level:getRandomWalkableTile()
-    monster.position.x = x
-    monster.position.y = y
-    level:addActor(monster)
+    spawnActor(actors.Monster())
   end
 
   for i = 1, 5 do
-    local potion = actors.Potion()
-    local x, y = level:getRandomWalkableTile()
-    potion.position.x = x
-    potion.position.y = y
-    level:addActor(potion)
+    spawnActor(actors.Potion())
   end
 
   local chestContents = {
@@ -88,25 +81,22 @@ function love.load()
     actors.Wand_of_swapping,
     actors.Wand_of_random_teleportation
   }
+
   for i = 1, 4 do
     local chest = actors.Chest()
     table.insert(chest.inventory, chestContents[math.random(#chestContents)]())
-    local x, y = level:getRandomWalkableTile()
-    chest.position.x = x
-    chest.position.y = y
-    level:addActor(chest)
+    spawnActor(chest)
   end
 
   local chest = actors.Chest()
   local key = actors.Key()
-  local x, y = level:getRandomWalkableTile()
-  chest.position.x = x
-  chest.position.y = y
   chest:setKey(chest, key)
-  level:addActor(chest)
 
-  table.insert(player.inventory, actors.Potion_of_weight())
-  table.insert(player.inventory, actors.Prism())
+  spawnActor(chest)
+  spawnActor(actors.Prism())
+  local player = actors.Player()
+  spawnActor(player)
+
   table.insert(player.inventory, key)
   table.insert(player.inventory, actors.Parsnip())
   table.insert(player.inventory, actors.Dagger_of_venom())

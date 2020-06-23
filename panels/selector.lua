@@ -25,6 +25,11 @@ function SelectorPanel:__new(display, parent, action, targets)
   self.blinkFunc = blink(0.3)
   self.targets = targets or {}
   self.movementTranslation = self:getRoot().movementTranslation
+  -- Where the cursor is pointing
+  self.curTarget = nil
+
+  -- Index in the getValidTargets() array
+  self.targetIndex = nil
 end
 
 function SelectorPanel:draw()
@@ -50,22 +55,32 @@ end
 function SelectorPanel:tabTarget(actor)
   local n = 1
   local currentTarget = #self.targets + 1
+  local valid = self:getValidTargets(currentTarget)
 
-  if #self:getValidTargets(currentTarget) < 1 then
+  if #valid < 1 then
     game.interface:reset()
     return
   end
 
   if self.targetIndex then
-    if self.targetIndex + 1 > #self:getValidTargets(currentTarget) then
-      n = 1
-    else
-      n = self.targetIndex + 1
+    -- If player is holding shift, go back a target
+    if love.keyboard.isDown("lshift") then
+      if self.targetIndex == 1 then 
+        n = #valid
+      else 
+        n = self.targetIndex - 1
+      end
+    else 
+      if self.targetIndex + 1 > #valid then
+        n = 1
+      else
+        n = self.targetIndex + 1
+      end
     end
   end
 
   self.targetIndex = n
-  self.curTarget = self:getValidTargets(currentTarget)[n]
+  self.curTarget = valid[n]
 end
 
 function SelectorPanel:moveTarget(direction)
