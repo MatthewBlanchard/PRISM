@@ -1,5 +1,5 @@
 local Panel = require "panel"
-local ContextPanel = require "panels.context"
+local ItemPanel = require "panels.item"
 
 local InventoryPanel = Panel:extend()
 InventoryPanel.interceptInput = true
@@ -53,7 +53,7 @@ function InventoryPanel:handleKeyPress(keypress)
 
   local item = game.curActor.inventory[tonumber(keypress)]
   if item then
-    game.interface:push(ContextPanel(self.display, self, game.curActor.inventory[tonumber(keypress)]))
+    game.interface:push(ItemPanel(self.display, self, item, self.x, self.y, self.w, self.h))
   end
 end
 
