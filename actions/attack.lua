@@ -48,7 +48,7 @@ function Attack:perform(level)
   self.time = self.owner.wielded.time or 100
   if roll >= target:getAC() then
     self.hit = true
-    local damage = target:getReaction(reactions.Damage)(target, self.owner, dmg)
+    local damage = target:getReaction(reactions.Damage)(target, {self.owner}, dmg)
     level:performAction(damage)
     level:addEffect(AttackEffect(self.owner.position, target.position, dmg, true))
     return

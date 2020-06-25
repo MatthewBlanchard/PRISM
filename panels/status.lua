@@ -30,8 +30,13 @@ function StatusPanel:draw()
 end
 
 function StatusPanel:statsToString(actor)
-  return self:statToString(actor.STR) .. " " .. self:statToString(actor.DEX) .. " " ..
-         self:statToString(actor.CON) .. " " .. self:statToString(actor.INT)
+  local STR = actor:getStat("STR")
+  local DEX = actor:getStat("DEX")
+  local CON = actor:getStat("CON")
+  local INT = actor:getStat("INT")
+
+  return self:statToString(STR) .. " " .. self:statToString(DEX) .. " " ..
+         self:statToString(CON) .. " " .. self:statToString(INT)
 end
 
 function StatusPanel:statToString(stat)

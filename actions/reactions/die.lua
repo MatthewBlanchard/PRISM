@@ -3,9 +3,9 @@ local Reaction = require "reaction"
 local Die = Reaction:extend()
 Die.name = "die"
 
-function Die:__new(owner, damage, dealer)
-  Reaction.__new(self, owner, nil)
-  self.dealer = dealer
+function Die:__new(owner, targets, damage)
+  Reaction.__new(self, owner, targets)
+  self.dealer = targets[1]
   self.damage = damage
 end
 

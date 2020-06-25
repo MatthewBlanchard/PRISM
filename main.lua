@@ -79,7 +79,10 @@ function love.load()
     actors.Slippers_of_swiftness,
     actors.Wand_of_lethargy,
     actors.Wand_of_swapping,
-    actors.Wand_of_random_teleportation
+    actors.Wand_of_random_teleportation,
+    actors.Potion_of_weight,
+    actors.Potion_of_rage,
+    actors.Dagger_of_venom
   }
 
   for i = 1, 4 do
@@ -100,6 +103,7 @@ function love.load()
   table.insert(player.inventory, key)
   table.insert(player.inventory, actors.Parsnip())
   table.insert(player.inventory, actors.Dagger_of_venom())
+  table.insert(player.inventory, actors.Potion_of_rage())
   love.keyboard.setKeyRepeat(true)
 end
 

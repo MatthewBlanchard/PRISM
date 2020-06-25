@@ -27,6 +27,7 @@ function Stats:initialize(actor)
 
   actor.rollCheck = self.rollCheck
   actor.getStatBonus = self.getStatBonus
+  actor.getStat = self.getStat
   actor.getAC = self.getAC
   actor.getMaxHP = self.getMaxHP
   actor.getHP = self.getHP
@@ -66,12 +67,31 @@ function Stats.getStatBonus(actor, stat)
 
   local condmods = 0
   for k, cond in pairs(actor:getConditions()) do
+    if stat == "STR" then
+    end
     if cond[validStats[stat]] then
       condmods = condmods + cond[validStats[stat]](cond, actor)
     end
   end
 
   return math.floor(diffFromTen(actor[stat] + condmods) / 2)
+end
+
+function Stats.getStat(actor, stat)
+  if not validStats[stat] then
+    error("Invalid bonus request made by actor: " .. actor .. " for stat: " .. stat)
+  end
+
+  local condmods = 0
+  for k, cond in pairs(actor:getConditions()) do
+    if stat == "STR" then
+    end
+    if cond[validStats[stat]] then
+      condmods = condmods + cond[validStats[stat]](cond, actor)
+    end
+  end
+
+  return actor[stat] + condmods
 end
 
 function Stats.getAC(actor)

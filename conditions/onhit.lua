@@ -14,7 +14,7 @@ OnHit:afterAction(actions.Attack,
     local defender = action:getTarget(1)
     if action.hit and defender ~= actor then
       if math.random() <= self.chance then
-        defender:applyCondition(self.toApply())
+        defender:applyCondition(self.toApply(actor))
       end
     end
   end

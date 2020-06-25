@@ -4,11 +4,16 @@ local Poison = Condition:extend()
 Poison.name = "poisoned"
 Poison.damage = 1
 
+function Poison:__new(owner)
+  Condition.__new(self)
+  self.owner = owner
+end
+
 Poison:setDuration(1000)
 
 Poison:onTick(
   function(self, level, actor)
-    local damage = actor:getReaction(reactions.Damage)(actor, self, self.damage)
+    local damage = actor:getReaction(reactions.Damage)(actor, {self.owner}, self.damage)
     level:performAction(damage)
     level:addEffect(effects.PoisonEffect(actor, self.damage))
   end
