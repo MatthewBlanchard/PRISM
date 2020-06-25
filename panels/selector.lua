@@ -1,4 +1,5 @@
 local Panel = require "panel"
+local ContextPanel = require "panels.context"
 
 local function blink(period)
   local t = 0
@@ -30,6 +31,8 @@ function SelectorPanel:__new(display, parent, action, targets)
 
   -- Index in the getValidTargets() array
   self.targetIndex = nil
+
+  self.targetPanel = ContextPanel(self.display, self, nil, 52, 12, 29, 11)
 end
 
 function SelectorPanel:draw()
@@ -38,6 +41,7 @@ function SelectorPanel:draw()
     self:writeOffset("X", position.x, position.y, SelectorPanel.blinkColor)
   end
   if self.curTarget.name then self:writeOffset(self.curTarget.name, position.x + 2, position.y) end
+  self.targetPanel:draw()
 end
 
 function SelectorPanel:getTargetPosition()
@@ -81,6 +85,7 @@ function SelectorPanel:tabTarget(actor)
 
   self.targetIndex = n
   self.curTarget = valid[n]
+  self.targetPanel:setTarget(self.curTarget)
 end
 
 function SelectorPanel:moveTarget(direction)

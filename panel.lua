@@ -124,6 +124,14 @@ function Panel:correctWidth(s, w)
   end
 end
 
+function Panel:correctHeight(h)
+  if h % 2 == 0 then
+    return h + 1
+  else 
+    return h
+  end
+end
+
 function Panel:handleKeyPress(keypress)
   if keypress == "backspace" then
     game.interface:pop()
