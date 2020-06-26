@@ -16,7 +16,7 @@ function Level:__new(map)
 
   self.fov = ROT.FOV.Recursive(self:getVisibilityCallback())
 
-  self.lighting = ROT.Lighting(self:getLightReflectivityCallback(), {range = 20, passes = 3})
+  self.lighting = ROT.Lighting(self:getLightReflectivityCallback(), {range = 50, passes = 3})
   self.lighting:setFOV(self.fov)
 
   map:create(self:getMapCallback())

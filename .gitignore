@@ -2,3 +2,5 @@
 .vscode/
 
 profiler.lua
+
+simpledungeon.lua

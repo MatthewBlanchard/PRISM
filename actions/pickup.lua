@@ -1,24 +1,27 @@
 local Action = require "action"
 
-targets.Pickup = targets.Item()
+targets.Pickup = targets.Item:extend()
 targets.Pickup.name = "pickup"
 
 function targets.Pickup:validate(owner, actor)
   if actor == owner then
+    print("ya")
     return false
   end
 
   for k, item in pairs(owner.inventory) do
     if item == actor then
+      print "Nah"
       return false
     end
   end
 
   if owner.slots and owner.slots[actor.slot] == actor then
+    print "blah"
     return false
   end
 
-  return targets.Target.validate(self, owner, actor)
+  return targets.Item.validate(self, owner, actor)
 end
 
 local Pickup = Action:extend()

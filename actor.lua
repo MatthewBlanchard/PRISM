@@ -56,10 +56,6 @@ function Actor:isVisible()
   return not visible
 end
 
-function Actor:draw(display)
-  display:write(self.char, self.position.x, self.position.y)
-end
-
 function Actor:addComponent(component)
   if not component:checkRequirements(self) then
     error("Unsupported component added to actor!")
@@ -110,7 +106,6 @@ function Actor:getAction(action)
   end
 end
 
-
 function Actor:addReaction(reaction)
   table.insert(self.reactions, reaction)
 end
@@ -145,17 +140,20 @@ end
 
 -- utility functions
 function Actor:getRange(type, actor)
+  return self:getRangeVec(type, actor.position)
+end
+
+function Actor:getRangeVec(type, vector)
+  local pos = self.position
   if type == "box" then
     local range
     local i = 1
-    local a1 = self
-    local a2 = actor
     while not range do
       if
-      a2.position.x >= a1.position.x - i and
-      a2.position.x <= a1.position.x + i and
-      a2.position.y >= a1.position.y - i and
-      a2.position.y <= a1.position.y + i
+      vector.x >= pos.x - i and
+      vector.x <= pos.x + i and
+      vector.y >= pos.y - i and
+      vector.y <= pos.y + i
       then
         range = i
       end
@@ -165,7 +163,7 @@ function Actor:getRange(type, actor)
 
     return range
   else
-    return math.sqrt(math.pow(self.position.x - actor.position.x, 2) + math.pow(self.position.y - actor.position.y, 2))
+    return math.sqrt(math.pow(pos.x - vector.x, 2) + math.pow(pos.y - vector.y, 2))
   end
 end
 

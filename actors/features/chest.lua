@@ -2,7 +2,7 @@ local Actor = require "actor"
 local Action = require "action"
 local Tiles = require "tiles"
 
-local targetDoor = targets.Target()
+local targetDoor = targets.Actor:extend()
 
 function targetDoor:validate(owner, actor)
   return actor:is(actors.Chest)

@@ -15,7 +15,7 @@ local function PoofEffect(pos1, pos2)
   end
 end
 
-local ZapTarget = targets.Target()
+local ZapTarget = targets.Actor:extend()
 ZapTarget.name = "ZapTarget"
 ZapTarget.requirements = {components.Stats}
 ZapTarget.range = 9

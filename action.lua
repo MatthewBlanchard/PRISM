@@ -29,6 +29,10 @@ function Action:getTargets()
   return self.targetActors
 end
 
+function Action:getTargetObject(index)
+  return self.targets[index]
+end
+
 function Action:hasTarget(actor)
   for _, a in pairs(self.targetActors) do
     if a == actor then return true end

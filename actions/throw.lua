@@ -1,8 +1,7 @@
 local Action = require "action"
 
-local ThrowTarget = targets.Target()
+local ThrowTarget = targets.Point:extend()
 ThrowTarget.name = "throwtarget"
-ThrowTarget.requirements = {components.Stats}
 ThrowTarget.range = 6
 
 local Throw = Action()
@@ -11,9 +10,9 @@ Throw.targets = {targets.Item, ThrowTarget}
 
 function Throw:perform(level)
   local thrown = self.targetActors[1]
-  local target = self.targetActors[2]
+  local point = self.targetActors[2]
 
-  level:moveActor(thrown, target.position)
+  level:moveActor(thrown, point)
 end
 
 return Throw

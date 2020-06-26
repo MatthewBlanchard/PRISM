@@ -3,7 +3,7 @@ local Action = require "action"
 local Condition = require "condition"
 local Tiles = require "tiles"
 
-local ZapTarget = targets.Target()
+local ZapTarget = targets.Actor:extend()
 ZapTarget.name = "ZapTarget"
 ZapTarget.requirements = {components.Stats}
 ZapTarget.range = 6

@@ -1,5 +1,6 @@
 local Panel = require "panel"
 local ContextPanel = require "panels.context"
+local Vector = require "vector"
 
 local function blink(period)
   local t = 0
@@ -37,6 +38,7 @@ end
 
 function SelectorPanel:draw()
   local position = self:getTargetPosition()
+  print(position.x, position.y, "YA DUDE")
   if not self.blink then
     self:writeOffset("X", position.x, position.y, SelectorPanel.blinkColor)
   end
@@ -45,7 +47,7 @@ function SelectorPanel:draw()
 end
 
 function SelectorPanel:getTargetPosition()
-  return self.curTarget.position and self.curTarget.position or self.curTarget
+  return self.curTarget.position or self.curTarget
 end
 
 function SelectorPanel:update(dt)
@@ -57,6 +59,12 @@ function SelectorPanel:update(dt)
 end
 
 function SelectorPanel:tabTarget(actor)
+  if not self.targetIndex and self.action:getTargetObject(#self.targets + 1):is(targets.Point) then
+    self.targetIndex = 1
+    self.curTarget = Vector(game.curActor.position.x, game.curActor.position.y)
+    self.targetPanel:setTarget(game.curActor)
+    return
+  end
   local n = 1
   local currentTarget = #self.targets + 1
   local valid = self:getValidTargets(currentTarget)
@@ -95,6 +103,10 @@ end
 function SelectorPanel:getValidTargets(index)
   local targets = {}
 
+  if self.action.targets[index]:is(targets.Point) then
+    return game.curActor.seenActors
+  end
+
   for i = 1, #game.curActor.seenActors do
     if self.action:validateTarget(index, game.curActor, game.curActor.seenActors[i]) then
       local isTargeted = false
@@ -120,10 +132,14 @@ function SelectorPanel:handleKeyPress(keypress)
 
   if keypress == "tab" then
     self:tabTarget(self.curActor)
-  elseif self.action.targets[#self.targets + 1].positional and self.movementTranslation[keypress] then
+  elseif self.action.targets[#self.targets + 1]:is(targets.Point) and self.movementTranslation[keypress] then
     self:moveTarget(self.movementTranslation[keypress])
   elseif keypress == "return" then
-    table.insert(self.targets, self.curTarget)
+    if self.action.targets[#self.targets + 1]:is(targets.Point) then
+      table.insert(self.targets, self.curTarget.position)
+    else
+      table.insert(self.targets, self.curTarget)
+    end
     self.targetIndex = nil
 
     if #self.targets == self.action:getNumTargets() then
