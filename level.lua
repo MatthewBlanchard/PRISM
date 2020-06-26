@@ -349,6 +349,23 @@ function Level:triggerActionEvents(type, action)
   end
 end
 
+function Level:getAOE(type, position, range)
+  if type == "fov" then
+    local fov = {}
+    local seenActors = {}
+    self.fov:compute(position.x, position.y, range, self:getAOEFOVCallback(fov))
+    for k, other in ipairs(self.actors) do
+      if fov[other.position.x] and
+      fov[other.position.x][other.position.y]
+      then
+        table.insert(seenActors, other)
+      end
+    end
+
+    return fov, seenActors
+  end
+end
+
 function Level:addMessage(message, actor)
   -- if they specified an actor we check if they have a message component and
   -- send them and specifically them that message
@@ -468,6 +485,14 @@ function Level:getFOVCallback(actor)
 
     if not actor.fov[x] then actor.fov[x] = {} end
     actor.fov[x][y] = self:getCell(x, y)
+  end
+end
+
+function Level:getAOEFOVCallback(aoeFOV)
+  return function(x, y, z)
+    print(x, y)
+    if not aoeFOV[x] then aoeFOV[x] = {} end
+    aoeFOV[x][y] = self:getCell(x, y)
   end
 end
 

@@ -134,7 +134,8 @@ function SelectorPanel:handleKeyPress(keypress)
   elseif self.action.targets[#self.targets + 1]:is(targets.Point) and self.movementTranslation[keypress] then
     self:moveTarget(self.movementTranslation[keypress])
   elseif keypress == "return" then
-    if self.action.targets[#self.targets + 1]:is(targets.Point) then
+    if  self.action.targets[#self.targets + 1]:is(targets.Point) and 
+        self.action:validateTarget(#self.targets + 1, game.curActor, self.curTarget)     then
       table.insert(self.targets, self.curTarget.position or self.curTarget)
     else
       table.insert(self.targets, self.curTarget)

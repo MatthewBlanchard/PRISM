@@ -6,6 +6,7 @@ ThrowTarget.range = 6
 
 local Throw = Action()
 Throw.name = "throw"
+Throw.range = 6
 Throw.targets = {targets.Item, ThrowTarget}
 
 function Throw:perform(level)

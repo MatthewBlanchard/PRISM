@@ -140,7 +140,7 @@ end
 
 -- utility functions
 function Actor:getRange(type, actor)
-  return self:getRangeVec(type, actor.position)
+  return self:getRangeVec(type, actor.position or actor)
 end
 
 function Actor:getRangeVec(type, vector)

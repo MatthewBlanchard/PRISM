@@ -103,7 +103,7 @@ function love.load()
   table.insert(player.inventory, key)
   table.insert(player.inventory, actors.Parsnip())
   table.insert(player.inventory, actors.Dagger_of_venom())
-  table.insert(player.inventory, actors.Potion_of_rage())
+  table.insert(player.inventory, actors.Wand_of_fireball())
   love.keyboard.setKeyRepeat(true)
 end
 
