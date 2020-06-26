@@ -38,7 +38,6 @@ end
 
 function SelectorPanel:draw()
   local position = self:getTargetPosition()
-  print(position.x, position.y, "YA DUDE")
   if not self.blink then
     self:writeOffset("X", position.x, position.y, SelectorPanel.blinkColor)
   end

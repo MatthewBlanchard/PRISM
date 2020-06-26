@@ -5,19 +5,16 @@ targets.Pickup.name = "pickup"
 
 function targets.Pickup:validate(owner, actor)
   if actor == owner then
-    print("ya")
     return false
   end
 
   for k, item in pairs(owner.inventory) do
     if item == actor then
-      print "Nah"
       return false
     end
   end
 
   if owner.slots and owner.slots[actor.slot] == actor then
-    print "blah"
     return false
   end
 
