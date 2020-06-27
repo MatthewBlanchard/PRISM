@@ -276,6 +276,14 @@ function Display:writeChar(index, x, y, fg, bg)
    self.chars[x][y] = index
 end
 
+function Display:writeBG(x, y, bg)
+   x = self:_validateX(x)
+   y = self:_validateY(y)
+   bg = self:_validateBackgroundColor(bg)
+
+   self.backgroundColors[x][y] = bg
+end
+
 function Display:writeCharCentre(index, y, fg, bg)
    self:writeChar(index, self.widthInChars / 2, fg, bg)
 end

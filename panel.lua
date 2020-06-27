@@ -68,11 +68,16 @@ function Panel:writeOffset(toWrite, x, y, fg, bg)
   local mx = (x - (game.curActor.position.x - interface.viewX)) + 1
   local my = (y - (game.curActor.position.y - interface.viewY)) + 1
 
-  if mx > 0 and mx < self.w and my > 0 and my < self.h then
-    self:write(toWrite, mx, my, fg, bg)
-  end
+  self:write(toWrite, mx, my, fg, bg)
 end
 
+function Panel:writeOffsetBG(x, y, bg)
+  local interface = game.interface
+  local mx = (x - (game.curActor.position.x - interface.viewX)) + 1
+  local my = (y - (game.curActor.position.y - interface.viewY)) + 1
+
+  self:writeBG(mx, my, bg)
+end
 
 function Panel:drawHorizontal(c, first, last, y) 
   for i = first, last do 
@@ -98,6 +103,13 @@ function Panel:write(c, x, y, fg, bg)
   self.display:write(c, self.x + x - 1, self.y + y - 1, fg, bg)
 end
 
+function Panel:writeBG(x, y, bg)
+  if x < 1 or x > self.w or y < 1 or y > self.h then
+    error("Tried to write out of bounds to a panel!")
+  end
+
+  self.display:writeBG(self.x + x - 1, self.y + y - 1, bg)
+end
 function Panel:writeFormatted(s, x, y, bg)
   if x < 1 or y < 1 or y > self.h then
     error("Tried to write out of bounds to a panel!")
