@@ -1,4 +1,5 @@
 local Panel = require "panel"
+local Colors = require "colors"
 
 local LevelUpPanel = Panel:extend()
 LevelUpPanel.options = {
@@ -8,18 +9,27 @@ LevelUpPanel.options = {
   ["4"] = "INT"
 }
 
+LevelUpPanel.feats = {
+  ["STR"] = {
+  },
+
+  ["DEX"] = {
+  }
+}
+
 function LevelUpPanel:__new(display, parent)
-  Panel.__new(self, display, parent, 23, 15, 27, 15)
+  Panel.__new(self, display, parent, 23, 15, 27, 17)
 end
 
 function LevelUpPanel:draw()
   self:clear()
   self:drawBorders()
-  self:writeFormatted({"1) ", {1, 0, 0, 1}, "STR"}, 2, 3)
+  self:writeFormatted({"1) ", Colors.RED, "STR"}, 2, 3)
   self:write("    \16Hit things harder.", 2, 4)
-  self:writeFormatted({"2) ", {0, 1, 0, 1}, "DEX"}, 2, 6)
-  self:writeFormatted({"3) ", {1, 1, 0, 1}, "CON"}, 2, 8)
-  self:writeFormatted({"4) ", {0, 0, 1, 1}, "STR"}, 2, 10)
+  self:writeFormatted({"2) ", Colors.GREEN, "DEX"}, 2, 6)
+  self:writeFormatted({"3) ", Colors.YELLOW, "CON"}, 2, 8)
+  self:writeFormatted({"4) ", Colors.BLUE, "INT"}, 2, 10)
+  self:writeFormatted({"5) ", Colors.PURPLE, "WIS"}, 2, 12)
 end
 
 function LevelUpPanel:handleKeyPress(keypress)

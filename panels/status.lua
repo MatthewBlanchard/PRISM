@@ -1,19 +1,22 @@
 local Panel = require "panel"
+local Colors = require "colors"
+
+local formatted = {Colors.RED, "STR ", Colors.GREEN, "DEX ", Colors.YELLOW, "CON ", Colors.BLUE, "INT ", Colors.PURPLE, "WIS"}
 
 local StatusPanel = Panel:extend()
 
 function StatusPanel:__new(display, parent)
-  local x, y = game.display:getWidth() - 17, game.display:getHeight()
-  Panel.__new(self, display, parent, x, 1, 17, 11)
+  local x, y = game.display:getWidth() - 20, game.display:getHeight()
+  Panel.__new(self, display, parent, x, 1, 21, 11)
 end
 
 function StatusPanel:draw()
   self:drawBorders()
   local hpPercentage = game.curActor.HP / game.curActor.maxHP
-  local barLength = math.floor(15 * hpPercentage)
+  local barLength = math.floor(19 * hpPercentage)
   local hpString = tostring(game.curActor.HP) .. "/" .. tostring(game.curActor.maxHP) .. " HP"
 
-  for i = 1, 15 do
+  for i = 1, 19 do
     local c = string.sub(hpString, i, i)
     c = c == "" and " " or c
 
@@ -21,7 +24,7 @@ function StatusPanel:draw()
     self:write(c, i + 1, 5, {.75, .75, .75, 1}, bg)
   end
 
-  self:write("STR DEX CON INT", 2, 2)
+  self:writeFormatted(formatted, 2, 2)
   local stats = self:statToString(game.curActor.STR) 
   self:write(self:statsToString(game.curActor), 2, 3)
   local statbonus = game.curActor:getStatBonus(game.curActor.wielded.stat)
@@ -34,9 +37,10 @@ function StatusPanel:statsToString(actor)
   local DEX = actor:getStat("DEX")
   local CON = actor:getStat("CON")
   local INT = actor:getStat("INT")
+  local WIS = actor:getStat("INT")
 
   return self:statToString(STR) .. " " .. self:statToString(DEX) .. " " ..
-         self:statToString(CON) .. " " .. self:statToString(INT)
+         self:statToString(CON) .. " " .. self:statToString(INT) .. " " .. self:statToString(WIS)
 end
 
 function StatusPanel:statToString(stat)

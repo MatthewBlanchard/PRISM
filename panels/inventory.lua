@@ -5,7 +5,7 @@ local InventoryPanel = Panel:extend()
 InventoryPanel.interceptInput = true
 
 function InventoryPanel:__new(display, parent)
-  Panel.__new(self, display, parent, 52, 12, 29, 11)
+  Panel.__new(self, display, parent, 53, 12, 29, 11)
 end
 
 local function correctWidth(s, w)

@@ -491,7 +491,6 @@ end
 function Level:getAOEFOVCallback(aoeFOV)
   return function(x, y, z)
     if self:getCell(x, y) == 1 then return end
-    print(self:getCell(x, y) == 1)
 
     if not aoeFOV[x] then aoeFOV[x] = {} end
     aoeFOV[x][y] = self:getCell(x, y)

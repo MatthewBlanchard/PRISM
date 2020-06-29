@@ -4,7 +4,7 @@ local Stats = Component:extend()
 
 local validStats = 
 {
-  STR = "getSTR", DEX = "getDEX", INT = "getINT", CON = "getCON"
+  STR = "getSTR", DEX = "getDEX", INT = "getINT", CON = "getCON", WIS = "getWIS"
 }
 
 function Stats:__new(options)

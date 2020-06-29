@@ -64,7 +64,7 @@ ZapTarget.range = 9
 
 local Zap = Action:extend()
 Zap.name = "zap"
-Zap.fireballRange = 4
+Zap.fireballRange = 1
 Zap.targets = {targets.Item, ZapTarget}
 
 function Zap:perform(level)

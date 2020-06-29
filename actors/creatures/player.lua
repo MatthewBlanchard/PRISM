@@ -18,6 +18,7 @@ Player.components = {
     DEX = 10,
     INT = 10,
     CON = 10,
+    WIS = 10,
     maxHP = 10,
     AC = 10
   },

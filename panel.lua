@@ -65,8 +65,8 @@ end
 
 function Panel:writeOffset(toWrite, x, y, fg, bg)
   local interface = game.interface
-  local mx = (x - (game.curActor.position.x - interface.viewX)) + 1
-  local my = (y - (game.curActor.position.y - interface.viewY)) + 1
+  local mx = (x - (game.curActor.position.x - interface.viewX)) + 2
+  local my = (y - (game.curActor.position.y - interface.viewY)) + 2
 
   self:write(toWrite, mx, my, fg, bg)
 end
