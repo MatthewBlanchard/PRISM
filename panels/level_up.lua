@@ -1,5 +1,6 @@
 local Panel = require "panel"
 local Colors = require "colors"
+local FeatsPanel = require "panels.feats"
 
 local LevelUpPanel = Panel:extend()
 LevelUpPanel.options = {
@@ -14,6 +15,16 @@ LevelUpPanel.feats = {
   },
 
   ["DEX"] = {
+    {conditions.Rapidfire}
+  },
+
+  ["CON"] = {
+  },
+
+  ["INT"] = {
+  },
+
+  ["WIS"] = {
   }
 }
 
@@ -35,8 +46,16 @@ end
 function LevelUpPanel:handleKeyPress(keypress)
   local stat = self.options[keypress]
   if stat then
-    game.interface:setAction(actions.Level(game.curActor, stat))
+    local statLevel = game.curActor.levels[stat] + 1
+    local feats = self.feats[stat][statLevel]
+
     game.interface:pop()
+
+    if feats then
+      game.interface:push(FeatsPanel(self.display, self.parent, stat, feats))
+    else
+      game.interface:setAction(actions.Level(game.curActor, stat))
+    end
   end
 end
 

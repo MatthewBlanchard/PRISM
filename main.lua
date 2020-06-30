@@ -100,6 +100,7 @@ function love.load()
   local player = actors.Player()
   spawnActor(player)
 
+  table.insert(player.inventory, actors.Prism())
   table.insert(player.inventory, key)
   table.insert(player.inventory, actors.Parsnip())
   table.insert(player.inventory, actors.Dagger_of_venom())
