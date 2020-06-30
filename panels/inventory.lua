@@ -6,6 +6,21 @@ InventoryPanel.interceptInput = true
 
 function InventoryPanel:__new(display, parent)
   Panel.__new(self, display, parent, 53, 12, 29, 11)
+  self.items = {}
+  self.indices = {}
+
+  local count = 0
+  for i, v in ipairs(game.curActor.inventory) do 
+    local meta = getmetatable(v)
+    if self.items[meta] then 
+      table.insert(self.items[meta], v)
+    else 
+      count = count + 1
+      self.items[meta] = {v}
+    end
+  end
+
+  self.h = self:correctHeight(count + 3)
 end
 
 local function correctWidth(s, w)
@@ -20,25 +35,23 @@ end
 
 function InventoryPanel:draw()
   local actor = game.curActor
-  local inventorySize = #actor.inventory
-  local height = #actor.inventory + 3
-  height = height % 2 == 0 and height + 1 or height
 
-  self:drawBorders(nil, height)
+  self:clear()
+  self:drawBorders()
 
-  local w = string.len("Inventory                  ")
-  self:write("Inventory                  ", 2, 2, {1, 1, 1, 1}, {.3, .3, .3, 1})
-  if inventorySize > 0 then
-    for i = 1, inventorySize do
-      local inventoryString = i .. " " .. actor.inventory[i].name
-      inventoryString = correctWidth(inventoryString, w)
-      self:write(inventoryString, 2, 2 + i, {1, 1, 1, 1})
-      self:write(actor.inventory[i].char, 3, 2 + i, actor.inventory[i].color)
-    end
+  local title = self:correctWidth("Inventory", self.w - 2)
+  local w = string.len(title)
+  self:write(title, 2, 2, {1, 1, 1, 1}, {.3, .3, .3, 1})
 
-    if inventorySize < height - 3 then 
-      self:write("                          ", 2, inventorySize + 3)
-    end
+  local i = 1
+  for meta, list in pairs(self.items) do
+
+    local inventoryString = self:correctWidth(i .. " " .. meta.name, self.w - 5)
+    inventoryString = inventoryString .. (#list > 1 and (" x" .. #list) or "")
+    self:write(inventoryString, 2, 2 + i, {1, 1, 1, 1})
+    self:write(meta.char, 3, 2 + i, meta.color)
+    self.indices[i] = list[1]
+    i = i + 1
   end
 end
 
@@ -51,7 +64,7 @@ end
 function InventoryPanel:handleKeyPress(keypress)
   Panel.handleKeyPress(self, keypress)
 
-  local item = game.curActor.inventory[tonumber(keypress)]
+  local item = self.indices[tonumber(keypress)]
   if item then
     game.interface:push(ItemPanel(self.display, self, item, self.x, self.y, self.w, self.h))
   end
