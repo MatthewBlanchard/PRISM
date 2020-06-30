@@ -85,8 +85,8 @@ end
 
 local WandOfFireball = Actor:extend()
 WandOfFireball.name = "Wand of Fireball"
-WandOfFireball.color = {0.1, 0.1, 1, 1}
-WandOfFireball.char = Tiles["wand"]
+WandOfFireball.color = {1, 0.6, 0.2, 1}
+WandOfFireball.char = Tiles["wand_gnarly"]
 
 WandOfFireball.components = {
   components.Item(),

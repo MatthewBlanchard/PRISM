@@ -44,6 +44,7 @@ local tiles = {
 	wall = 256,
 	wand = 355,
 	wand_pointy = 371,
+	wand_gnarly = 377,
 	zombie = 305,
 
 	rocks_1 = 262,
