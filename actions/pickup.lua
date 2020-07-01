@@ -28,7 +28,12 @@ Pickup.targets = {targets.Pickup}
 function Pickup:perform(level)
   local target = self.targetActors[1]
   level:removeActor(target)
-  table.insert(self.owner.inventory, target)
+
+  if target.worth then 
+    self.owner:deposit(self.owner, target)
+  else
+    table.insert(self.owner.inventory, target)
+  end
 end
 
 return Pickup

@@ -30,6 +30,13 @@ function StatusPanel:draw()
   local statbonus = game.curActor:getStatBonus(game.curActor.wielded.stat)
   self:write(game.curActor.wielded.name, 2, 6, {.75, .75, .75, 1})
   self:write("AC: " .. game.curActor:getAC(), 2, 7, {.75, .75, .75, 1})
+
+  local i = 9
+  for k, v in pairs(game.curActor.wallet) do 
+    self:write(k.name .. "s: ", 2, i, k.color)
+    self:write(k.char, 2 + #k.name + 3, i, k.color)
+    self:write(tostring(v), #k.name + 4, i, k.color)
+  end
 end
 
 function StatusPanel:statsToString(actor)

@@ -10,6 +10,7 @@ Player.components = {
   components.Message(),
   components.Move(),
   components.Inventory(),
+  components.Wallet(),
   components.Controller{ inputControlled = true },
 
   components.Stats

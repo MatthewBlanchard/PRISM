@@ -36,6 +36,7 @@ local tiles = {
 	rat = 306,
 	ring = 356,
 	scroll = 361,
+	shard = 362,
 	shoes = 376,
 	shortsword = 358,
 	spider = 358,
