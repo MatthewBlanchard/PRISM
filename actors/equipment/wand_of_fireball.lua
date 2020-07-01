@@ -14,6 +14,22 @@ local function clerp(start, finish, t)
 end
 
 local ambientColor = {.09, .09, .09}
+local black = {0, 0, 0}
+
+
+local function cmul(c1, s)
+    return {c1[1] * s, c1[2] * s, c1[3] * s}
+end
+
+
+local function FireballLightEffect(x, y, duration)
+    local t = 0
+    return function (dt)
+        t = t + dt
+        if t > duration then return nil end
+        return x, y, cmul({0.8, 0.8, 0.1}, (1 - t/duration)*2)
+    end
+end
 
 local function FireballEffect(fov, origin, range)
     local t = 0
@@ -44,17 +60,21 @@ local function FireballEffect(fov, origin, range)
 
                 if fade < 0.5 then
                     local yellow = {0.8, 0.8, 0.1}
-                    yellow = clerp(yellow, color, fade*2)
+                    yellow = clerp(yellow, color, fade)
                     interface:writeOffset(char, x, y, yellow)
-                elseif fade < 1 then
+                elseif fade > .95 then
+                elseif fade > .75 then
                     local grey = {0.3, 0.3, 0.3}
-                    grey = clerp(color, grey, (fade - 0.5) * 2)
+                    grey = clerp(color, grey, math.min(fade*3, 1))
                     interface:writeOffset(char, x, y, grey)
+                elseif fade < .75 then
+                    interface:writeOffset(char, x, y, color)
                 end
             end
         end
         
         if t > duration then return true end
+        return false, {x, y, }
     end
 end
 
@@ -64,7 +84,7 @@ ZapTarget.range = 9
 
 local Zap = Action:extend()
 Zap.name = "zap"
-Zap.fireballRange = 1
+Zap.fireballRange = 4
 Zap.targets = {targets.Item, ZapTarget}
 
 function Zap:perform(level)
@@ -81,6 +101,7 @@ function Zap:perform(level)
   end
   
   level:addEffect(FireballEffect(fov, target, self.fireballRange))
+  table.insert(level.temporaryLights, FireballLightEffect(target.x, target.y, 0.6))
 end
 
 local WandOfFireball = Actor:extend()

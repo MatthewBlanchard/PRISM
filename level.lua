@@ -8,6 +8,7 @@ function Level:__new(map)
   self.width = map._width
   self.height = map._height
 
+  self.temporaryLights = {}
   self.light = {}
   self.actors = {}
   self.effects = {}
@@ -146,6 +147,27 @@ function Level:updateLighting(effect, dt)
       self.lighting:setLight(x, y, light)
     end
   end
+  
+  local lightsToClean = {}
+  local stopIndex = 1
+
+  if #self.temporaryLights > 0 then
+    for i = #self.temporaryLights, 1 do
+      print(i)
+      local light = self.temporaryLights[i]
+      local x, y, color = light(dt)
+
+      if not color then table.remove(self.temporaryLights, i) end
+
+      table.insert(lightsToClean, {x, y})
+      local curLight = self.lighting:getLight(x, y)
+      if curLight then
+        self.lighting:setLight(x, y, ROT.Color.add(color, curLight))
+      else
+        self.lighting:setLight(x, y, color)
+      end
+    end
+  end
 
   -- We maintain two seperate light buffers. If effect is truthy we give the lighting engine
   -- a callback that fills the effects buffer which does not get used in gameplay and is for
@@ -156,6 +178,10 @@ function Level:updateLighting(effect, dt)
   -- Once we've accumulated our light we clear the buffer of the existing lights.
   for actor in self:eachActor(components.Light) do
       self.lighting:setLight(actor.position.x, actor.position.y, nil)
+  end
+
+  for _, light in ipairs(lightsToClean) do
+    self.lighting:setLight(light[1], light[2], nil)
   end
 end
 
