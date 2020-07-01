@@ -5,14 +5,18 @@ local InventoryPanel = Panel:extend()
 InventoryPanel.interceptInput = true
 
 function InventoryPanel:__new(display, parent)
-  Panel.__new(self, display, parent, 53, 12, 29, 11)
+  Panel.__new(self, display, parent, 47, 12, 35, 11)
   self.items = {}
   self.indices = {}
 
   local count = 0
   for i, v in ipairs(game.curActor.inventory) do 
     local meta = getmetatable(v)
-    if self.items[meta] then 
+
+    if not v.stackable then 
+      self.items[v] = {v}
+      count = count + 1
+    elseif self.items[meta] then 
       table.insert(self.items[meta], v)
     else 
       count = count + 1
@@ -21,16 +25,6 @@ function InventoryPanel:__new(display, parent)
   end
 
   self.h = self:correctHeight(count + 3)
-end
-
-local function correctWidth(s, w)
-  if string.len(s) < w then
-    return s .. string.rep(" ", w - string.len(s))
-  elseif string.len(s) > w then
-    return string.sub(s, 1, w)
-  else
-    return s
-  end
 end
 
 function InventoryPanel:draw()

@@ -84,7 +84,7 @@ function Actor:hasComponent(type)
 end
 
 function Actor:initializeComponents()
-  for k, component in pairs(self.components) do
+  for k, component in ipairs(self.components) do
     component:initialize(self)
   end
 end

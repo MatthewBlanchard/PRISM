@@ -101,7 +101,6 @@ function love.load()
   spawnActor(player)
 
   table.insert(player.inventory, actors.Prism())
-  table.insert(player.inventory, actors.Prism())
   table.insert(player.inventory, actors.Parsnip())
   table.insert(player.inventory, actors.Parsnip())
   table.insert(player.inventory, actors.Dagger_of_venom())

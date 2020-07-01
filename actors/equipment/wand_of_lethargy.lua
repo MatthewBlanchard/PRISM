@@ -22,6 +22,7 @@ local WandOfLethargy = Actor:extend()
 WandOfLethargy.name = "Wand of Lethargy"
 WandOfLethargy.color = {0.7, 0.1, 0.7, 1}
 WandOfLethargy.char = Tiles["wand_pointy"]
+WandOfLethargy.stackable = false
 
 WandOfLethargy.components = {
   components.Item(),

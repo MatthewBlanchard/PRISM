@@ -26,7 +26,7 @@ Potion.lightEffect = components.Light.effects.pulse({ 0.3, 0.0, 0.0, 1 }, 3, .5)
 
 Potion.components = {
   components.Light({ 0.1, 0.0, 0.0, 1}, 3, Potion.lightEffect),
-  components.Item(),
+  components.Item({stackable = true}),
   components.Usable{Drink}
 }
 

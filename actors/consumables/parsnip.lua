@@ -24,7 +24,7 @@ Parsnip.emissive = false
 Parsnip.char = Tiles["parsnip"]
 
 Parsnip.components = {
-  components.Item(),
+  components.Item({stackable = true}),
   components.Usable{Eat}
 }
 

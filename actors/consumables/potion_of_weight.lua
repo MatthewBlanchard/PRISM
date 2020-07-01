@@ -20,7 +20,7 @@ Potion.color = {0.5, 0.5, 0.5, 1}
 Potion.char = Tiles["potion"]
 
 Potion.components = {
-  components.Item(),
+  components.Item({stackable = true}),
   components.Usable{Drink}
 }
 

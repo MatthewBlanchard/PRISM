@@ -21,6 +21,7 @@ function Weapon:initialize(actor)
   actor.time = self.time
   actor.bonus = self.bonus
   actor.effects = self.effects
+  actor.stackable = false
   actor:applyCondition(conditions.Wield())
 end
 

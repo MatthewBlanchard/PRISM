@@ -13,6 +13,7 @@ end
 function Equipment:initialize(actor)
   actor.slot = self.slot
   actor.effects = self.effects
+  actor.stackable = false
   actor:applyCondition(conditions.Equip())
 end
 
