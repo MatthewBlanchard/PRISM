@@ -5,7 +5,7 @@ Player.name = "Player"
 
 local lightEffect = components.Light.effects.flicker({ 0.8666, 0.4509, 0.0862, 1 }, .1, .1)
 Player.components = {
-  components.Light({ 0.8666, 0.4509, 0.0862, 1 }, 3, lightEffect),
+  components.Light({ 0.8666, 0.4509, 0.0862, 1}, 3, lightEffect),
   components.Sight{ range = 30, fov = true, explored = true },
   components.Message(),
   components.Move(),
@@ -23,6 +23,7 @@ Player.components = {
     maxHP = 10,
     AC = 10
   },
+
   components.Progression(),
 
   components.Attacker
@@ -36,7 +37,7 @@ Player.components = {
   },
 
 
-  components.Equipper{
+  components.Equipper {
     "armor",
     "ring",
     "boots",

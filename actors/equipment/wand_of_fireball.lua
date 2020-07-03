@@ -35,6 +35,8 @@ local function FireballEffect(fov, origin, range)
     local t = 0
     local duration = .6
     local chars = {}
+
+    -- let's define ourselves a little gradient
     chars[5] = 176
     chars[4] = 176
     chars[3] = 177

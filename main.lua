@@ -64,7 +64,7 @@ function love.load()
   end
 
   for i = 1, 20 do
-    spawnActor(actors.Monster())
+    spawnActor(actors.Sqeeto())
   end
 
   for i = 1, 5 do

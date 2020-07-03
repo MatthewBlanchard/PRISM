@@ -90,7 +90,9 @@ function Level:update(dt, inputAction)
 
       -- if we don't have a player controlled actor we ask the actor for it's
       -- next action through it's controller
-      local action = actor:act()
+
+      -- TODO: don't provide act with level
+      local action = actor:act(self)
       assert(not (action == nil))
       self:performAction(action)
       -- we continue to the next actor

@@ -34,16 +34,15 @@ Monster.components = {
   components.Aicontroller()
 }
 
+local actUtil = components.Aicontroller
 function Monster:act()
-  for k, v in pairs(self.seenActors) do
-    if v:is(actors.Player) then
-      if self:getRange("box", v) == 1 then
-        return self:getAction(actions.Attack)(self, v)
+  for _, actor in ipairs(self.seenActors) do
+    if actor:is(actors.Player) then
+      if self:getRange("box", actor) == 1 then
+        return self:getAction(actions.Attack)(self, actor)
       end
 
-      local mx = v.position.x - self.position.x > 0 and 1 or v.position.x - self.position.x < 0 and - 1 or 0
-      local my = v.position.y - self.position.y > 0 and 1 or v.position.y - self.position.y < 0 and - 1 or 0
-      return self:getAction(actions.Move)(self, Vector2(mx, my))
+      return actUtil.moveToward(self, actor)
     end
   end
 

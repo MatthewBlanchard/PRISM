@@ -23,6 +23,7 @@ local tiles = {
 	floor = 261,
 	gloves = 373,
 	gobbo = 357,
+	sqeeto = 308,
 	heal = 289,
 	key = 369,
 	pants = 374,

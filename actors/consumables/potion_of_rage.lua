@@ -15,7 +15,7 @@ function Drink:perform(level)
 end
 
 local Potion = Actor:extend()
-Potion.name = "Potion of Anger"
+Potion.name = "Extract of Anger"
 Potion.color = {0.5, 0.5, 0.5, 1}
 Potion.char = Tiles["potion"]
 

@@ -23,10 +23,10 @@ Prism.name = "Prism of Enlightenment"
 Prism.color = {0.67, 0.78, 0.9, 1}
 Prism.emissive = true
 Prism.char = Tiles["prism"]
-Prism.lightEffect = components.Light.effects.pulse({ 0.4, 0.4, 0.6, 1 }, 0.2, .2)
+Prism.lightEffect = components.Light.effects.pulse({ 0.4, 0.4, 0.6, 1 }, 0.2, 0.2)
 
 Prism.components = {
-  components.Light({ 0.0, 0.0, 0.0, 1}, 3, Prism.lightEffect),
+  components.Light({ 0.0, 0.0, 0.0, 1}, 5, Prism.lightEffect),
   components.Item(),
   components.Usable{Gaze}
 }
