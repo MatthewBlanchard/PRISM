@@ -5,7 +5,7 @@ local Tiles = require "tiles"
 local Sqeeto = Actor:extend()
 
 Sqeeto.char = Tiles["sqeeto"]
-Sqeeto.name = "sqeeto"
+Sqeeto.name = "sqeeter"
 Sqeeto.color = {0.8, 0.7, 0.09}
 
 Sqeeto.components = {
@@ -36,17 +36,30 @@ Sqeeto.components = {
 
 local actUtil = components.Aicontroller
 function Sqeeto:act(level)
-  if not actUtil.canSeeActor(self, self.actTarget) then self.actTarget = nil end
-
-  if self.actTarget then
-
-  end
-
+  local highest = 0
+  local highestActor = nil
   for k, v in pairs(self.seenActors) do
     if v:is(actors.Player) and self:getRange("box", v) == 1 then
-        return self:getAction(actions.Attack)(self, v)
+      return self:getAction(actions.Attack)(self, v)
     elseif v:hasComponent(components.Light) then
+      local lightVal = ROT.Color.value(v.light) * v.lightIntensity
       
+      if lightVal > highest then
+        highest = lightVal
+        highestActor = v
+      end
+    end
+  end
+
+  local x, y, brightest = actUtil.getLightestTile(level, self)
+
+  if highestActor then self.actTarget = highestActor end
+
+  if self.actTarget then
+    if brightest > ROT.Color.value(self.actTarget.light) * self.actTarget.lightIntensity then
+      self.actTarget = nil
+    else
+      return actUtil.moveTowardObject(self, self.actTarget)
     end
   end
 

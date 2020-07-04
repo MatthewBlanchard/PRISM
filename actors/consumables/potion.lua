@@ -25,7 +25,7 @@ Potion.char = Tiles["potion"]
 Potion.lightEffect = components.Light.effects.pulse({ 0.3, 0.0, 0.0, 1 }, 3, .5)
 
 Potion.components = {
-  components.Light({ 0.1, 0.0, 0.0, 1}, 3, Potion.lightEffect),
+  components.Light({ 1, 0.0, 0.0, 1}, 1, Potion.lightEffect),
   components.Item({stackable = true}),
   components.Usable{Drink}
 }

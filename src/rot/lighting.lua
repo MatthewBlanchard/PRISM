@@ -134,7 +134,7 @@ function Lighting:_emitLightFromCell(x, y, color, litCells)
   local lx, ly = x, y
   local fov = self._fovCache:getCell(x, y) or self:_updateFOV(x, y)
   for _, x, y, formFactor in fov:each() do
-    local falloff = 1 / math.max(dist(lx, ly, x, y), 3) - dist(lx, ly, x, y)/900
+    local falloff = 1 / math.max(dist(lx, ly, x, y), 3) - dist(lx, ly, x, y)/700
     local cellColor = litCells:getCell(x, y)
     if not cellColor then
       cellColor = { 0, 0, 0 }

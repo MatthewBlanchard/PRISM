@@ -62,14 +62,14 @@ function Interface:draw()
   local fov = game.curActor.fov
   local explored = game.curActor.explored
   local seenActors = game.curActor:getRevealedActors()
-  local light = game.level.effectlight
+  local light = game.level.light
   local ambientColor = {.175, .175, .175}
 
   local sx, sy = game.curActor.position.x, game.curActor.position.y
   for x = sx - self.viewX, sx + self.viewX do
     for y = sy - self.viewY, sy + self.viewY do
       if fov[x] and fov[x][y] then
-        if light[x] and light[x][y] and value(light[x][y]) > 0.05 then
+        if light[x] and light[x][y] then
           -- okay we're gonna first establish our light color and then
           -- do a bit of blending to keep it in line with the ambient
           -- fog of war

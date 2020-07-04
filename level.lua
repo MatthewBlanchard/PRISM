@@ -126,8 +126,6 @@ end
 
 local lightinit = false
 function Level:updateLighting(effect, dt)
-  self.light = {}
-
   for actor in self:eachActor(components.Light) do
     local x, y = actor.position.x, actor.position.y
 
@@ -202,6 +200,7 @@ function Level:invalidateLighting(actor)
 
   -- This resets out lighting. rotLove doesn't offer a better way to do this.
   self.lighting:setFOV(self.fov)
+  self:updateLighting(false)
 end
 
 function Level:updateSeenActors(actor)
@@ -477,6 +476,8 @@ function Level:getMapCallback()
 end
 
 function Level:getLightingCallback()
+  self.light = {}
+
   return function(x, y, color)
     if not self.light[x] then self.light[x] = {} end
     self.light[x][y] = color

@@ -85,6 +85,20 @@ function Color.multiply(...) return multiply({}, ...) end
 -- @treturn table modified color
 function Color.multiply_(...) return multiply(...) end
 
+
+function Color.multiplyScalar(color, s)
+  return {color[1] * s, color[2] * s, color[3] * s}
+end
+
+function Color.value(color) 
+  local highest = color[1]
+  for i = 1, 3 do
+    if color[i] > highest then highest = color[i] end
+  end
+  
+  return (color[1] + color[2] + color[3]) / 3
+end
+
 --- Interpolate (blend) two colors with a given factor.
 -- @tparam table color1 A color table
 -- @tparam table color2 A color table
@@ -189,6 +203,8 @@ function Color.hsl2rgb(color)
   end
   return result
 end
+
+
 
 --- Convert color to RGB string.
 -- Get a string that can be fed to Color.fromString()
