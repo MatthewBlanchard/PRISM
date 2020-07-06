@@ -62,7 +62,7 @@ function Interface:draw()
   local fov = game.curActor.fov
   local explored = game.curActor.explored
   local seenActors = game.curActor:getRevealedActors()
-  local light = game.level.light
+  local light = game.level.effectlight
   local ambientColor = {.175, .175, .175}
 
   local sx, sy = game.curActor.position.x, game.curActor.position.y
