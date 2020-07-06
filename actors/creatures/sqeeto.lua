@@ -9,7 +9,7 @@ Sqeeto.name = "sqeeter"
 Sqeeto.color = {0.8, 0.7, 0.09}
 
 Sqeeto.components = {
-  components.Sight{ range = 2, fov = true, explored = false },
+  components.Sight{ range = 3, fov = true, explored = false },
   components.Move(),
   components.Stats
   {
@@ -59,6 +59,9 @@ function Sqeeto:act(level)
     if brightest > ROT.Color.value(self.actTarget.light) * self.actTarget.lightIntensity then
       self.actTarget = nil
     else
+      if math.random() > .75 then
+        return actUtil.randomMove(level, self)
+      end
       return actUtil.moveTowardObject(self, self.actTarget)
     end
   end

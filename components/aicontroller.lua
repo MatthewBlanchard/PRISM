@@ -126,4 +126,8 @@ function AIController.moveTowardLight(level, actor)
   return actor:getAction(actions.Move)(actor, moveVec)
 end
 
+function AIController.randomMove(level, actor)
+  return actor:getAction(actions.Move)(actor, Vector2(ROT.RNG:random(1, 3) - 2, ROT.RNG:random(1, 3) - 2))
+end
+
 return AIController
