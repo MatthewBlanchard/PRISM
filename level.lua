@@ -153,7 +153,6 @@ function Level:updateLighting(effect, dt)
 
   if #self.temporaryLights > 0 then
     for i = #self.temporaryLights, 1 do
-      print(i)
       local light = self.temporaryLights[i]
       local x, y, color = light(dt)
 

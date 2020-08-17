@@ -5,15 +5,16 @@ Damage.name = "damage"
 Damage.silent = true
 Damage.targets = {targets.Creature}-- dealer
 
-function Damage:__new(owner, targets, damage)
+function Damage:__new(owner, targets, damage, source)
   Reaction.__new(self, owner, targets)
   self.dealer = targets[1]
   self.damage = damage
+  self.source = source
 end
 
 function Damage:perform(level)
   self.owner.HP = math.max(self.owner.HP - self.damage, 0)
-  level:addEffect(effects.DamageEffect(self.dealer.position, self.owner.position, self.damage, true))
+  level:addEffect(effects.DamageEffect(self.dealer.position, self.owner.position, self.damage, self.damage > 0 and true or false))
   if self.owner.HP == 0 then
     local die = self.owner:getReaction(reactions.Die)(self.owner, {self.dealer}, self.damage)
     level:performAction(die)

@@ -97,7 +97,7 @@ function Zap:perform(level)
 
   for _, actor in ipairs(actors) do
     if targets.Creature:checkRequirements(actor) then
-        local damage = actor:getReaction(reactions.Damage)(actor, {self.owner}, damage)
+        local damage = actor:getReaction(reactions.Damage)(actor, {self.owner}, damage, self.targetActors[1])
         level:performAction(damage)
     end
   end
