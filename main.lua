@@ -63,8 +63,12 @@ function love.load()
     level:addActor(actor)
   end
 
-  for i = 1, 20 do
+  for i = 1, 15 do
     spawnActor(actors.Sqeeto())
+  end
+
+  for i = 1, 5 do 
+    spawnActor(actors.Golem())
   end
 
   for i = 1, 5 do
