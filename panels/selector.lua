@@ -1,6 +1,7 @@
 local Panel = require "panel"
 local ContextPanel = require "panels.context"
 local Vector = require "vector"
+local Bresenham = require "bresenham"
 
 local function blink(period)
   local t = 0
@@ -20,6 +21,7 @@ end
 local SelectorPanel = Panel:extend()
 SelectorPanel.interceptInput = true
 SelectorPanel.blinkColor = {.6, 0, 0, 1}
+SelectorPanel.lineColor = {0.5, 0.5, 0.5}
 
 function SelectorPanel:__new(display, parent, action, targets)
   Panel.__new(self, display, parent, 1, 1, display:getWidth(), display:getHeight())
@@ -33,6 +35,8 @@ function SelectorPanel:__new(display, parent, action, targets)
   -- Index in the getValidTargets() array
   self.targetIndex = nil
 
+  self.line = {}
+
   self.targetPanel = ContextPanel(self.display, self, nil, 52, 12, 29, 11)
 end
 
@@ -41,8 +45,29 @@ function SelectorPanel:draw()
   if not self.blink then
     self:writeOffset("X", position.x, position.y, SelectorPanel.blinkColor)
   end
-  if self.curTarget.name then self:writeOffset(self.curTarget.name, position.x + 2, position.y) end
-  self.targetPanel:draw()
+
+  if self.curTarget.name then 
+    local last = self.line[#self.line == 1 and 1 or #self.line - 1]
+    local x = position.x + 2
+    local y = position.y
+
+    if last[2] == position.y then 
+      y = position.y - 1
+      x = position.x - math.floor(#self.curTarget.name / 2)
+    elseif last[1] > position.x then
+      x = position.x - 1 - #self.curTarget.name
+    end
+
+    self:writeOffset(self.curTarget.name, x, y) 
+  end
+
+  for i = 2, #self.line - 1 do 
+    self:writeOffset("x", self.line[i][1], self.line[i][2], SelectorPanel.lineColor)
+  end
+    
+  if self.curTarget.name then
+    self.targetPanel:draw()
+  end
 end
 
 function SelectorPanel:getTargetPosition()
@@ -91,12 +116,29 @@ function SelectorPanel:tabTarget(actor)
   end
 
   self.targetIndex = n
-  self.curTarget = valid[n]
+  self:updateTarget(valid[n])
+end
+
+function SelectorPanel:updateTarget(target)
+  self.curTarget = target
   self.targetPanel:setTarget(self.curTarget)
+  self.line = Bresenham.line(game.curActor.position.x, game.curActor.position.y, self:getTargetPosition().x, self:getTargetPosition().y)
 end
 
 function SelectorPanel:moveTarget(direction)
-  self.curTarget = self:getTargetPosition() + direction
+  local position = self:getTargetPosition() + direction
+  local valid = self:getValidTargets(#self.targets + 1)
+
+  -- check if the new position lands on a valid actor
+  for i = 1, #valid do 
+    if position == valid[i].position then
+      self:updateTarget(valid[i])
+      return
+    end
+  end
+
+  -- if not, just set to position
+  self:updateTarget(position)
 end
 
 function SelectorPanel:getValidTargets(index)

@@ -10,6 +10,9 @@ function Damage:__new(owner, targets, damage, source)
   self.dealer = targets[1]
   self.damage = damage
   self.source = source
+  if not self.source then 
+    print("No damage source for: " .. self.dealer.name .. " against " .. owner.name)
+  end
 end
 
 function Damage:perform(level)
