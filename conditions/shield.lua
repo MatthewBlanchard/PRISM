@@ -16,7 +16,7 @@ Shield:onReaction(reactions.Damage,
     end
 
     if action.source then
-      for _,v in self.breaks do
+      for _,v in ipairs(Shield.breaks) do
         if v:is(action.source) then 
           self.hasShield = false
         end

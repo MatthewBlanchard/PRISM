@@ -1,4 +1,5 @@
 local Tiles = require "tiles"
+local Color = require "color"
 
 local effects = {}
 
@@ -27,10 +28,6 @@ effects.PoisonEffect = function(actor, damage)
   end
 end
 
-local function cmul(c1, s)
-  return {c1[1] * s, c1[2] * s, c1[3] * s}
-end
-
 effects.OpenEffect = function(actor)
   local t = 0
   local lastflip = 9
@@ -39,7 +36,7 @@ effects.OpenEffect = function(actor)
 
     local color = {1, 1, .1, 1}
     if t < .5 then
-      local c = cmul(color, t / 0.5)
+      local c = Color.mul(color, t / 0.5)
       interface:writeOffset(Tiles["pointy_poof"], actor.position.x, actor.position.y, c)
     elseif t < .8 then
       interface:writeOffset(Tiles["chest_open"], actor.position.x, actor.position.y, actor.color)
@@ -83,6 +80,55 @@ effects.DamageEffect = function(source, position, dmg, hit)
     t = t + dt
     if t > .2 then return true end
   end
+end
+
+effects.ExplosionEffect = function(fov, origin, range)
+    local t = 0
+    local duration = .6
+    local chars = {}
+
+    -- let's define ourselves a little gradient
+    chars[5] = 176
+    chars[4] = 176
+    chars[3] = 177
+    chars[2] = 178
+    chars[1] = 179
+    chars[0] = 180
+
+    local colors =
+    {
+    
+    }
+    return function(dt, interface)
+        t = t + dt
+
+        for x, yt in pairs(fov) do
+            for y, _ in pairs(yt) do
+                local distFactor = math.sqrt(math.pow(origin.x - x, 2) + math.pow(origin.y - y, 2))/(t/(duration/6)*range)
+                local fadeFactor = math.min(t/duration, 1)
+                local fade = math.max(distFactor, fadeFactor)
+                local fade = math.min(fade + love.math.noise(x+t, y+t)/2, 1)
+                local color = {0.8666, 0.4509, 0.0862}
+                local char = chars[math.floor(fade * 5)]
+
+                if fade < 0.5 then
+                    local yellow = {0.8, 0.8, 0.1}
+                    yellow = Color.lerp(yellow, color, fade)
+                    interface:writeOffset(char, x, y, yellow)
+                elseif fade > .95 then
+                elseif fade > .75 then
+                    local grey = {0.3, 0.3, 0.3}
+                    grey = Color.lerp(color, grey, math.min(fade*3, 1))
+                    interface:writeOffset(char, x, y, grey)
+                elseif fade < .75 then
+                    interface:writeOffset(char, x, y, color)
+                end
+            end
+        end
+        
+        if t > duration then return true end
+        return false, {x, y, }
+    end
 end
 
 return effects

@@ -11,6 +11,7 @@ local tiles = {
 
 	armor = 354,
 	belt = 370,
+	bomb = 360,
 	boots = 372,
 	cloak = 357,
 	chest = 276,

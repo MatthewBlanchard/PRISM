@@ -113,6 +113,7 @@ function love.load()
   table.insert(player.inventory, actors.Parsnip())
   table.insert(player.inventory, actors.Dagger_of_venom())
   table.insert(player.inventory, actors.Wand_of_fireball())
+  table.insert(player.inventory, actors.Bomb())
   love.keyboard.setKeyRepeat(true)
 end
 
