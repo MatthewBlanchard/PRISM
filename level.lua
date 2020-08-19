@@ -484,6 +484,10 @@ function Level:getCellPassable(x, y)
   end
 end
 
+function Level:getCellPass(x, y)
+  return self:getCell(x, y) == 0
+end
+
 function Level:getCellVisibility(x, y)
   if not (self:getCell(x, y) == 0) then
     return false

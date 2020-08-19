@@ -3,6 +3,10 @@ local ContextPanel = require "panels.context"
 local Vector = require "vector"
 local Bresenham = require "bresenham"
 
+local function bresenhamCallback(x, y)
+  return game.level:getCellPass(x, y)
+end
+
 local function blink(period)
   local t = 0
   return function(dt)
@@ -20,7 +24,8 @@ end
 
 local SelectorPanel = Panel:extend()
 SelectorPanel.interceptInput = true
-SelectorPanel.blinkColor = {.6, 0, 0, 1}
+SelectorPanel.blinkColor = {0.2, 0.2, 0.6, 1}
+SelectorPanel.invalidColor = {0.6, 0, 0, 1}
 SelectorPanel.lineColor = {0.5, 0.5, 0.5}
 
 function SelectorPanel:__new(display, parent, action, targets)
@@ -36,6 +41,7 @@ function SelectorPanel:__new(display, parent, action, targets)
   self.targetIndex = nil
 
   self.line = {}
+  self.valid = true
 
   self.targetPanel = ContextPanel(self.display, self, nil, 52, 12, 29, 11)
 end
@@ -43,7 +49,7 @@ end
 function SelectorPanel:draw()
   local position = self:getTargetPosition()
   if not self.blink then
-    self:writeOffset("X", position.x, position.y, SelectorPanel.blinkColor)
+    self:writeOffset("X", position.x, position.y, self.valid and SelectorPanel.blinkColor or SelectorPanel.invalidColor)
   end
 
   if self.curTarget.name then 
@@ -61,8 +67,10 @@ function SelectorPanel:draw()
     self:writeOffset(self.curTarget.name, x, y) 
   end
 
-  for i = 2, #self.line - 1 do 
-    self:writeOffset("x", self.line[i][1], self.line[i][2], SelectorPanel.lineColor)
+  if self.valid then
+    for i = 2, #self.line - 1 do 
+      self:writeOffset("x", self.line[i][1], self.line[i][2], SelectorPanel.lineColor)
+    end
   end
     
   if self.curTarget.name then
@@ -122,7 +130,9 @@ end
 function SelectorPanel:updateTarget(target)
   self.curTarget = target
   self.targetPanel:setTarget(self.curTarget)
-  self.line = Bresenham.line(game.curActor.position.x, game.curActor.position.y, self:getTargetPosition().x, self:getTargetPosition().y)
+  local line, valid = Bresenham.line(game.curActor.position.x, game.curActor.position.y, self:getTargetPosition().x, self:getTargetPosition().y, bresenhamCallback)
+  self.line = line 
+  self.valid = valid
 end
 
 function SelectorPanel:moveTarget(direction)
@@ -175,7 +185,7 @@ function SelectorPanel:handleKeyPress(keypress)
     self:tabTarget(self.curActor)
   elseif self.action.targets[#self.targets + 1]:is(targets.Point) and self.movementTranslation[keypress] then
     self:moveTarget(self.movementTranslation[keypress])
-  elseif keypress == "return" then
+  elseif keypress == "return" and self.valid then
     if  self.action.targets[#self.targets + 1]:is(targets.Point) and 
         self.action:validateTarget(#self.targets + 1, game.curActor, self.curTarget)     then
       table.insert(self.targets, self.curTarget.position or self.curTarget)
