@@ -11,7 +11,7 @@ function Event:__new(action, resolutionFunc)
 end
 
 function Event:fire(condition, level, actor, action)
-  self.resolve(condition, level, actor, action)
+  return self.resolve(condition, level, actor, action)
 end
 
 function Event:shouldFire(level, action)
@@ -55,6 +55,7 @@ function Condition:extend()
   self.onActions = {}
   self.afterActions = {}
   self.onTicks = {}
+  self.onScrys = {}
 
   for k, v in pairs(oldOnActions) do
     self.onActions[k] = v
@@ -66,7 +67,7 @@ function Condition:extend()
 
   for k, v in pairs(oldOnTick) do
     self.onTicks[k] = v
-  end 
+  end
 
   return self
 end
@@ -88,9 +89,11 @@ function Condition:getActionEvents(type, level, action)
   local e = {}
   local shouldret = false
 
+  if not self[type] then return false end
+
   for k, event in pairs(self[type]) do
     event.owner = self
-    if type == "onTicks" or event:shouldFire(level, action) then
+    if type == "onTicks" or type == "onScrys" or event:shouldFire(level, action) then
       table.insert(e, event)
       shouldret = true
     end
@@ -110,6 +113,13 @@ function Condition:onTick(func)
   local e = Event(nil, func)
 
   table.insert(self.onTicks, e)
+  return e
+end
+
+function Condition:onScry(func)
+  local e = Event(nil, func)
+
+  table.insert(self.onScrys, e)
   return e
 end
 

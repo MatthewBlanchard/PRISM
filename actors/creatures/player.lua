@@ -28,7 +28,7 @@ Player.components = {
 
   components.Attacker
   {
-    defaultAttack = 
+    defaultAttack =
     {
       name = "Stronk Fists",
       stat = "STR",
@@ -43,6 +43,10 @@ Player.components = {
     "boots",
     "cloak"
   }
+}
+
+Player.innateConditions = {
+  conditions.Scrying
 }
 
 return Player

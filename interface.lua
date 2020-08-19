@@ -61,7 +61,8 @@ end
 function Interface:draw()
   local fov = game.curActor.fov
   local explored = game.curActor.explored
-  local seenActors = game.curActor:getRevealedActors()
+  local seenActors = game.curActor.seenActors
+  local scryActors = game.curActor.scryActors
   local light = game.level.effectlight
   local ambientColor = {.175, .175, .175}
 
@@ -92,6 +93,12 @@ function Interface:draw()
         self:writeOffset(explored[x][y] == 0 and Tiles["floor"] or Tiles["wall"], x, y, ambientColor)
       end
     end
+  end
+
+  for k, actor in pairs(scryActors) do
+    print(actor.name)
+    local x, y = actor.position.x, actor.position.y
+    self:writeOffset(actor.char, x, y, actor.color)
   end
 
   local offx = (sx - self.viewX) - 1

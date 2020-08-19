@@ -69,7 +69,7 @@ function Level:update(dt, inputAction)
     -- check if we should quit before we move onto the next actor
     if self.shouldQuit then return love.event.push('quit') end
 
-    -- grab the next actor off the scheduler 
+    -- grab the next actor off the scheduler
     local actor = self.scheduler:next()
 
     if actor == "tick" then
@@ -116,7 +116,9 @@ function Level:updateFOV(actor)
   if actor.fov then
     actor.fov = {}
     self.fov:compute(actor.position.x, actor.position.y, actor.sight, self:getFOVCallback(actor))
+    self:triggerActionEvents("onTicks")
     self:updateSeenActors(actor)
+    self:updateScryActors(actor)
   end
 end
 
@@ -147,7 +149,7 @@ function Level:updateLighting(effect, dt)
       self.lighting:setLight(x, y, light)
     end
   end
-  
+
   local lightsToClean = {}
   local stopIndex = 1
 
@@ -202,6 +204,29 @@ function Level:invalidateLighting(actor)
   self:updateLighting(false)
 end
 
+function Level:updateScryActors(actor)
+  actor.scryActors = {}
+
+  -- we'll use this temporary table to remove duplicates
+  local scryed = {}
+
+  local dummy = {}
+  for i, condition in ipairs(actor:getConditions()) do
+    local e = condition:getActionEvents("onScrys", self) or dummy
+    for i, event in ipairs(e) do
+      local scryedActor = event:fire(condition, self, actor)
+
+      if scryedActor then
+        scryed[scryedActor] = true
+      end
+    end
+  end
+
+  for scryActor, _ in pairs(scryed) do
+    table.insert(actor.scryActors, scryActor)
+  end
+end
+
 function Level:updateSeenActors(actor)
   actor.seenActors = {}
 
@@ -232,6 +257,14 @@ function Level:hasActor(actor)
   for i = 1, #self.actors do
     if self.actors[i] == actor then
       return i
+    end
+  end
+end
+
+function Level:getActorByType(type)
+  for i = 1, #self.actors do
+    if self.actors[i]:is(type)then
+      return self.actors[i]
     end
   end
 end
@@ -312,7 +345,7 @@ function Level:moveActor(actor, pos)
   if actor.light or actor.blocksVision then
     self:updateLighting(false, self.dt)
   end
-  
+
   for seen in self:eachActor(components.Sight) do
     self:updateSeenActors(seen)
   end
@@ -338,7 +371,7 @@ function Level:triggerActionEvents(type, action)
   if type == "onTicks" then
     for _, actor in ipairs(self.actors) do
       for i, condition in ipairs(actor:getConditions()) do
-        local e = condition:getActionEvents("onTicks", self) or dummy
+        local e = condition:getActionEvents(type, self) or dummy
         for i, event in ipairs(e) do
           event:fire(condition, self, actor)
         end
@@ -349,7 +382,7 @@ function Level:triggerActionEvents(type, action)
   end
 
   if not action then return nil end
-  
+
   for k, condition in ipairs(action.owner:getConditions()) do
     local e = condition:getActionEvents(type, self, action)
     if e then

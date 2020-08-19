@@ -12,6 +12,7 @@ function Sight:initialize(actor)
   actor.getRevealedActors = self.getRevealedActors
   actor.sight = self.range
   actor.seenActors = {}
+  actor.scryActors = {}
 
   if self.fov then
     actor.fov = {}
