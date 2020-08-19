@@ -10,6 +10,7 @@ local tiles = {
 	bubble_heart = 298,
 
 	armor = 354,
+	arrow = 378,
 	belt = 370,
 	bomb = 360,
 	boots = 372,

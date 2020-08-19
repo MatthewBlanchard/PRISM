@@ -115,6 +115,7 @@ function love.load()
   table.insert(player.inventory, actors.Wand_of_fireball())
   table.insert(player.inventory, actors.Bomb())
   table.insert(player.inventory, actors.Scroll_of_enlightenment())
+  table.insert(player.inventory, actors.Arrow())
   love.keyboard.setKeyRepeat(true)
 end
 
