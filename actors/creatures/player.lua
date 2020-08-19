@@ -45,8 +45,4 @@ Player.components = {
   }
 }
 
-Player.innateConditions = {
-  conditions.Scrying
-}
-
 return Player

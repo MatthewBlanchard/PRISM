@@ -67,7 +67,7 @@ function love.load()
     spawnActor(actors.Sqeeto())
   end
 
-  for i = 1, 5 do 
+  for i = 1, 5 do
     spawnActor(actors.Golem())
   end
 
@@ -95,7 +95,7 @@ function love.load()
     spawnActor(chest)
   end
 
-  for i = 1, 10 do 
+  for i = 1, 10 do
     spawnActor(actors.Shard())
   end
 
@@ -114,6 +114,7 @@ function love.load()
   table.insert(player.inventory, actors.Dagger_of_venom())
   table.insert(player.inventory, actors.Wand_of_fireball())
   table.insert(player.inventory, actors.Bomb())
+  table.insert(player.inventory, actors.Scroll_of_enlightenment())
   love.keyboard.setKeyRepeat(true)
 end
 

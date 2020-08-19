@@ -101,8 +101,6 @@ function Interface:draw()
     self:writeOffset(actor.char, x, y, actor.color)
   end
 
-  local offx = (sx - self.viewX) - 1
-  local offy = (sy - self.viewY) - 1
   for k, actor in pairs(seenActors) do
     if not actor:hasComponent(components.Move) then
       local x, y = actor.position.x, actor.position.y
