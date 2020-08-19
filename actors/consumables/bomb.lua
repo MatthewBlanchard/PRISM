@@ -1,5 +1,6 @@
 local Actor = require "actor"
 local Condition = require "condition"
+local Color = require "color"
 local Tiles = require "tiles"
 
 local function BombLightEffect(x, y, duration)
@@ -7,7 +8,7 @@ local function BombLightEffect(x, y, duration)
     return function (dt)
         t = t + dt
         if t > duration then return nil end
-        return x, y, cmul({0.8, 0.8, 0.1}, (1 - t/duration)*2)
+        return x, y, Color.mul({0.8, 0.8, 0.1}, (1 - t/duration)*2)
     end
 end
 
@@ -16,17 +17,18 @@ Explode.range = 2
 
 Explode:afterAction(actions.Throw, 
   function(self, level, actor, action)
-	local fov, actors = level:getAOE("fov", actor.position, Explode.range)
+    local fov, actors = level:getAOE("fov", actor.position, Explode.range)
 	local damage = ROT.Dice.roll("6d6")
 
 	for _, a in ipairs(actors) do
-		if targets.Creature:checkRequirements(a) then
-			local damage = a:getReaction(reactions.Damage)(a, {action.owner}, damage)
-			level:performAction(damage)
-		end
+	  if targets.Creature:checkRequirements(a) then
+	    local damage = a:getReaction(reactions.Damage)(a, {action.owner}, damage)
+		level:performAction(damage)
+	  end
 	end
 	
 	level:addEffect(effects.ExplosionEffect(fov, actor.position, Explode.range))
+	table.insert(level.temporaryLights, BombLightEffect(actor.position.x, actor.position.y, 0.6))
 	level:destroyActor(actor)
   end
 )
