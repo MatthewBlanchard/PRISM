@@ -99,6 +99,10 @@ function love.load()
     spawnActor(actors.Shard())
   end
 
+  for i = 1, 10 do
+    spawnActor(actors.Box())
+  end
+
   local chest = actors.Chest()
   local key = actors.Key()
   chest:setKey(chest, key)
