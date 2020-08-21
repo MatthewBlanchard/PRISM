@@ -22,7 +22,7 @@ Explode:afterAction(actions.Throw,
 
 	for _, a in ipairs(actors) do
 	  if targets.Creature:checkRequirements(a) then
-	    local damage = a:getReaction(reactions.Damage)(a, {action.owner}, damage)
+	    local damage = a:getReaction(reactions.Damage)(a, {action.owner}, damage, actor)
 		level:performAction(damage)
 	  end
 	end
@@ -41,7 +41,7 @@ Bomb.description = "A simple key. You wonder what it unlocks."
 Bomb.innateConditions = {Explode()}
 
 Bomb.components = {
-  components.Item()
+  components.Item({stackable = true})
 }
 
 return Bomb

@@ -116,7 +116,6 @@ function Level:updateFOV(actor)
   if actor.fov then
     actor.fov = {}
     self.fov:compute(actor.position.x, actor.position.y, actor.sight, self:getFOVCallback(actor))
-    self:triggerActionEvents("onTicks")
     self:updateSeenActors(actor)
     self:updateScryActors(actor)
   end

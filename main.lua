@@ -108,14 +108,12 @@ function love.load()
   local player = actors.Player()
   spawnActor(player)
 
-  table.insert(player.inventory, actors.Prism())
-  table.insert(player.inventory, actors.Parsnip())
-  table.insert(player.inventory, actors.Parsnip())
   table.insert(player.inventory, actors.Dagger_of_venom())
   table.insert(player.inventory, actors.Wand_of_fireball())
   table.insert(player.inventory, actors.Bomb())
   table.insert(player.inventory, actors.Scroll_of_enlightenment())
   table.insert(player.inventory, actors.Arrow())
+  table.insert(player.inventory, actors.Bow())
   love.keyboard.setKeyRepeat(true)
 end
 
