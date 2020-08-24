@@ -31,14 +31,23 @@ Box.color = {0.8, 0.5, 0.1, 1}
 Box.passable = false
 Box.blocksView = false
 
-function Box:act(level)
-  return self:getAction(actions.Move)(self, Vector2(0, 0))
-end
-
 Box.components = {
   components.Usable({Push}, Push),
   components.Move(),
-  components.Aicontroller()
+  components.Aicontroller(),
+  components.Stats
+  {
+    STR = 0,
+    DEX = 0,
+    INT = 0,
+    CON = 0,
+    maxHP = 1,
+    AC = 0
+  }
 }
+
+function Box:act(level)
+  return self:getAction(actions.Move)(self, Vector2(0, 0))
+end
 
 return Box

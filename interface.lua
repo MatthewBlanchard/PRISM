@@ -96,7 +96,6 @@ function Interface:draw()
   end
 
   for k, actor in pairs(scryActors) do
-    print(actor.name)
     local x, y = actor.position.x, actor.position.y
     self:writeOffset(actor.char, x, y, actor.color)
   end
@@ -188,13 +187,15 @@ function Interface:handleKeyPress(keypress)
         enemy = actor
       end
 
-      if actor:hasComponent(components.Usable) and
-      actor.defaultUseAction and
-      actor.position == targetPosition and
-      actor.defaultUseAction and
-      actor.defaultUseAction:validateTarget(1, game.curActor, actor) and
-      not actor.passable then
-        return self:setAction(actor.defaultUseAction(game.curActor, actor))
+      if not love.keyboard.isDown("lshift") then 
+        if actor:hasComponent(components.Usable) and
+        actor.defaultUseAction and
+        actor.position == targetPosition and
+        actor.defaultUseAction and
+        actor.defaultUseAction:validateTarget(1, game.curActor, actor) and
+        not actor.passable then
+          return self:setAction(actor.defaultUseAction(game.curActor, actor))
+        end
       end
     end
 
