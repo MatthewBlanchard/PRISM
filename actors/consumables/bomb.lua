@@ -3,17 +3,9 @@ local Condition = require "condition"
 local Color = require "color"
 local Tiles = require "tiles"
 
-local function BombLightEffect(x, y, duration)
-    local t = 0
-    return function (dt)
-        t = t + dt
-        if t > duration then return nil end
-        return x, y, Color.mul({0.8, 0.8, 0.1}, (1 - t/duration)*2)
-    end
-end
-
 local Explode = Condition:extend()
 Explode.range = 2
+Explode.color = {0.8, 0.8, 0.1}
 
 Explode:afterAction(actions.Throw, 
   function(self, level, actor, action)
@@ -28,7 +20,7 @@ Explode:afterAction(actions.Throw,
 	end
 	
 	level:addEffect(effects.ExplosionEffect(fov, actor.position, Explode.range))
-	table.insert(level.temporaryLights, BombLightEffect(actor.position.x, actor.position.y, 0.6))
+	table.insert(level.temporaryLights, effects.LightEffect(actor.position.x, actor.position.y, 0.6, Explode.color))
 	level:destroyActor(actor)
   end
 )

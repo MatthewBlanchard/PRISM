@@ -131,4 +131,13 @@ effects.ExplosionEffect = function(fov, origin, range)
     end
 end
 
+effects.LightEffect = function(x, y, duration, color)
+  local t = 0
+  return function (dt)
+      t = t + dt
+      if t > duration then return nil end
+      return x, y, Color.mul(color, (1 - t/duration)*2)
+  end
+end
+
 return effects

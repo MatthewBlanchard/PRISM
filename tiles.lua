@@ -11,6 +11,7 @@ local tiles = {
 
 	armor = 354,
 	arrow = 378,
+	barrel = 281,
 	belt = 370,
 	bomb = 360,
 	bow = 336,

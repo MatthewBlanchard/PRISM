@@ -64,7 +64,7 @@ function love.load()
   end
 
   for i = 1, 15 do
-    spawnActor(actors.Sqeeto())
+    --spawnActor(actors.Sqeeto())
   end
 
   for i = 1, 5 do
@@ -99,8 +99,12 @@ function love.load()
     spawnActor(actors.Shard())
   end
 
-  for i = 1, 10 do
+  for i = 1, 5 do
     spawnActor(actors.Box())
+  end
+
+  for i = 1, 20 do 
+    spawnActor(actors.Barrel())
   end
 
   local chest = actors.Chest()
