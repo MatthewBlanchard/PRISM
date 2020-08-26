@@ -10,8 +10,7 @@ Gaze.silent = true
 Gaze.time = 0
 
 function Gaze:perform(level)
-  local target = self.targetActors[1]
-  level:destroyActor(target)
+  level:destroyActor(self:getTarget(1))
   level:addMessage("You gaze into the prism. It shatters!", self.owner)
   self.owner:setHP(self.owner:getHP() + 5)
   -- TODO: Better way to do this

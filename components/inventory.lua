@@ -27,7 +27,6 @@ end
 function Inventory.hasItemType(owner, item)
   for k, v in pairs(owner.inventory) do
     if v:is(item) then 
-      print(v.name)
       return k
     end
   end

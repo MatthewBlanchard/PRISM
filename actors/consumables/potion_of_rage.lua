@@ -8,9 +8,7 @@ Drink.name = "drink"
 Drink.targets = {targets.Item}
 
 function Drink:perform(level)
-  local target = self.targetActors[1]
-
-  level:destroyActor(target)
+  level:destroyActor(self:getTarget(1))
   self.owner:applyCondition(conditions.Rage())
 end
 

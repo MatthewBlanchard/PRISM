@@ -9,9 +9,8 @@ Eat.targets = {targets.Item}
 
 function Eat:perform(level)
   local heal = 2
-  local target = self.targetActors[1]
 
-  level:destroyActor(target)
+  level:destroyActor(self:getTarget(1))
   self.owner:setHP(self.owner:getHP() + heal)
   level:addEffect(effects.HealEffect(self.owner, heal))
 end

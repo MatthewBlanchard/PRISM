@@ -8,11 +8,17 @@ Read.targets = {targets.Item}
 
 function Read:perform(level)
   level:destroyActor(self:getTarget(1))
-  self.owner:applyCondition(conditions.Scrying())
+
+  for x = 1, level.width do
+	for y = 1, level.height do 
+	  if not self.owner.explored[x] then self.owner.explored[x] = {} end
+	  self.owner.explored[x][y] = level.map[x][y]
+	end
+  end
 end
 
 local Scroll = Actor:extend()
-Scroll.name = "Scroll of Enlightenment"
+Scroll.name = "Scroll of Mapping"
 Scroll.color = {0.8, 0.8, 0.8, 1}
 Scroll.char = Tiles["scroll"]
 
