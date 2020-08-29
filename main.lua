@@ -64,7 +64,7 @@ function love.load()
   end
 
   for i = 1, 15 do
-    --spawnActor(actors.Sqeeto())
+    spawnActor(actors.Sqeeto())
   end
 
   for i = 1, 5 do
@@ -103,7 +103,7 @@ function love.load()
     spawnActor(actors.Box())
   end
 
-  for i = 1, 20 do 
+  for i = 1, 5 do 
     spawnActor(actors.Barrel())
   end
 
@@ -121,7 +121,7 @@ function love.load()
   table.insert(player.inventory, actors.Bomb())
   table.insert(player.inventory, actors.Scroll_of_mapping())
   table.insert(player.inventory, actors.Arrow())
-  table.insert(player.inventory, actors.Bow())
+  table.insert(player.inventory, actors.Sword_of_dashing())
   love.keyboard.setKeyRepeat(true)
 end
 

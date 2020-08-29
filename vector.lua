@@ -23,4 +23,8 @@ function Vector2.__eq(a, b)
   return a.x == b.x and a.y == b.y
 end
 
+function Vector2.__mul(a, b)
+  return Vector2(a.x * b, a.y * b)
+end
+
 return Vector2
