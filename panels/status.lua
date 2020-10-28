@@ -36,6 +36,7 @@ function StatusPanel:draw()
     self:write(k.name .. "s: ", 2, i, k.color)
     self:write(k.char, 2 + #k.name + 3, i, k.color)
     self:write(tostring(v), #k.name + 4, i, k.color)
+    i = i + 1
   end
 end
 

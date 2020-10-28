@@ -1,7 +1,7 @@
 local Actor = require "actor"
 local Action = require "action"
 local Tiles = require "tiles"
-local LevelUpPanel = require "panels.level_up"
+local FeatsPanel = require "panels.feats"
 
 local Gaze = Action:extend()
 Gaze.name = "gaze"
@@ -14,7 +14,7 @@ function Gaze:perform(level)
   level:addMessage("You gaze into the prism. It shatters!", self.owner)
   self.owner:setHP(self.owner:getHP() + 5)
   -- TODO: Better way to do this
-  game.interface:push(LevelUpPanel(game.interface.display, game.interface))
+  game.interface:push(FeatsPanel(game.interface.display, game.interface, {conditions.Rapidfire, conditions.Swiftness}))
 end
 
 local Prism = Actor:extend()

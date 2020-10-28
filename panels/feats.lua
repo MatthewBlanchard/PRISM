@@ -11,7 +11,7 @@ local statToColor = {
   ["WIS"] = Colors.PURPLE
 }
 
-function FeatsPanel:__new(display, parent, stat, feats)
+function FeatsPanel:__new(display, parent, feats)
   Panel.__new(self, display, parent, 23, 15, 27, 17)
   self.feats = feats
   self.stat = stat
@@ -24,15 +24,17 @@ function FeatsPanel:draw()
   if #self.feats == 1 then 
     self:write("Gained a Feat!", 8, 2)
     local feat = self.feats[1]
-    self:writeFormatted({statToColor[self.stat], feat.name}, 3, 4)
+    self:writeText(feat.name, 3, 4)
     self:writeText(feat.description, 3, 5, self.w - 3)
   else
     self:write("Pick a Feat!", 9, 2)
     local descHeight = 0
+    local extra = 0
     for i, feat in ipairs(self.feats) do 
-      self:writeFormatted({i .. ") ", statToColor[self.stat], feat.name}, 2, i * 2 + 2 + descHeight)
-      self:writeText(feat.description, 5, i * 2 + 3 + descHeight, self.w - 5)
+      self:writeFormatted({Colors.YELLOW, i .. ") " .. feat.name}, 2, i * 2 + 2 + extra + descHeight)
+      self:writeText(feat.description, 5, i * 2 + 3 + extra + descHeight, self.w - 5)
       descHeight = math.ceil(#feat.description / (self.w - 3))
+      extra = 1
     end
   end
 end
