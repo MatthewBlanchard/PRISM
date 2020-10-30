@@ -3,14 +3,6 @@ local Colors = require "colors"
 
 local FeatsPanel = Panel:extend()
 
-local statToColor = {
-  ["STR"] = Colors.RED,
-  ["DEX"] = Colors.GREEN,
-  ["CON"] = Colors.YELLOW,
-  ["INT"] = Colors.BLUE,
-  ["WIS"] = Colors.PURPLE
-}
-
 function FeatsPanel:__new(display, parent, feats)
   Panel.__new(self, display, parent, 23, 15, 27, 17)
   self.feats = feats

@@ -1,13 +1,11 @@
 local Panel = require "panel"
 local Colors = require "colors"
 
-local formatted = {Colors.RED, "STR ", Colors.GREEN, "DEX ", Colors.YELLOW, "CON ", Colors.BLUE, "INT ", Colors.PURPLE, "WIS"}
-
 local StatusPanel = Panel:extend()
 
 function StatusPanel:__new(display, parent)
   local x, y = game.display:getWidth() - 20, game.display:getHeight()
-  Panel.__new(self, display, parent, x, 1, 21, 11)
+  Panel.__new(self, display, parent, x, 1, 21, 9)
 end
 
 function StatusPanel:draw()
@@ -21,17 +19,14 @@ function StatusPanel:draw()
     c = c == "" and " " or c
 
     local bg = barLength >= i and {.3, .3, .3, 1} or {.2, .1, .1, 1}
-    self:write(c, i + 1, 5, {.75, .75, .75, 1}, bg)
+    self:write(c, i + 1, 3, {.75, .75, .75, 1}, bg)
   end
 
-  self:writeFormatted(formatted, 2, 2)
-  local stats = self:statToString(game.curActor.STR) 
-  self:write(self:statsToString(game.curActor), 2, 3)
   local statbonus = game.curActor:getStatBonus(game.curActor.wielded.stat)
-  self:write(game.curActor.wielded.name, 2, 6, {.75, .75, .75, 1})
-  self:write("AC: " .. game.curActor:getAC(), 2, 7, {.75, .75, .75, 1})
+  self:write(game.curActor.wielded.name, 2, 4, {.75, .75, .75, 1})
+  self:write("AC: " .. game.curActor:getAC(), 2, 5, {.75, .75, .75, 1})
 
-  local i = 9
+  local i = 7
   for k, v in pairs(game.curActor.wallet) do 
     self:write(k.name .. "s: ", 2, i, k.color)
     self:write(k.char, 2 + #k.name + 3, i, k.color)
