@@ -15,8 +15,22 @@ function BrogueRoom:init(dims, doorX, doorY)
   self._dims = dims
   self._doors = PointSet()
   self._walls = PointSet()
+  self._x = doorX or 0
+  self._y = doorY or 0
+
   if doorX then
     self._doors:push(doorX, doorY)
+  end
+end
+
+function BrogueRoom:getRandomWalkableTile()
+  while true do
+    local rx = love.math.random(self:getLeft(), self:getRight())
+    local ry = love.math.random(self:getTop(), self:getBottom())
+
+    if self:_coordIsFloor(rx, ry) then
+      return rx, ry
+    end
   end
 end
 

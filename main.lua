@@ -49,9 +49,10 @@ function love.load()
   local scale = 1
   local w, h = math.floor(81/scale), math.floor(49/scale)
   local display = Display:new(w, h, scale, nil, {.09, .09, .09}, nil, nil, true)
-  local map = ROT.Map.Rogue(display:getWidth() - 11, 44)
+  local map = ROT.Map.Brogue(display:getWidth() - 11, 44)
 
   game.display = display
+  game.Player = actors.Player()
 
   local interface = Interface(display)
   local level = Level(map)
@@ -66,59 +67,7 @@ function love.load()
     level:addActor(actor)
   end
 
-  for i = 1, 15 do
-    spawnActor(actors.Sqeeto())
-  end
-
-  for i = 1, 5 do
-    spawnActor(actors.Golem())
-  end
-
-  for i = 1, 5 do
-    spawnActor(actors.Potion())
-  end
-
-  local chestContents = {
-    actors.Ring_of_protection,
-    actors.Ring_of_regeneration,
-    actors.Armor,
-    actors.Cloak_of_invisibility,
-    actors.Slippers_of_swiftness,
-    actors.Wand_of_lethargy,
-    actors.Wand_of_swapping,
-    actors.Wand_of_random_teleportation,
-    actors.Potion_of_weight,
-    actors.Potion_of_rage,
-    actors.Dagger_of_venom
-  }
-
-  for i = 1, 4 do
-    local chest = actors.Chest()
-    table.insert(chest.inventory, chestContents[math.random(#chestContents)]())
-    spawnActor(chest)
-  end
-
-  for i = 1, 10 do
-    spawnActor(actors.Shard())
-  end
-
-  for i = 1, 5 do
-    spawnActor(actors.Box())
-  end
-
-  for i = 1, 5 do
-    spawnActor(actors.Barrel())
-  end
-
-  local chest = actors.Chest()
-  local key = actors.Key()
-  chest:setKey(chest, key)
-
-  spawnActor(chest)
-  spawnActor(actors.Prism())
-  local player = actors.Player()
-  spawnActor(player)
-
+  local player = game.Player
   table.insert(player.inventory, actors.Dagger_of_venom())
   table.insert(player.inventory, actors.Wand_of_fireball())
   table.insert(player.inventory, actors.Bomb())
@@ -137,7 +86,7 @@ end
 
 function love.update(dt)
   next_time = next_time + min_dt
-  
+
   local curActor
   while not curActor and (#game.level.effects == 0) do
     curActor = game.level:update(dt, game.interface:getAction())

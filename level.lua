@@ -1,5 +1,6 @@
 local Object = require "object"
 local Scheduler = require "scheduler"
+local populateMap = require "populater"
 
 local Level = Object:extend()
 
@@ -24,14 +25,7 @@ function Level:__new(map)
 
   -- temporary code before we get more complicated level gen in
   -- just pop a few doors where rotLove's level gen indicates
-  if not map._doors then return end
-  for k, d in ipairs(map._doors) do
-    local door = actors.Door()
-    door.position.x = d.x
-    door.position.y = d.y
-
-    self:addActor(door)
-  end
+  populateMap(self, map)
 end
 
 local initialized
