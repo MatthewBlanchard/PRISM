@@ -17,15 +17,13 @@ end
 function Event:shouldFire(level, action)
   if not action:is(self.action) then return false end
 
-  if self.conditionals then
+  if not (self.owner.actor == action.owner) then
+    return false
+  end
+
+  if #self.conditionals > 0 then
     for k, conditional in pairs(self.conditionals) do
       if not conditional(self.owner.actor, level, action) then return false end
-    end
-
-    return true
-  else
-    if self.owner.actor == action.owner then
-      return true
     end
   end
 
@@ -134,7 +132,7 @@ function Condition:afterAction(action, func)
 end
 
 function Condition:afterReaction(reaction, func)
-  self:afterAction(reaction, func)
+  return self:afterAction(reaction, func)
 end
 
 function Condition.ownerIsTarget(actor, level, action)

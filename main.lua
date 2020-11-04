@@ -43,6 +43,9 @@ game = {}
 
 
 function love.load()
+  min_dt = 1/30 --fps
+  next_time = love.timer.getTime()
+
   local scale = 1
   local w, h = math.floor(81/scale), math.floor(49/scale)
   local display = Display:new(w, h, scale, nil, {.09, .09, .09}, nil, nil, true)
@@ -103,7 +106,7 @@ function love.load()
     spawnActor(actors.Box())
   end
 
-  for i = 1, 5 do 
+  for i = 1, 5 do
     spawnActor(actors.Barrel())
   end
 
@@ -133,6 +136,8 @@ function love.draw()
 end
 
 function love.update(dt)
+  next_time = next_time + min_dt
+  
   local curActor
   while not curActor and (#game.level.effects == 0) do
     curActor = game.level:update(dt, game.interface:getAction())
