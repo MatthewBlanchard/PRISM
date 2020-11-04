@@ -14,7 +14,7 @@ Explode:afterReaction(reactions.Die,
     local damageAmount = ROT.Dice.roll("6d6")
 
     for _, a in ipairs(actors) do
-      if targets.Creature:checkRequirements(a) and not a:is(Barrel) then
+      if targets.Creature:checkRequirements(a) then
         local damage = a:getReaction(reactions.Damage)(a, {actor}, damageAmount)
         level:performAction(damage)
       end
