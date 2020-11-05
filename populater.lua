@@ -98,7 +98,7 @@ function Populater(level, map)
       table.insert(room.actors, actor)
     end
 
-    spawnShards(room, 0, 3)
+    spawnShards(room, 0, 2)
   end
 
   table.insert(toSpawn, actors.Prism())

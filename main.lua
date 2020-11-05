@@ -48,10 +48,16 @@ function love.load()
 
   local scale = 1
   local w, h = math.floor(81/scale), math.floor(49/scale)
-  local display = Display:new(w, h, scale, nil, {.09, .09, .09}, nil, nil, true)
+  local w2, h2 = math.floor(81/2), math.floor(49/2)
+  local display = Display:new(w, h, scale, nil, {.09, .09, .09, 0}, nil, nil, true)
+  local viewDisplay2x = Display:new(w2, h2, 2, nil, {.09, .09, .09}, nil, nil, true)
+  local viewDisplay1x = Display:new(w, h, 1, nil, {.09, .09, .09}, nil, nil, true)
   local map = ROT.Map.Brogue(display:getWidth() - 11, 44)
 
   game.display = display
+  game.viewDisplay1x = viewDisplay1x
+  game.viewDisplay2x = viewDisplay2x
+  game.viewDisplay = viewDisplay2x
   game.Player = actors.Player()
 
   local interface = Interface(display)
@@ -79,8 +85,10 @@ end
 
 function love.draw()
   if not game.display then return end
+  game.viewDisplay:clear()
   game.display:clear()
   game.interface:draw(game.display)
+  game.viewDisplay:draw()
   game.display:draw()
 end
 

@@ -64,14 +64,15 @@ function Panel:drawBorders(width, height)
 end
 
 function Panel:writeOffset(toWrite, x, y, fg, bg)
-  local interface = game.interface
-  local mx = (x - (game.curActor.position.x - interface.viewX)) + 2
-  local my = (y - (game.curActor.position.y - interface.viewY)) + 2
+  local viewX, viewY = game.viewDisplay.widthInChars, game.viewDisplay.heightInChars
+  local mx = (x - (game.curActor.position.x - math.floor(viewX/2)))
+  local my = (y - (game.curActor.position.y - math.floor(viewY/2)))
 
-  if x < 1 or x > self.w or y < 1 or y > self.h then
+  if mx < 1 or mx > game.viewDisplay.widthInChars or my < 1 or my > game.viewDisplay.heightInChars then
     return
   end
-  self:write(toWrite, mx, my, fg, bg)
+
+  game.viewDisplay:write(toWrite, mx, my, fg, bg)
 end
 
 function Panel:writeOffsetBG(x, y, bg)

@@ -11,7 +11,7 @@ Display.defaultTileset = {
 }
 
 --- Constructor.
--- The display constructor. 
+-- The display constructor.
 -- @tparam[opt=80] int w Width of display in number of characters
 -- @tparam[opt=24] int h Height of display in number of characters
 -- @tparam[opt=1] float scale Window scale modifier applied to glyph dimensions
@@ -85,6 +85,7 @@ function Display:draw(noDraw)
 	local endY = self.heightInChars
 
    self.graphics.setCanvas(self.canvas)
+   self.graphics.clear()
    for x = startX, endX do
       for y = startY, endY do
          local c = self.chars[x][y]
@@ -92,11 +93,6 @@ function Display:draw(noDraw)
          local fg = self.foregroundColors[x][y]
          local px = (x-1)*self.charWidth
          local py = (y-1)*self.charHeight
-         if self.oldChars[x][y]            ~= c  or
-            self.oldBackgroundColors[x][y] ~= bg or
-            self.oldForegroundColors[x][y] ~= fg or 
-			self.tilesetChanged                  then
-
             self:_setColor(bg)
             self.graphics.rectangle('fill', px, py, self.charWidth, self.charHeight)
             if c ~= 32 and c ~= 255 then
@@ -109,7 +105,6 @@ function Display:draw(noDraw)
             self.oldBackgroundColors[x][y] = bg
             self.oldForegroundColors[x][y] = fg
          end
-      end
    end
    self.tilesetChanged = false
    self.graphics.setCanvas()
@@ -248,8 +243,8 @@ function Display:writeFormatted(s, x, y, bg)
 
    local currentX = x
    local currentFg = nil
-   for i = 1, #s do 
-      if type(s[i]) == "string" then 
+   for i = 1, #s do
+      if type(s[i]) == "string" then
          self:write(s[i], currentX, y, currentFg, bg)
          currentX = currentX + #s[i]
       elseif type(s[i]) == "table" then
@@ -263,7 +258,7 @@ end
 -- @tparam number index The char to be written
 -- @tparam[opt=1] int x The x-position where the char will be written
 -- @tparam[opt=1] int y The y-position where the char will be written
--- @tparam[opt] table fg The color used to write the provided char 
+-- @tparam[opt] table fg The color used to write the provided char
 -- @tparam[opt] table bg the color used to fill in the char's background
 function Display:writeChar(index, x, y, fg, bg)
    x = self:_validateX(x)

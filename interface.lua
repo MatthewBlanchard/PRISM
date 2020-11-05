@@ -13,8 +13,6 @@ function Interface:__new(display)
   Panel.__new(self, display)
   self.statusPanel = Status(display)
   self.messagePanel = Message(display)
-  self.viewX = math.floor((display.widthInChars - self.statusPanel.w)/2)
-  self.viewY = math.floor((display.heightInChars - self.messagePanel.h)/2)
   self.stack = {}
 end
 
@@ -66,9 +64,10 @@ function Interface:draw()
   local light = game.level.effectlight
   local ambientColor = {.175, .175, .175}
 
+  local viewX, viewY = game.viewDisplay.widthInChars, game.viewDisplay.heightInChars
   local sx, sy = game.curActor.position.x, game.curActor.position.y
-  for x = sx - self.viewX, sx + self.viewX do
-    for y = sy - self.viewY, sy + self.viewY do
+  for x = sx - viewX, sx + viewX do
+    for y = sy - viewY, sy + viewY do
       if fov[x] and fov[x][y] then
         if light[x] and light[x][y] then
           -- okay we're gonna first establish our light color and then
@@ -149,7 +148,8 @@ Interface.movementTranslation = {
 Interface.keybinds = {
   i = "inventory",
   p = "pickup",
-  l = "log"
+  l = "log",
+  m = "map"
 }
 
 function Interface:handleKeyPress(keypress)
@@ -174,6 +174,11 @@ function Interface:handleKeyPress(keypress)
           return self:setAction(game.curActor:getAction(actions.Pickup)(game.curActor, i))
         end
       end
+    end
+
+    if self.keybinds[keypress] == "map" then
+      print "YA"
+      game.viewDisplay = game.viewDisplay == game.viewDisplay1x and game.viewDisplay2x or game.viewDisplay1x
     end
   end
 
