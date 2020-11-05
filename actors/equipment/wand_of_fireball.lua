@@ -17,15 +17,17 @@ local ZapTarget = targets.Point:extend()
 ZapTarget.name = "ZapTarget"
 ZapTarget.range = 9
 
-local Zap = Action:extend()
+local Zap = actions.Zap:extend()
 Zap.name = "zap"
-Zap.fireballRange = 1
+Zap.aoeRange = 1
 Zap.targets = {targets.Item, ZapTarget}
 
 function Zap:perform(level)
+  actions.Zap.perform(self, level)
+
   local target = self.targetActors[2]
 
-  local fov, actors = level:getAOE("fov", target, self.fireballRange)
+  local fov, actors = level:getAOE("fov", target, self.aoeRange)
   local damage = ROT.Dice.roll("6d6")
 
   for _, actor in ipairs(actors) do
@@ -34,8 +36,8 @@ function Zap:perform(level)
       level:performAction(damage)
     end
   end
-  
-  level:addEffect(effects.ExplosionEffect(fov, target, self.fireballRange))
+
+  level:addEffect(effects.ExplosionEffect(fov, target, self.aoeRange))
   table.insert(level.temporaryLights, FireballLightEffect(target.x, target.y, 0.6))
 end
 
@@ -49,6 +51,7 @@ WandOfFireball.stackable = false
 WandOfFireball.components = {
   components.Item(),
   components.Usable{Zap},
+  components.Wand(5)
 }
 
 return WandOfFireball

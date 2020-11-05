@@ -98,6 +98,15 @@ function Actor:addAction(action)
   table.insert(self.actions, action)
 end
 
+function Actor:removeAction(action)
+  for k, v in pairs(self.actions) do
+    if v:is(action) then
+      table.remove(self.actions, k)
+      return
+    end
+  end
+end
+
 function Actor:getAction(action)
   for k, v in pairs(self.actions) do
     if v:is(action) then

@@ -14,6 +14,7 @@ Zap.name = "zap"
 Zap.targets = {targets.Item, ZapTarget}
 
 function Zap:perform(level)
+  actions.Zap.perform(self, level)
   local target = self.targetActors[2]
   target:applyCondition(conditions.Lethargy())
 end
@@ -27,6 +28,7 @@ WandOfLethargy.stackable = false
 WandOfLethargy.components = {
   components.Item(),
   components.Usable{Zap},
+  components.Wand(5)
 }
 
 return WandOfLethargy

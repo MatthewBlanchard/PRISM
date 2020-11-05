@@ -19,6 +19,7 @@ Zap.name = "zap"
 Zap.targets = {targets.Item}
 
 function Zap:perform(level)
+  actions.Zap.perform(self, level)
   local target = self.targetActors[2]
   local position = self.owner.position
 
@@ -36,6 +37,7 @@ WandOfRandomTeleportation.stackable = false
 WandOfRandomTeleportation.components = {
   components.Item(),
   components.Usable{Zap},
+  components.Wand(5)
 }
 
 return WandOfRandomTeleportation

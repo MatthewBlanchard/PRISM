@@ -25,6 +25,8 @@ Zap.name = "zap"
 Zap.targets = {targets.Item, ZapTarget}
 
 function Zap:perform(level)
+  actions.Zap.perform(self, level)
+
   local target = self.targetActors[2]
   local position = self.owner.position
 
@@ -41,6 +43,7 @@ WandOfSwapping.stackable = false
 WandOfSwapping.components = {
   components.Item(),
   components.Usable{Zap},
+  components.Wand(5)
 }
 
 return WandOfSwapping

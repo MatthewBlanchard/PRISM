@@ -9,7 +9,10 @@ function Populater(level, map)
     return x and y * 0x4000000 + x or false --  26-bit x and y
   end
 
-  local function spawnActor(room, actor)
+  local function spawnActor(room, actor, i, j)
+    for i = 1, love.math.random(i, j) do
+      spawnActor(room, actors.Shard())
+    end
     local x, y = room:getRandomWalkableTile()
     actor.position.x = x
     actor.position.y = y
@@ -99,6 +102,7 @@ function Populater(level, map)
     end
 
     spawnShards(room, 0, 2)
+    spawnActor(room, actors.Sqeeto())
   end
 
   table.insert(toSpawn, actors.Prism())
