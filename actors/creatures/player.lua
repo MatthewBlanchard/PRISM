@@ -49,9 +49,9 @@ Player.components = {
 local Pickup = Condition:extend()
 Pickup:afterAction(actions.Move,
   function(self, level, actor, action)
-    for _,actor in pairs(game.curActor.seenActors) do
-      if actor:is(actors.Shard) and actions.Pickup:validateTarget(1, game.curActor, actor) then
-        return level:performAction(game.curActor:getAction(actions.Pickup)(game.curActor, actor))
+    for _,item in pairs(game.curActor.seenActors) do
+      if actor:is(actors.Shard) and actions.Pickup:validateTarget(1, actor, item) then
+        return level:performAction(game.curActor:getAction(actions.Pickup)(actor, item))
       end
     end
   end

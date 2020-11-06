@@ -80,6 +80,20 @@ function love.load()
   table.insert(player.inventory, actors.Scroll_of_mapping())
   table.insert(player.inventory, actors.Arrow())
   table.insert(player.inventory, actors.Sword_of_dashing())
+  player:deposit(player, actors.Shard())
+  local item = actors.Potion()
+  local c = actors.Shard()
+  local p = actors.Product()
+  local shop = actors.Shopkeep()
+  p.position.x = player.position.x + 1
+  p.position.y = player.position.y + 1
+  shop.position.x = player.position.x + 2
+  shop.position.y = player.position.y + 2
+  p:setItem(p, item)
+  p:setCurrency(p, c)
+  p:setShopkeep(p, shop)
+  level:addActor(p)
+  level:addActor(shop)
   love.keyboard.setKeyRepeat(true)
 end
 

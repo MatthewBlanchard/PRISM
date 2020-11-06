@@ -140,4 +140,14 @@ effects.LightEffect = function(x, y, duration, color)
   end
 end
 
+effects.Character = function(x, y, char, color, duration)
+  local t = 0
+  return function (dt, interface)
+    t = t + dt
+    if t > duration then return nil end
+
+    interface:writeOffset(char, x, y, color)
+  end
+end
+
 return effects
