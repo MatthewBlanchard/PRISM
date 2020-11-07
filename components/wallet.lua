@@ -13,32 +13,23 @@ function Wallet:initialize(actor)
   actor.hasAmount = self.hasAmount
 end
 
-function Wallet:deposit(owner, currency)
-  local meta = getmetatable(currency)
-  if not owner.wallet[meta] then 
-    owner.wallet[meta] = 0
+function Wallet:deposit(currency, amount)
+  if not self.wallet[currency] then 
+    self.wallet[currency] = 0
   end
-  owner.wallet[meta] = owner.wallet[meta] + currency.worth
+  self.wallet[currency] = self.wallet[currency] + amount
 end
 
-function Wallet:hasAmount(owner, currency)
-  local meta = getmetatable(currency)
-
-  if not owner.wallet[meta] then 
+function Wallet:hasAmount(currency, amount)
+  if not self.wallet[currency] then 
     return nil 
   end
-  return owner.wallet[meta] >= currency.worth
+  return self.wallet[currency] >= amount
 end
 
-function Wallet:withdraw(owner, currency)
-  local meta = getmetatable(currency)
-
-  if not owner.wallet[meta] then 
-    return nil 
-  end
-
-  if owner.wallet[meta] >= currency.worth then 
-    owner.wallet[meta] = owner.wallet[meta] - currency.worth
+function Wallet:withdraw(currency, amount)
+  if self:hasAmount(currency, amount) then
+    self.wallet[currency] = self.wallet[currency] - amount
     return true
   else 
     return nil

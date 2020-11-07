@@ -1,4 +1,4 @@
-local Action = require "Action"
+local Action = require "action"
 
 local Zap = Action:extend()
 Zap.name = "zap"

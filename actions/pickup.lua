@@ -30,7 +30,7 @@ function Pickup:perform(level)
   level:removeActor(target)
 
   if target.worth then 
-    self.owner:deposit(self.owner, target)
+    self.owner:deposit(getmetatable(target), target.worth)
   else
     table.insert(self.owner.inventory, target)
   end
