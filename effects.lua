@@ -97,7 +97,7 @@ effects.ExplosionEffect = function(fov, origin, range)
 
     local colors =
     {
-    
+
     }
     return function(dt, interface)
         t = t + dt
@@ -125,7 +125,7 @@ effects.ExplosionEffect = function(fov, origin, range)
                 end
             end
         end
-        
+
         if t > duration then return true end
         return false, {x, y, }
     end
@@ -135,7 +135,7 @@ effects.LightEffect = function(x, y, duration, color)
   local t = 0
   return function (dt)
       t = t + dt
-      if t > duration then return nil end
+      if t > duration then return true end
       return x, y, Color.mul(color, (1 - t/duration)*2)
   end
 end
@@ -144,7 +144,7 @@ effects.Character = function(x, y, char, color, duration)
   local t = 0
   return function (dt, interface)
     t = t + dt
-    if t > duration then return nil end
+    if t > duration then return true end
 
     interface:writeOffset(char, x, y, color)
   end

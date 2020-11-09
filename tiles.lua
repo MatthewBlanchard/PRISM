@@ -1,8 +1,8 @@
 local tiles = {
 	arrow_down = 291,
 
-	bubble_exclamation = 292,
-	bubble_surprise = 293,
+	bubble_surprise = 292,
+	bubble_exclamation = 293,
 	bubble_question = 294,
 	bubble_sleep = 295,
 	bubble_lines = 296,

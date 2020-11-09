@@ -41,7 +41,7 @@ function AIController.moveTowardObject(actor, target)
 
   if actor.fov[actor.position.x + mx][actor.position.x + my] == 0 then
     local moveVec = Vector2(mx, my)
-    return actor:getAction(actions.Move)(actor, moveVec)
+    return actor:getAction(actions.Move)(actor, moveVec), moveVec
   end
 
   local closestDist = target:getRange("box", actor)
@@ -60,7 +60,7 @@ function AIController.moveTowardObject(actor, target)
   end
 
   local moveVec = Vector2(-(actor.position.x - closest.x), -(actor.position.y - closest.y))
-  return actor:getAction(actions.Move)(actor, moveVec)
+  return actor:getAction(actions.Move)(actor, moveVec), moveVec
 end
 
 
@@ -70,7 +70,7 @@ function AIController.moveToward(actor, target)
 
   if actor.fov[actor.position.x + mx][actor.position.x + my] == 0 then
     local moveVec = Vector2(mx, my)
-    return actor:getAction(actions.Move)(actor, moveVec)
+    return actor:getAction(actions.Move)(actor, moveVec), moveVec
   end
 
   local closestDist = target:getRange("box", actor)
@@ -89,7 +89,7 @@ function AIController.moveToward(actor, target)
   end
 
   local moveVec = Vector2(-(actor.position.x - closest.x), -(actor.position.y - closest.y))
-  return actor:getAction(actions.Move)(actor, moveVec)
+  return actor:getAction(actions.Move)(actor, moveVec), moveVec
 end
 
 function AIController.canSeeActor(actor, target)
@@ -127,7 +127,8 @@ function AIController.moveTowardLight(level, actor)
 end
 
 function AIController.randomMove(level, actor)
-  return actor:getAction(actions.Move)(actor, Vector2(ROT.RNG:random(1, 3) - 2, ROT.RNG:random(1, 3) - 2))
+  local moveVec = Vector2(ROT.RNG:random(1, 3) - 2, ROT.RNG:random(1, 3) - 2)
+  return actor:getAction(actions.Move)(actor, moveVec), moveVec
 end
 
 return AIController
