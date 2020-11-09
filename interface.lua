@@ -214,6 +214,8 @@ end
 
 function Interface:setAction(action)
   self.action = action
+  game.level.effects = {}
+  game.interface.curEffect = nil
 end
 
 function Interface:getAction()
