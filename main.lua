@@ -80,7 +80,6 @@ function love.load()
   table.insert(player.inventory, actors.Scroll_of_mapping())
   table.insert(player.inventory, actors.Arrow())
   table.insert(player.inventory, actors.Sword_of_dashing())
-  player:deposit(actors.Shard, 1)
   local item = actors.Potion()
   local product = actors.Product()
   product.position.x = player.position.x + 1

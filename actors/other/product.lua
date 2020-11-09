@@ -23,7 +23,8 @@ function Buy:perform(level)
     if product.shopkeep then 
       level:addEffect(product.soldEffect)
     end
-  else
+  elseif product.shopkeep then 
+    level:addEffect(product.notSoldEffect)
   end
 end
 
