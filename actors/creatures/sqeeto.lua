@@ -40,9 +40,9 @@ function Sqeeto:act(level)
   local highestActor = nil
   local wowFactor = false
 
-  local function playAnim(animateBool, x, y)
+  local function playAnim(animateBool, actor)
     if not animateBool then return end
-    level:addEffect(effects.Character(x, y - 1, Tiles["bubble_surprise"], {1, 1, 1}, .5))
+    level:addEffect(effects.CharacterDynamic(actor, 0, -1, Tiles["bubble_surprise"], {1, 1, 1}, .5))
   end
 
   for k, v in pairs(self.seenActors) do
@@ -73,12 +73,12 @@ function Sqeeto:act(level)
     else
       if math.random() > .75 then
         local action, moveVec = actUtil.randomMove(level, self)
-        playAnim(wowFactor, self.position.x + moveVec.x, self.position.y + moveVec.y)
+        playAnim(wowFactor, self)
         return action
       end
 
       local action, moveVec = actUtil.moveTowardObject(self, self.actTarget)
-      playAnim(wowFactor, self.position.x + moveVec.x, self.position.y + moveVec.y)
+      playAnim(wowFactor, self)
       return action
     end
   end

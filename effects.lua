@@ -150,4 +150,14 @@ effects.Character = function(x, y, char, color, duration)
   end
 end
 
+effects.CharacterDynamic = function(actor, x, y, char, color, duration)
+  local t = 0
+  return function (dt, interface)
+    t = t + dt
+    if t > duration then return true end
+
+    interface:writeOffset(char, actor.position.x + x, actor.position.y + y, color)
+  end
+end
+
 return effects
