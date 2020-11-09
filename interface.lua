@@ -56,6 +56,20 @@ local function csub(c1, c2)
   return {c1[1] - c2[1], c1[2] - c2[2], c1[3] - c2[3]}
 end
 
+local function shouldDrawExplored(explored, x, y)
+  if explored[x] and explored[x][y] == 0 then return true end
+
+  for i = -1, 1 do
+    for j = -1, 1 do
+      if explored[x+i] then
+        if explored[x+i][y+j] == 0 then
+          return true
+        end
+      end
+    end
+  end
+end
+
 function Interface:draw()
   local fov = game.curActor.fov
   local explored = game.curActor.explored
@@ -88,7 +102,7 @@ function Interface:draw()
         else
           self:writeOffset(fov[x][y] == 0 and Tiles["floor"] or Tiles["wall"], x, y, ambientColor)
         end
-      elseif explored[x] and explored[x][y] then
+      elseif explored[x] and explored[x][y] and shouldDrawExplored(explored, x, y) then
         self:writeOffset(explored[x][y] == 0 and Tiles["floor"] or Tiles["wall"], x, y, ambientColor)
       end
     end

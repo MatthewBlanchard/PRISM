@@ -10,7 +10,7 @@ function Read:perform(level)
   level:destroyActor(self:getTarget(1))
 
   for x = 1, level.width do
-	for y = 1, level.height do 
+	for y = 1, level.height do
 	  if not self.owner.explored[x] then self.owner.explored[x] = {} end
 	  self.owner.explored[x][y] = level.map[x][y]
 	end
