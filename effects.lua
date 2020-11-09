@@ -144,7 +144,7 @@ effects.Character = function(x, y, char, color, duration)
   local t = 0
   return function (dt, interface)
     t = t + dt
-    if t > duration then return true end
+    if t > duration then print("doot") return true end
 
     interface:writeOffset(char, x, y, color)
   end

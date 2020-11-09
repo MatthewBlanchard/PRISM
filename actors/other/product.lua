@@ -20,11 +20,12 @@ function Buy:perform(level)
   if self.owner:withdraw(product.currency, product.price) then
     level:performAction(game.curActor:getAction(actions.Pickup)(game.curActor, product.item))
     level:removeActor(product)
-    if product.shopkeep then 
-      level:addEffect(product.soldEffect)
+    if product.shopkeep then
+      level:addEffect(product.soldEffect())
     end
-  elseif product.shopkeep then 
-    level:addEffect(product.notSoldEffect)
+  elseif product.shopkeep then
+    print "Yeet"
+    level:addEffect(product.notSoldEffect())
   end
 end
 
