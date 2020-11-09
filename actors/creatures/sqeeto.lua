@@ -9,7 +9,7 @@ Sqeeto.name = "sqeeter"
 Sqeeto.color = {0.8, 0.7, 0.09}
 
 Sqeeto.components = {
-  components.Sight{ range = 3, fov = true, explored = false },
+  components.Sight{ range = 4, fov = true, explored = false },
   components.Move(),
   components.Stats
   {
@@ -65,6 +65,8 @@ function Sqeeto:act(level)
       wowFactor = true
     end
     self.actTarget = highestActor
+  else
+    self.actTarget = nil
   end
 
   if self.actTarget then
