@@ -26,6 +26,21 @@ function AIController.isPassable(actor, vec)
   return true
 end
 
+function AIController.getPassableDirection(actor)
+  local options = {}
+
+  local x, y = actor.position.x, actor.position.y
+  for i = -1, 1 do
+    for j = -1, 1 do
+      if actor.fov[x+i][y+j] == 0 and not (i == 0 and j == 0) then
+        table.insert(options, {i, j})
+      end
+    end
+  end
+
+  return Vector2(unpack(options[love.math.random(1, #options)]))
+end
+
 function AIController.moveTowardSimple(actor, target)
   local mx = target.position.x - actor.position.x > 0 and 1 or target.position.x - actor.position.x < 0 and - 1 or 0
   local my = target.position.y - actor.position.y > 0 and 1 or target.position.y - actor.position.y < 0 and - 1 or 0
@@ -61,6 +76,10 @@ function AIController.moveTowardObject(actor, target)
 
   local moveVec = Vector2(-(actor.position.x - closest.x), -(actor.position.y - closest.y))
   return actor:getAction(actions.Move)(actor, moveVec), moveVec
+end
+
+function AIController.move(actor, moveVec)
+    return actor:getAction(actions.Move)(actor, moveVec)
 end
 
 

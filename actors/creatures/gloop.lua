@@ -10,23 +10,23 @@ Gloop.name = "gloop"
 Gloop.color = {90 / 230, 161 / 230, 74 / 230}
 
 local Explode = Condition:extend()
-Explode.range = 2
+Explode.range = 1
 Explode.color = {90 / 230, 161 / 230, 74 / 230}
 
 Explode:afterAction(actions.Throw,
   function(self, level, actor, action)
     local fov, actors = level:getAOE("fov", actor.position, Explode.range)
-	local damage = ROT.Dice.roll("6d6")
+	local damage = ROT.Dice.roll("1d4")
 
 	for _, a in ipairs(actors) do
 	  if targets.Creature:checkRequirements(a) then
 	    local damage = a:getReaction(reactions.Damage)(a, {action.owner}, damage, actor)
-		level:performAction(damage)
+		  level:performAction(damage)
 	  end
 	end
 
-	level:addEffect(effects.ExplosionEffect(fov, actor.position, Explode.range))
-	table.insert(level.temporaryLights, effects.LightEffect(actor.position.x, actor.position.y, 0.6, Explode.color))
+	level:addEffect(effects.ExplosionEffect(fov, actor.position, Explode.range, Explode.color))
+	table.insert(level.temporaryLights, effects.LightEffect(actor.position.x, actor.position.y, 0.6, Explode.color, 2))
 	level:destroyActor(actor)
   end
 ):where(Condition.ownerIsTarget)
@@ -47,11 +47,18 @@ function Gloop:act(level)
   for _, actor in ipairs(self.seenActors) do
     if actor:is(actors.Player) then
       level:addEffect(effects.CharacterDynamic(self, 0, -1, Tiles["bubble_lines"], {1, 1, 1}, .5))
+      self._meanderDirection = nil
       return actUtil.moveAway(self, actor)
     end
   end
 
-  return actUtil.randomMove(level, self)
+  if not self._meanderDirection or
+    not actUtil.isPassable( self, self.position + self._meanderDirection)
+  then
+    self._meanderDirection = actUtil.getPassableDirection(self)
+  end
+
+  return actUtil.move(self, self._meanderDirection)
 end
 
 return Gloop

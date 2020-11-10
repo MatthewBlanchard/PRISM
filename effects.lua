@@ -95,10 +95,7 @@ effects.ExplosionEffect = function(fov, origin, range, colors)
     chars[1] = 179
     chars[0] = 180
 
-    local colors = colors or
-    {
-
-    }
+    local color = colors or {0.8666, 0.4509, 0.0862}
     return function(dt, interface)
         t = t + dt
 
@@ -108,7 +105,6 @@ effects.ExplosionEffect = function(fov, origin, range, colors)
                 local fadeFactor = math.min(t/duration, 1)
                 local fade = math.max(distFactor, fadeFactor)
                 local fade = math.min(fade + love.math.noise(x+t, y+t)/2, 1)
-                local color = {0.8666, 0.4509, 0.0862}
                 local char = chars[math.floor(fade * 5)]
 
                 if fade < 0.5 then
@@ -131,12 +127,13 @@ effects.ExplosionEffect = function(fov, origin, range, colors)
     end
 end
 
-effects.LightEffect = function(x, y, duration, color)
+effects.LightEffect = function(x, y, duration, color, intensity)
+  intensity = intensity or 1
   local t = 0
   return function (dt)
       t = t + dt
       if t > duration then return false end
-      return x, y, Color.mul(color, (1 - t/duration)*2)
+      return x, y, Color.mul(Color.mul(color,intensity), (1 - t/duration)*2)
   end
 end
 
