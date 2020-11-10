@@ -1,6 +1,7 @@
 function Populater(level, map)
   local spawnedPrism = false
   local treasureRoom = false
+  local store = false
   local toSpawn = {}
   local roomsLeft = #map._rooms - 1 -- subtract the starting room
   local doors = {}
@@ -9,11 +10,9 @@ function Populater(level, map)
     return x and y * 0x4000000 + x or false --  26-bit x and y
   end
 
-  local function spawnActor(room, actor, i, j)
-    for i = 1, love.math.random(i, j) do
-      spawnActor(room, actors.Shard())
-    end
-    local x, y = room:getRandomWalkableTile()
+  local function spawnActor(room, actor, x, y)
+    local _x, _y = room:getRandomWalkableTile()
+    local x, y = x or _x, y or _y
     actor.position.x = x
     actor.position.y = y
     level:addActor(actor)
@@ -39,6 +38,7 @@ function Populater(level, map)
   end
 
   local function spawnEnemies()
+
   end
 
   local function spawnShards(room, i, j)
@@ -52,19 +52,60 @@ function Populater(level, map)
     spawnActor(room, game.Player)
   end
 
-  local function populateTreasureRoom(room)
-    local chestContents = {
-      actors.Ring_of_protection,
-      actors.Ring_of_regeneration,
-      actors.Armor,
-      actors.Cloak_of_invisibility,
-      actors.Slippers_of_swiftness,
-      actors.Wand_of_lethargy,
-      actors.Wand_of_swapping,
-      actors.Wand_of_random_teleportation,
-      actors.Dagger_of_venom
-    }
+  local chestContents = {
+    actors.Ring_of_protection,
+    actors.Ring_of_regeneration,
+    actors.Armor,
+    actors.Cloak_of_invisibility,
+    actors.Slippers_of_swiftness,
+    actors.Wand_of_lethargy,
+    actors.Wand_of_swapping,
+    actors.Wand_of_fireball,
+    actors.Wand_of_random_teleportation,
+    actors.Dagger_of_venom
+  }
 
+  local shopContents = {
+    actors.Bomb,
+    actors.Potion_of_rage,
+    actors.Potion_of_weight,
+    actors.Potion,
+    actors.Scroll_of_enlightenment,
+    actors.Scroll_of_mapping,
+    actors.Arrow,
+    actors.Bow,
+    actors.Ring_of_protection,
+    actors.Ring_of_regeneration,
+    actors.Armor,
+    actors.Cloak_of_invisibility,
+    actors.Slippers_of_swiftness,
+    actors.Wand_of_lethargy,
+    actors.Wand_of_swapping,
+    actors.Wand_of_fireball,
+    actors.Wand_of_random_teleportation,
+    actors.Dagger_of_venom
+  }
+
+  local function populateShopRoom(room)
+    local shop = actors.Shopkeep()
+    shop.position.x, shop.position.y = room:getCenterTile()
+    shop.position.x = shop.position.x - 3
+    level:addActor(shop)
+
+    for i = 1, 3 do
+      local item = chestContents[love.math.random(1, #chestContents)]()
+      local product = actors.Product()
+      product.position.x = shop.position.x + i*2
+      product.position.y = shop.position.y
+
+      product:setItem(item)
+      product:setPrice(actors.Shard, 1)
+      product:setShopkeep(shop)
+      level:addActor(product)
+    end
+  end
+
+  local function populateTreasureRoom(room)
     treasureRoom = true
     local locked = false
 
@@ -91,6 +132,12 @@ function Populater(level, map)
 
     if #room._doors == 2 and not treasureRoom then
       populateTreasureRoom(room)
+      return
+    end
+
+    if not store and love.math.random(1, roomsLeft)/roomsLeft > 0.8 then
+      store = true
+      populateShopRoom(room)
       return
     end
 

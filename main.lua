@@ -66,13 +66,6 @@ function love.load()
   game.level = level
   game.interface = interface
 
-  local spawnActor = function(actor)
-    local x, y = level:getRandomWalkableTile()
-    actor.position.x = x
-    actor.position.y = y
-    level:addActor(actor)
-  end
-
   local player = game.Player
   table.insert(player.inventory, actors.Dagger_of_venom())
   table.insert(player.inventory, actors.Wand_of_fireball())
@@ -80,22 +73,7 @@ function love.load()
   table.insert(player.inventory, actors.Scroll_of_mapping())
   table.insert(player.inventory, actors.Arrow())
   table.insert(player.inventory, actors.Sword_of_dashing())
-  local item = actors.Potion()
-  local product = actors.Product()
-  product.position.x = player.position.x + 1
-  product.position.y = player.position.y + 1
 
-  local shop = actors.Shopkeep()
-
-  shop.position.x = player.position.x + 2
-  shop.position.y = player.position.y + 2
-
-  product:setItem(item)
-  product:setPrice(actors.Shard, 1)
-  product:setShopkeep(shop)
-
-  level:addActor(product)
-  level:addActor(shop)
   love.keyboard.setKeyRepeat(true)
 end
 

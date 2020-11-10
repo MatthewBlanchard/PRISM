@@ -34,6 +34,15 @@ function BrogueRoom:getRandomWalkableTile()
   end
 end
 
+function BrogueRoom:getCenterTile()
+  while true do
+    local rx = math.floor((self:getLeft() + self:getRight())/2)
+    local ry = math.floor((self:getTop() + self:getBottom())/2)
+
+    return rx, ry
+  end
+end
+
 --- Create room at bottom center with dims 9x10 and 20x4
 -- @tparam int availWidth Typically the width of the map.
 -- @tparam int availHeight Typically the height of the map
