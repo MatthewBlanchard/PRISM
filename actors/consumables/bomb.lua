@@ -4,10 +4,10 @@ local Color = require "color"
 local Tiles = require "tiles"
 
 local Explode = Condition:extend()
-Explode.range = 2
+Explode.range = 4
 Explode.color = {0.8, 0.8, 0.1}
 
-Explode:afterAction(actions.Throw, 
+Explode:afterAction(actions.Throw,
   function(self, level, actor, action)
     local fov, actors = level:getAOE("fov", actor.position, Explode.range)
 	local damage = ROT.Dice.roll("6d6")
@@ -18,12 +18,12 @@ Explode:afterAction(actions.Throw,
 		level:performAction(damage)
 	  end
 	end
-	
+
+  table.insert(level.temporaryLights, effects.LightEffect(actor.position.x, actor.position.y, 0.6, Explode.color))
 	level:addEffect(effects.ExplosionEffect(fov, actor.position, Explode.range))
-	table.insert(level.temporaryLights, effects.LightEffect(actor.position.x, actor.position.y, 0.6, Explode.color))
 	level:destroyActor(actor)
   end
-)
+):where(Condition.ownerIsTarget)
 
 local Bomb = Actor:extend()
 Bomb.name = "Bomb"

@@ -82,7 +82,7 @@ effects.DamageEffect = function(source, position, dmg, hit)
   end
 end
 
-effects.ExplosionEffect = function(fov, origin, range)
+effects.ExplosionEffect = function(fov, origin, range, colors)
     local t = 0
     local duration = .6
     local chars = {}
@@ -95,7 +95,7 @@ effects.ExplosionEffect = function(fov, origin, range)
     chars[1] = 179
     chars[0] = 180
 
-    local colors =
+    local colors = colors or
     {
 
     }
@@ -135,7 +135,7 @@ effects.LightEffect = function(x, y, duration, color)
   local t = 0
   return function (dt)
       t = t + dt
-      if t > duration then return true end
+      if t > duration then return false end
       return x, y, Color.mul(color, (1 - t/duration)*2)
   end
 end

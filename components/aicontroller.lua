@@ -92,6 +92,34 @@ function AIController.moveToward(actor, target)
   return actor:getAction(actions.Move)(actor, moveVec), moveVec
 end
 
+function AIController.moveAway(actor, target)
+  local mx = target.position.x - actor.position.x > 0 and -1 or target.position.x - actor.position.x < 0 and 1 or 0
+  local my = target.position.y - actor.position.y > 0 and -1 or target.position.y - actor.position.y < 0 and 1 or 0
+
+  if actor.fov[actor.position.x + mx][actor.position.x + my] == 0 then
+    local moveVec = Vector2(mx, my)
+    return actor:getAction(actions.Move)(actor, moveVec), moveVec
+  end
+
+  local furthestDist = target:getRange("box", actor)
+  local closest = {x = actor.position.x, y = actor.position.y}
+  local current = {x = actor.position.x, y = actor.position.y}
+  for x = actor.position.x - 1, actor.position.x + 1 do
+    for y = actor.position.y - 1, actor.position.y + 1 do
+      current.x, current.y = x, y
+      local dist = target:getRange("box", current)
+
+      if dist > furthestDist and AIController.isPassable(actor, current) then
+        furthestDist = dist
+        closest.x, closest.y = current.x, current.y
+      end
+    end
+  end
+
+  local moveVec = Vector2(-(actor.position.x - closest.x), -(actor.position.y - closest.y))
+  return actor:getAction(actions.Move)(actor, moveVec), moveVec
+end
+
 function AIController.canSeeActor(actor, target)
   for k, v in pairs(actor.seenActors) do
     if v == actor then return true end
@@ -108,7 +136,8 @@ function AIController.getLightestTile(level, actor)
       if level.light[x] and level.light[x][y] then
         local lightval = ROT.Color.value(level.light[x][y])
 
-        if lightval > highestLightValue and AIController.isPassable(actor, {x = x, y = y}) then
+        if lightval > highestLightValue and AIController.isPassable(actor, {x = x, y = y}) and
+        level.map[x] and level.map[x][y] == 0 then
           highestLightValue = lightval
           highest.x, highest.y = x, y
         end

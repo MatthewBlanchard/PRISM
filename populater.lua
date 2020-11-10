@@ -37,13 +37,15 @@ function Populater(level, map)
     end
   end
 
-  local function spawnEnemies()
-
-  end
-
   local function spawnShards(room, i, j)
     for i = 1, love.math.random(i, j) do
       spawnActor(room, actors.Shard())
+    end
+  end
+
+  local function spawnShrooms(room, i, j)
+    for i = 1, love.math.random(i, j) do
+      spawnActor(room, actors.Glowshroom())
     end
   end
 
@@ -92,8 +94,13 @@ function Populater(level, map)
     shop.position.x = shop.position.x - 3
     level:addActor(shop)
 
+    local torch = actors.Stationarytorch()
+    torch.position.x, torch.position.y = shop.position.x, shop.position.y
+    torch.position.x = shop.position.x - 1
+    level:addActor(torch)
+
     for i = 1, 3 do
-      local item = chestContents[love.math.random(1, #chestContents)]()
+      local item = shopContents[love.math.random(1, #shopContents)]()
       local product = actors.Product()
       product.position.x = shop.position.x + i*2
       product.position.y = shop.position.y
@@ -135,7 +142,7 @@ function Populater(level, map)
       return
     end
 
-    if not store and love.math.random(1, roomsLeft)/roomsLeft > 0.8 then
+    if not store and love.math.random(1, roomsLeft)/roomsLeft > 0.6 then
       store = true
       populateShopRoom(room)
       return
@@ -149,7 +156,9 @@ function Populater(level, map)
     end
 
     spawnShards(room, 0, 2)
+    spawnShrooms(room, 0, 2)
     spawnActor(room, actors.Sqeeto())
+    spawnActor(room, actors.Gloop())
   end
 
   table.insert(toSpawn, actors.Prism())
