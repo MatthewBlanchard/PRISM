@@ -79,6 +79,7 @@ function Condition:setDuration(duration)
       self.time = (self.time or 0) + 100
 
       if self.time > duration then
+        if self.onDurationEnd then self:onDurationEnd(level, actor) end
         actor:removeCondition(self)
       end
     end

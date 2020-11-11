@@ -16,7 +16,7 @@ Explode.color = {90 / 230, 161 / 230, 74 / 230}
 Explode:afterAction(actions.Throw,
   function(self, level, actor, action)
     local fov, actors = level:getAOE("fov", actor.position, Explode.range)
-	local damage = ROT.Dice.roll("1d4")
+	local damage = ROT.Dice.roll("1d4") + 1
 
 	for _, a in ipairs(actors) do
 	  if targets.Creature:checkRequirements(a) then

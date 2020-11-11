@@ -67,12 +67,8 @@ function love.load()
   game.interface = interface
 
   local player = game.Player
-  table.insert(player.inventory, actors.Dagger_of_venom())
-  table.insert(player.inventory, actors.Wand_of_fireball())
-  table.insert(player.inventory, actors.Bomb())
-  table.insert(player.inventory, actors.Scroll_of_mapping())
-  table.insert(player.inventory, actors.Arrow())
   table.insert(player.inventory, actors.Sword_of_dashing())
+  table.insert(player.inventory, actors.Wand_of_light())
 
   love.keyboard.setKeyRepeat(true)
 end
