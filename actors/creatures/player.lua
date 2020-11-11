@@ -39,9 +39,10 @@ Player.components = {
 
 
   components.Equipper {
-    "armor",
+    "body",
+    "head",
     "ring",
-    "boots",
+    "feet",
     "cloak"
   }
 }
@@ -57,8 +58,8 @@ Pickup:afterAction(actions.Move,
   end
 )
 
-Player.innateConditions = { 
-  Pickup() 
+Player.innateConditions = {
+  Pickup()
 }
 
 return Player

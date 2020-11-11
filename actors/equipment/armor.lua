@@ -3,15 +3,15 @@ local Tiles = require "tiles"
 
 local Armor = Actor:extend()
 Armor.char = Tiles["armor"]
-Armor.name = "armor"
+Armor.name = "Armor"
 
 Armor.components = {
   components.Item(),
   components.Equipment{
-    slot = "armor",
+    slot = "body",
     effects = {
       conditions.Modifystats{
-        AC = 4
+        AC = 2
       }
     }
   }

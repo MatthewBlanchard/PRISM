@@ -69,6 +69,8 @@ function love.load()
   local player = game.Player
   table.insert(player.inventory, actors.Sword_of_dashing())
   table.insert(player.inventory, actors.Wand_of_light())
+  table.insert(player.inventory, actors.Plate_of_spikes())
+
 
   love.keyboard.setKeyRepeat(true)
 end
