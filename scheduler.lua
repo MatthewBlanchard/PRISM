@@ -25,7 +25,16 @@ function Scheduler:remove(actor)
   end
 end
 
+function Scheduler:has(actor)
+  for i, schedTable in ipairs(self.queue) do
+    if schedTable.actor == actor then
+      return true
+    end
+  end
+end
+
 function Scheduler:addTime(actor, time)
+  print(actor.name, time)
   for i, schedTable in ipairs(self.queue) do
     if schedTable.actor == actor then
       schedTable.time = schedTable.time + time

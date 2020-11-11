@@ -28,6 +28,7 @@ ZapTarget.range = 6
 local Zap = actions.Zap:extend()
 Zap.name = "zap"
 Zap.targets = {targets.Item, ZapTarget}
+Zap.aoeRange = 3
 
 function Zap:perform(level)
   actions.Zap.perform(self, level)
@@ -35,8 +36,18 @@ function Zap:perform(level)
   local target = self.targetActors[2]
   local orb = Orb()
   orb.position = target
-
   level:addActor(orb)
+
+  local fov, actors = level:getAOE("fov", target, self.aoeRange)
+
+  for _, actor in ipairs(actors) do
+    if targets.Creature:checkRequirements(actor) then
+      if level:isScheduled(actor) then
+        level:addEffect(effects.CharacterDynamic(actor, 0, -1, Tiles["bubble_stun"], {1, 1, 1}, .5))
+        level:addScheduleTime(actor, 600)
+      end
+    end
+  end
 end
 
 -- Actual item definition all the way down here

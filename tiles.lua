@@ -8,6 +8,8 @@ local tiles = {
 	bubble_lines = 296,
 	bubble_ellipsis = 297,
 	bubble_heart = 298,
+	bubble_stun = 299,
+
 
 	armor = 354,
 	arrow = 378,

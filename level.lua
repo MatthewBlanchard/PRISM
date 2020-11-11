@@ -94,6 +94,14 @@ function Level:update(dt, inputAction)
   end
 end
 
+function Level:isScheduled(actor)
+  return self.scheduler:has(actor)
+end
+
+function Level:addScheduleTime(actor, time)
+  self.scheduler:addTime(actor, time)
+end
+
 function Level:getCell(x, y)
   if self.map[x] then
     return self.map[x][y]
