@@ -2,7 +2,7 @@ local Component = require "component"
 
 local Stats = Component:extend()
 
-local validStats = 
+local validStats =
 {
   STR = "getSTR", DEX = "getDEX", INT = "getINT", CON = "getCON", WIS = "getWIS"
 }
@@ -35,6 +35,7 @@ function Stats:initialize(actor)
 
   actor:addReaction(reactions.Damage)
   actor:addReaction(reactions.Die)
+  actor:addReaction(reactions.Heal)
 end
 
 function Stats.rollCheck(actor, stat)

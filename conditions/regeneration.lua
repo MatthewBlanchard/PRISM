@@ -5,7 +5,8 @@ Regeneration.name = "regeneration"
 
 Regeneration:onTick(
   function(self, level, actor)
-    actor:setHP(actor:getHP() + 1)
+    local heal = self.owner:getReaction(reactions.Heal)
+    level:performAction(heal(actor, {actor}, 1))
   end
 )
 

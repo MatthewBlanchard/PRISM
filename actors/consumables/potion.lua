@@ -3,16 +3,15 @@ local Action = require "action"
 local Condition = require "condition"
 local Tiles = require "tiles"
 
-local Drink = Action:extend()
+local Drink = actions.Consume:extend()
 Drink.name = "drink"
 Drink.targets = {targets.Item}
 
 function Drink:perform(level)
-  local heal = 5
+  Consume.perform(self, level)
 
-  level:destroyActor(self:getTarget(1))
-  self.owner:setHP(self.owner:getHP() + heal)
-  level:addEffect(effects.HealEffect(self.owner, heal))
+  local heal = self.owner:getReaction(reactions.Heal)
+  level:performAction(heal(self.owner, {self.owner}, 5))
 end
 
 local Potion = Actor:extend()
