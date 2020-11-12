@@ -11,6 +11,7 @@ Shortsword.components = {
     stat = "STR",
     name = "Shortsword",
     dice = "1d6"
+    time = 75
   }
 }
 
