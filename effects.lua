@@ -10,8 +10,8 @@ effects.HealEffect = function(actor, heal)
     t = t + dt
 
     local color = {.1, 1, .1, 1}
-    interface:writeOffset(Tiles["heal"], actor.position.x, actor.position.y, color)
-    interface:writeOffset(tostring(heal), actor.position.x + 1, actor.position.y, color)
+    interface:effectWriteOffset(Tiles["heal"], actor.position.x, actor.position.y, color)
+    interface:effectWriteOffset(tostring(heal), actor.position.x + 1, actor.position.y, color)
     if t > .4 then return true end
   end
 end
@@ -22,8 +22,8 @@ effects.PoisonEffect = function(actor, damage)
     t = t + dt
 
     local color = {.1, .7, .1, 1}
-    interface:writeOffset(Tiles["pointy_poof"], actor.position.x, actor.position.y, color)
-    interface:writeOffset(tostring(damage), actor.position.x + 1, actor.position.y, color)
+    interface:effectWriteOffset(Tiles["pointy_poof"], actor.position.x, actor.position.y, color)
+    interface:effectWriteOffset(tostring(damage), actor.position.x + 1, actor.position.y, color)
     if t > .2 then return true end
   end
 end
@@ -37,9 +37,9 @@ effects.OpenEffect = function(actor)
     local color = {1, 1, .1, 1}
     if t < .5 then
       local c = Color.mul(color, t / 0.5)
-      interface:writeOffset(Tiles["pointy_poof"], actor.position.x, actor.position.y, c)
+      interface:effectWriteOffset(Tiles["pointy_poof"], actor.position.x, actor.position.y, c)
     elseif t < .8 then
-      interface:writeOffset(Tiles["chest_open"], actor.position.x, actor.position.y, actor.color)
+      interface:effectWriteOffset(Tiles["chest_open"], actor.position.x, actor.position.y, actor.color)
     else
       return true
     end
@@ -69,12 +69,12 @@ effects.DamageEffect = function(source, position, dmg, hit)
     local dmgstring = tostring(dmg)
     local dmglen = string.len(dmgstring)
 
-    interface:writeOffset(char, position.x, position.y, color)
+    interface:effectWriteOffset(char, position.x, position.y, color)
 
     if hit then
       local xoffset = math.min(dirx * dmglen, 1)
       local xoffset = xoffset == 0 and 1 or xoffset
-      interface:writeOffset(dmgstring, position.x + xoffset, position.y, color)
+      interface:effectWriteOffset(dmgstring, position.x + xoffset, position.y, color)
     end
 
     t = t + dt
@@ -110,14 +110,14 @@ effects.ExplosionEffect = function(fov, origin, range, colors)
                 if fade < 0.5 then
                     local yellow = {0.8, 0.8, 0.1}
                     yellow = Color.lerp(yellow, color, fade)
-                    interface:writeOffset(char, x, y, yellow)
+                    interface:effectWriteOffset(char, x, y, yellow)
                 elseif fade > .95 then
                 elseif fade > .75 then
                     local grey = {0.3, 0.3, 0.3}
                     grey = Color.lerp(color, grey, math.min(fade*3, 1))
-                    interface:writeOffset(char, x, y, grey)
+                    interface:effectWriteOffset(char, x, y, grey)
                 elseif fade < .75 then
-                    interface:writeOffset(char, x, y, color)
+                    interface:effectWriteOffset(char, x, y, color)
                 end
             end
         end
@@ -143,7 +143,7 @@ effects.Character = function(x, y, char, color, duration)
     t = t + dt
     if t > duration then print("doot") return true end
 
-    interface:writeOffset(char, x, y, color)
+    interface:effectWriteOffset(char, x, y, color)
   end
 end
 
@@ -153,7 +153,7 @@ effects.CharacterDynamic = function(actor, x, y, char, color, duration)
     t = t + dt
     if t > duration then return true end
 
-    interface:writeOffset(char, actor.position.x + x, actor.position.y + y, color)
+    interface:effectWriteOffset(char, actor.position.x + x, actor.position.y + y, color)
   end
 end
 

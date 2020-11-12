@@ -134,7 +134,8 @@ function Interface:draw()
   end
 
   if self.curEffect then
-    local done = self.curEffect(self.dt, self)
+    self._curEffectDone = true
+    local done = self.curEffect(self.dt, self) or self._curEffectDone
     if done then self.curEffect = nil end
   end
 
