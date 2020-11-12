@@ -1,3 +1,4 @@
+local Actor = require "actor"
 local Tiles = require "tiles"
 
 local Greatsword = Actor:extend()
@@ -9,7 +10,7 @@ Greatsword.components = {
   components.Weapon{
     stat = "STR",
     name = "Greatsword",
-    dice = "2d6"
+    dice = "2d6",
     time = 150
   }
 }

@@ -10,7 +10,7 @@ Shortsword.components = {
   components.Weapon{
     stat = "STR",
     name = "Shortsword",
-    dice = "1d6"
+    dice = "1d6",
     time = 75
   }
 }

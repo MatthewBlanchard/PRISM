@@ -18,7 +18,7 @@ OnHitRecieved:afterAction(actions.Attack,
 
 local PlateOfSpikes = Actor:extend()
 PlateOfSpikes.char = Tiles["armor"]
-PlateOfSpikes.name = "Plate of Spikes"
+PlateOfSpikes.name = "Plate of Prickles"
 
 PlateOfSpikes.components = {
   components.Item(),

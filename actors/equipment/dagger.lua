@@ -10,7 +10,7 @@ Dagger.components = {
   components.Weapon{
     stat = "DEX",
     name = "Dagger",
-    dice = "1d4"
+    dice = "1d4",
     time = 50
   }
 }
