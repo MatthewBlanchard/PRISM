@@ -3,10 +3,6 @@ local Action = require "action"
 local Condition = require "condition"
 local Tiles = require "tiles"
 
--- Give the orb a lifetime
-local customLifetime = conditions.Lifetime:extend()
-customLifetime:setDuration(3000)
-
 -- The light actor
 -- Not super reusable so we define the light actor here.
 local Orb = Actor:extend()
@@ -14,7 +10,11 @@ Orb.char = Tiles["pointy_poof"]
 Orb.name = "Orb of light"
 
 Orb.components = {
-  components.Light({ 0.8, 0.8, 0.866, 1}, 2.5, lightEffect),
+  components.Light{
+    color = { 0.8, 0.8, 0.866, 1 },
+    intensity = 2.5
+  },
+  components.Lifetime{ duration = 3000 }
 }
 
 Orb.innateConditions = { customLifetime }

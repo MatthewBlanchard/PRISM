@@ -1,5 +1,4 @@
 local Actor = require "actor"
-local Condition = require "condition"
 local Tiles = require "tiles"
 
 local Parsnip = Actor:extend()
