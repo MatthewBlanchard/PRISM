@@ -1,20 +1,20 @@
 local Actor = require "actor"
 local Tiles = require "tiles"
 
-local Armor = Actor:extend()
-Armor.char = Tiles["armor"]
-Armor.name = "Armor"
+local ClothArmor = Actor:extend()
+ClothArmor.char = Tiles["armor"]
+ClothArmor.name = "Cloth Armor"
 
-Armor.components = {
+ClothArmor.components = {
   components.Item(),
   components.Equipment{
     slot = "body",
     effects = {
       conditions.Modifystats{
-        AC = 2
+        AC = 1
       }
     }
   }
 }
 
-return Armor
+return ClothArmor
