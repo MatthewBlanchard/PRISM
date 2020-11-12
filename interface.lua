@@ -202,7 +202,7 @@ function Interface:handleKeyPress(keypress)
 
     local enemy
     for k, actor in pairs(game.curActor.seenActors) do
-      if not actor.passable and actor.position == targetPosition then
+      if actor.position == targetPosition then
         enemy = actor
       end
     end
@@ -220,7 +220,9 @@ function Interface:handleKeyPress(keypress)
       end
 
       if enemy:hasComponent(components.Stats) then
-        return self:setAction(game.curActor:getAction(actions.Attack)(game.curActor, enemy))
+        if not enemy.passable or love.keyboard.isDown("lctrl") then
+          return self:setAction(game.curActor:getAction(actions.Attack)(game.curActor, enemy))
+        end
       end
     end
 
