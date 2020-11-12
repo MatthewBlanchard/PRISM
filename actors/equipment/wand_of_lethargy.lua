@@ -9,7 +9,7 @@ ZapTarget.requirements = {components.Stats}
 ZapTarget.range = 6
 ZapTarget.positional = true
 
-local Zap = Action:extend()
+local Zap = actions.Zap:extend()
 Zap.name = "zap"
 Zap.targets = {targets.Item, ZapTarget}
 
@@ -27,8 +27,11 @@ WandOfLethargy.stackable = false
 
 WandOfLethargy.components = {
   components.Item(),
-  components.Usable{Zap},
-  components.Wand(5)
+  components.Usable(),
+  components.Wand{
+    maxCharges = 5,
+    zap = Zap
+  }
 }
 
 return WandOfLethargy

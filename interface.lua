@@ -202,7 +202,7 @@ function Interface:handleKeyPress(keypress)
 
     local enemy
     for k, actor in pairs(game.curActor.seenActors) do
-      if actor:hasComponent(components.Stats) and not actor.passable and actor.position == targetPosition then
+      if not actor.passable and actor.position == targetPosition then
         enemy = actor
       end
     end
@@ -212,14 +212,16 @@ function Interface:handleKeyPress(keypress)
         enemy:hasComponent(components.Usable) and
         enemy.defaultUseAction and
         enemy.defaultUseAction:validateTarget(1, game.curActor, enemy) and
-        not love.keyboard.isDown("lctrl") 
+        not love.keyboard.isDown("lctrl")
       then
         if not enemy.passable or love.keyboard.isDown("lshift") then
           return self:setAction(enemy.defaultUseAction(game.curActor, enemy))
         end
       end
 
-      return self:setAction(game.curActor:getAction(actions.Attack)(game.curActor, enemy))
+      if enemy:hasComponent(components.Stats) then
+        return self:setAction(game.curActor:getAction(actions.Attack)(game.curActor, enemy))
+      end
     end
 
     return self:setAction(game.curActor:getAction(actions.Move)(game.curActor, self.movementTranslation[keypress]))

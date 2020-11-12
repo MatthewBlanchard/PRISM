@@ -50,8 +50,11 @@ WandOfFireball.stackable = false
 
 WandOfFireball.components = {
   components.Item(),
-  components.Usable{Zap},
-  components.Wand(5)
+  components.Usable(),
+  components.Wand{
+    maxCharges = 5,
+    zap = Zap
+  }
 }
 
 return WandOfFireball

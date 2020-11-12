@@ -20,7 +20,7 @@ ZapTarget.name = "ZapTarget"
 ZapTarget.requirements = {components.Stats}
 ZapTarget.range = 9
 
-local Zap = Action:extend()
+local Zap = actions.Zap:extend()
 Zap.name = "zap"
 Zap.targets = {targets.Item, ZapTarget}
 
@@ -42,8 +42,11 @@ WandOfSwapping.stackable = false
 
 WandOfSwapping.components = {
   components.Item(),
-  components.Usable{Zap},
-  components.Wand(5)
+  components.Usable(),
+  components.Wand{
+    maxCharges = 5,
+    zap = Zap
+  }
 }
 
 return WandOfSwapping

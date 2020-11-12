@@ -14,7 +14,7 @@ local function PoofEffect(pos1)
   end
 end
 
-local Zap = Action:extend()
+local Zap = actions.Zap:extend()
 Zap.name = "zap"
 Zap.targets = {targets.Item}
 
@@ -36,8 +36,11 @@ WandOfRandomTeleportation.stackable = false
 
 WandOfRandomTeleportation.components = {
   components.Item(),
-  components.Usable{Zap},
-  components.Wand(5)
+  components.Usable(),
+  components.Wand{
+    maxCharges = 5,
+    zap = Zap
+  }
 }
 
 return WandOfRandomTeleportation

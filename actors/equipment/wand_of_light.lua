@@ -17,8 +17,6 @@ Orb.components = {
   components.Lifetime{ duration = 3000 }
 }
 
-Orb.innateConditions = { customLifetime }
-
 -- Let's get our zap target going.
 local ZapTarget = targets.Point:extend()
 ZapTarget.name = "ZapTarget"
@@ -59,8 +57,11 @@ WandOfLight.stackable = false
 
 WandOfLight.components = {
   components.Item(),
-  components.Usable{Zap},
-  components.Wand(5)
+  components.Usable(),
+  components.Wand{
+    maxCharges = 5,
+    zap = Zap
+  }
 }
 
 return WandOfLight

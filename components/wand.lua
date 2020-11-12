@@ -2,15 +2,24 @@ local Component = require "component"
 
 local Wand = Component:extend()
 
-function Wand:__new(maxCharges)
-  self.maxCharges = maxCharges
-  self.charges = maxCharges
+Wand.requirements = {
+  components.Usable
+}
+
+function Wand:__new(options)
+  assert(options.zap:is(actions.Zap))
+  self.maxCharges = options.maxCharges
+  self.charges = options.charges or self.maxCharges
+  self.zap = options.zap
 end
 
 function Wand:initialize(actor)
   actor.charges = self.charges
   actor.maxCharges = self.maxCharges
   actor.modifyCharges = self.modifyCharges
+  actor.zap = self.zap
+
+  actor:addUseAction(actor.zap)
 end
 
 function Wand:modifyCharges(n)
