@@ -1,7 +1,7 @@
 local Actor = require "actor"
 local Vector2 = require "vector"
 local Tiles = require "tiles"
-local Condition = require "Condition"
+local Condition = require "condition"
 
 local Gloop = Actor:extend()
 

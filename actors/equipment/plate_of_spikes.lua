@@ -1,6 +1,6 @@
 local Actor = require "actor"
 local Tiles = require "tiles"
-local Condition = require "Condition"
+local Condition = require "condition"
 
 local OnHitRecieved = Condition:extend()
 OnHitRecieved.name = "OnHitRecieved"
