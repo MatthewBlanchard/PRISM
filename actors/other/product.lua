@@ -17,7 +17,7 @@ Buy.targets = {targetProduct}
 function Buy:perform(level)
   local product = self.targetActors[1]
   if self.owner:withdraw(product.currency, product.price) then
-    level:performAction(game.curActor:getAction(actions.Pickup)(game.curActor, product.item))
+    level:performAction(self.owner:getAction(actions.Pickup)(self.owner, product.item), true)
     level:removeActor(product)
     if product.shopkeep then
       level:addEffect(product.soldEffect())

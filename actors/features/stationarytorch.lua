@@ -10,7 +10,7 @@ StationaryTorch.components = {
   components.Light{
     color = { 0.8666, 0.4509, 0.0862, 1},
     intensity = 2
-  },
+  }
 }
 
 return StationaryTorch

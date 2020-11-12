@@ -70,6 +70,7 @@ function love.load()
   table.insert(player.inventory, actors.Sword_of_dashing())
   table.insert(player.inventory, actors.Wand_of_light())
   table.insert(player.inventory, actors.Plate_of_spikes())
+  table.insert(player.inventory, actors.Parsnip())
 
 
   love.keyboard.setKeyRepeat(true)

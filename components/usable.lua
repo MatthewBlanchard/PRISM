@@ -3,7 +3,7 @@ local Component = require "component"
 local Usable = Component:extend()
 
 function Usable:__new(actions, default)
-  self.useActions = actions
+  self.useActions = actions or {}
   self.defaultUseAction = default or self.useActions[1]
 end
 

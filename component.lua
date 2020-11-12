@@ -3,6 +3,9 @@ local Object = require "object"
 local Component = Object:extend()
 Component.requirements = {}
 
+function Component:addRequirement(req)
+  table.insert(Component.requirements, req)
+end
 function Component:checkRequirements(actor)
   local foundreqs = {}
 
