@@ -31,7 +31,7 @@ function Actor:__new()
 
     for k, component in pairs(self.components) do
       if not component:checkRequirements(self) then
-        error("Unsupported component added to actor!")
+        error("Unsupported component added to actor!" .. self.name)
       end
 
       table.insert(temp, component)

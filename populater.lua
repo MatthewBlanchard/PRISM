@@ -52,6 +52,7 @@ function Populater(level, map)
   local function populateStartRoom(room)
     spawnDoors(room)
     spawnActor(room, game.Player)
+    spawnActor(room, actors.Box())
   end
 
   local chestContents = {

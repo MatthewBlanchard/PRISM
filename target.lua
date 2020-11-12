@@ -53,7 +53,7 @@ function ActorTarget:__new(range)
 end
 
 function ActorTarget:validate(owner, actor)
-  local range
+  local range = false
 
   if owner == actor and not self.canTargetSelf then return false end
 
@@ -73,6 +73,7 @@ function ActorTarget:validate(owner, actor)
     range = owner:getRange(self.rtype, actor) <= self.range
   end
 
+  print("TEST", self:checkRequirements(actor) and range)
   return self:checkRequirements(actor) and range
 end
 
@@ -98,7 +99,7 @@ local PointTarget = Target:extend()
 
 function PointTarget:validate(owner, vec2)
   if not vec2.x and vec2.y then return false end
-  
+
   return owner:getRange(self.rtype, vec2)
 end
 
