@@ -44,10 +44,10 @@ Light.effects = {
   pulse = pulse
 }
 
-function Light:__new(lightColor, intensity, effect)
-  self.color = lightColor
-  self.intensity = intensity
-  self.effect = effect
+function Light:__new(options)
+  self.color = options.color
+  self.intensity = options.intensity
+  self.effect = options.effect
 end
 
 function Light:initialize(actor)

@@ -2,9 +2,9 @@ local Component = require "component"
 
 local Move = Component:extend()
 
-function Move:__new(speed, blocksMovement)
-  self.speed = speed
-  self.passable = blocksMovement or false
+function Move:__new(options)
+  self.speed = options.speed
+  self.passable = options.passable or false
 end
 
 function Move:initialize(actor)

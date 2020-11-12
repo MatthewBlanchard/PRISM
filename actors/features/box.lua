@@ -18,7 +18,7 @@ function Push:perform(level)
   local box = self.targetActors[1]
   local movement = box.position - self.owner.position
   if movement.y == 0 or movement.x == 0 then
-	level:performAction(box:getAction(actions.Move)(box, movement))
+	level:performAction(box:getAction(actions.Move)(box, movement), true)
 	level:performAction(self.owner:getAction(actions.Move)(self.owner, movement))
   end
 end
@@ -33,7 +33,7 @@ Box.blocksView = false
 
 Box.components = {
   components.Usable({Push}, Push),
-  components.Move(),
+  components.Move{speed = 0, passable = false},
   components.Aicontroller(),
   components.Stats
   {

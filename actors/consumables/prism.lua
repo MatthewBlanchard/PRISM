@@ -25,7 +25,11 @@ Prism.char = Tiles["prism"]
 Prism.lightEffect = components.Light.effects.pulse({ 0.4, 0.4, 0.6, 1 }, 0.2, 0.2)
 
 Prism.components = {
-  components.Light({ 0.4, 0.4, 0.6, 1}, 4, Prism.lightEffect),
+  components.Light{
+    color = { 0.4, 0.4, 0.6, 1},
+    intensity = 4,
+    effect = Prism.lightEffect
+  },
   components.Item(),
   components.Usable{Gaze}
 }

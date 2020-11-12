@@ -192,7 +192,6 @@ function Interface:handleKeyPress(keypress)
     end
 
     if self.keybinds[keypress] == "map" then
-      print "YA"
       game.viewDisplay = game.viewDisplay == game.viewDisplay1x and game.viewDisplay2x or game.viewDisplay1x
     end
   end

@@ -11,30 +11,31 @@ Gloop.color = {90 / 230, 161 / 230, 74 / 230}
 
 local Explode = Condition:extend()
 Explode.range = 1
+Explode.damage = "1d4"
 Explode.color = {90 / 230, 161 / 230, 74 / 230}
 
 Explode:afterAction(actions.Throw,
   function(self, level, actor, action)
     local fov, actors = level:getAOE("fov", actor.position, Explode.range)
-	local damage = ROT.Dice.roll("1d4") + 1
+  	local damage = ROT.Dice.roll(explode.damage) + 1
 
-	for _, a in ipairs(actors) do
-	  if targets.Creature:checkRequirements(a) then
-	    local damage = a:getReaction(reactions.Damage)(a, {action.owner}, damage, actor)
-		  level:performAction(damage)
-	  end
-	end
+  	for _, a in ipairs(actors) do
+  	  if targets.Creature:checkRequirements(a) then
+  	    local damage = a:getReaction(reactions.Damage)(a, {action.owner}, damage, actor)
+  		  level:performAction(damage)
+  	  end
+  	end
 
-	level:addEffect(effects.ExplosionEffect(fov, actor.position, Explode.range, Explode.color))
-	table.insert(level.temporaryLights, effects.LightEffect(actor.position.x, actor.position.y, 0.6, Explode.color, 2))
-	level:destroyActor(actor)
+  	level:addEffect(effects.ExplosionEffect(fov, actor.position, Explode.range, Explode.color))
+  	table.insert(level.temporaryLights, effects.LightEffect(actor.position.x, actor.position.y, 0.6, Explode.color, 2))
+  	level:destroyActor(actor)
   end
 ):where(Condition.ownerIsTarget)
 
 
 Gloop.components = {
   components.Sight{ range = 2, fov = true, explored = false },
-  components.Move(120, true),
+  components.Move{speed = 120, passable = true},
   components.Item{stackable = true},
   components.Aicontroller()
 }

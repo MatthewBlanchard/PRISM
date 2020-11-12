@@ -6,12 +6,16 @@ Player.name = "Player"
 
 local lightEffect = components.Light.effects.flicker({ 0.8666, 0.4509, 0.0862, 1 }, .1, .1)
 Player.components = {
-  components.Light({ 0.8666, 0.4509, 0.0862, 1}, 3, lightEffect),
+  components.Light{
+    color = { 0.8666, 0.4509, 0.0862, 1},
+    intensity = 3,
+    effect = lightEffect
+  },
   components.Sight{ range = 30, fov = true, explored = true },
   components.Message(),
-  components.Move(),
+  components.Move{ speed = 100, passable = false },
   components.Inventory(),
-  components.Wallet(),
+  components.Wallet{ autoPick = true },
   components.Controller{ inputControlled = true },
 
   components.Stats
@@ -46,20 +50,4 @@ Player.components = {
     "cloak"
   }
 }
-
-local Pickup = Condition:extend()
-Pickup:afterAction(actions.Move,
-  function(self, level, actor, action)
-    for _,item in pairs(game.curActor.seenActors) do
-      if item:is(actors.Shard) and actions.Pickup:validateTarget(1, actor, item) then
-        return level:performAction(game.curActor:getAction(actions.Pickup)(actor, item))
-      end
-    end
-  end
-)
-
-Player.innateConditions = {
-  Pickup()
-}
-
 return Player

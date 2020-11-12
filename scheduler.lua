@@ -34,7 +34,6 @@ function Scheduler:has(actor)
 end
 
 function Scheduler:addTime(actor, time)
-  print(actor.name, time)
   for i, schedTable in ipairs(self.queue) do
     if schedTable.actor == actor then
       schedTable.time = schedTable.time + time

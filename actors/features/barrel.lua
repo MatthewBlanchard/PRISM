@@ -9,7 +9,6 @@ Explode.color = {0.8, 0.5, 0.1}
 
 Explode:afterReaction(reactions.Die,
   function(self, level, actor, action)
-    print(actor.name)
     local fov, actors = level:getAOE("fov", actor.position, Explode.range)
     local damageAmount = ROT.Dice.roll("6d6")
 

@@ -10,7 +10,7 @@ Monster.color = {90 / 230, 161 / 230, 74 / 230}
 
 Monster.components = {
   components.Sight{ range = 12, fov = true, explored = false },
-  components.Move(),
+  components.Move{ speed = 100, passable = false},
   components.Stats
   {
     STR = 10,
@@ -23,7 +23,7 @@ Monster.components = {
 
   components.Attacker
   {
-    defaultAttack = 
+    defaultAttack =
     {
       name = "Claws",
       stat = "DEX",

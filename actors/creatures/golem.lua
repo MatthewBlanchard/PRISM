@@ -10,7 +10,7 @@ Golem.color = {0.4, 0.4, 0.8}
 
 Golem.components = {
   components.Sight{range = 5, fov = true, explored = false},
-  components.Move(),
+  components.Move{speed = 100, passable = false},
   components.Stats
   {
     STR = 13,
