@@ -113,6 +113,9 @@ targets.Point = PointTarget
 targets.Creature = targets.Actor:extend()
 targets.Creature.requirements = {components.Stats}
 
+targets.Living = targets.Actor:extend()
+targets.Living.requirements = {components.Stats, components.Aicontroller}
+
 targets.Item = targets.Actor:extend()
 targets.Item.name = "item"
 targets.Item.requirements = {components.Item}

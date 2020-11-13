@@ -18,6 +18,7 @@ local tiles = {
 	bomb = 360,
 	bow = 336,
 	steak = 338,
+	cleaver = 339,
 	box = 265,
 	boots = 372,
 	cloak = 357,

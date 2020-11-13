@@ -17,7 +17,7 @@ Sqeeto.components = {
     DEX = 10,
     INT = 4,
     CON = 8,
-    maxHP = 9,
+    maxHP = 4,
     AC = 13
   },
 

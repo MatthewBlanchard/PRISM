@@ -4,7 +4,8 @@ local Tiles = require "tiles"
 local meatOnKill = conditions.Onkill:extend()
 
 function meatOnKill:onKill(level, killer, killed)
-  if love.math.random() > 0 then
+  if not killed:hasComponent(components.Aicontroller) then return end
+  if love.math.random() > 0.66 then
     local steak = actors.Steak()
     steak.position.x, steak.position.y = killed.position.x, killed.position.y
     level:addActor(steak)
@@ -12,7 +13,7 @@ function meatOnKill:onKill(level, killer, killed)
 end
 
 local CleaverMythical = Actor:extend()
-CleaverMythical.char = Tiles["shortsword"]
+CleaverMythical.char = Tiles["cleaver"]
 CleaverMythical.name = "Cleaver of Meats"
 
 CleaverMythical.components = {
@@ -20,7 +21,8 @@ CleaverMythical.components = {
   components.Weapon{
     stat = "STR",
     name = "Cleaver of Meats",
-    dice = "2d4",
+    dice = "1d6+1",
+    bonus = 1,
     time = 100,
     effects = {
       meatOnKill
