@@ -19,13 +19,13 @@ function Event:shouldFire(level, action)
 
   if #self.conditionals > 0 then
     for k, conditional in pairs(self.conditionals) do
-      if not conditional(self.owner.actor, level, action) then return false end
+      if not conditional(self.owner.owner, level, action) then return false end
     end
 
     return true
   end
 
-  if not (self.owner.actor == action.owner) then
+  if not (self.owner.owner == action.owner) then
     return false
   end
 

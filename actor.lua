@@ -129,7 +129,7 @@ end
 
 function Actor:applyCondition(condition)
   table.insert(self.conditions, condition)
-  condition.actor = self
+  condition.owner = self
 end
 
 function Actor:removeCondition(condition)

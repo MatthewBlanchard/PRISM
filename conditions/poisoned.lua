@@ -4,11 +4,6 @@ local Poison = Condition:extend()
 Poison.name = "poisoned"
 Poison.damage = 1
 
-function Poison:__new(owner)
-  Condition.__new(self)
-  self.owner = owner
-end
-
 Poison:setDuration(1000)
 
 Poison:onTick(
