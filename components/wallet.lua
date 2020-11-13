@@ -14,7 +14,6 @@ function Wallet:initialize(actor)
   actor.hasAmount = self.hasAmount
 
   if self.autoPick then
-    print "YE"
     actor:applyCondition(conditions.Autopickup())
   end
 end

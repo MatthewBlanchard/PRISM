@@ -147,6 +147,28 @@ function AIController.canSeeActor(actor, target)
   return false
 end
 
+function AIController.canSeeActorType(actor, type)
+  for k, v in pairs(actor.seenActors) do
+    if v:is(type) then return true end
+  end
+
+  return false
+end
+
+
+function AIController.closestSeenActorByType(actor, type)
+  local closest
+  local dist = math.huge
+  for k, v in pairs(actor.seenActors) do
+    if v:is(type) and v:getRange(actor) < dist then
+      closest = v
+      dist = v:getRange(actor)
+    end
+  end
+
+  return closest
+end
+
 function AIController.getLightestTile(level, actor)
   local highestLightValue = 0
   local highest = {x = actor.position.x, y = actor.position.y}

@@ -13,19 +13,64 @@ function Message:__new(display, parent)
   self.messages = {}
 end
 
+Message.combos = {
+  [actions.Attack] = {
+    [reactions.Die] = false
+  }
+}
+
+local function combine(actionStack, curAction, curTable, first)
+  first = first or true
+
+  if type(curAction) == "string" then
+    return curAction
+  end
+
+  for k, v in pairs(curTable) do
+    print(k.name, curAction.name)
+    if curAction:is(k) then
+      local curString = Message.generateString(curAction)
+
+      if not v then
+        return curString
+      elseif type(v) == "table" then
+        local curAction = table.remove(actionStack, 1)
+
+        if curAction then
+          return curString .. " " .. combine(actionStack, curAction, v, false)
+        else
+          return curString
+        end
+      end
+    end
+  end
+
+  if first then
+    return Message.generateString(curAction)
+  end
+
+  table.insert(actionStack, 1, curAction)
+  return ""
+end
+
 function Message:update(dt)
   local actor = game.curActor
+  local messageStack = {}
 
   if actor:hasComponent(components.Message) then
     for i, message in ipairs(actor.messages) do
       if type(message) == "string" then
-        table.insert(self.messages, message)
+        table.insert(messageStack, message)
       elseif message.targetActors and not message.silent then
-        local s = Message.generateString(message)
-        table.insert(self.messages, s)
+        table.insert(messageStack, message)
       end
     end
 
+    local pop = table.remove(messageStack, 1)
+    while pop do
+      table.insert(self.messages, combine(messageStack, pop, Message.combos))
+      pop = table.remove(messageStack, 1)
+    end
     actor.messages = {}
   end
 end
@@ -43,7 +88,7 @@ function Message:draw()
 end
 
 function Message:toggleHeight()
-  if self.h == Message.initialHeight then 
+  if self.h == Message.initialHeight then
     self.h = Message.toggledHeight
     self.y = self.y - (Message.toggledHeight - Message.initialHeight)
   else
@@ -70,11 +115,17 @@ end
 function Message.generateString(action)
   local actor = game.curActor
   local ownerstring, pluralize = Message.actorString(action.owner, action)
-  local targetString = Message.actorString(action.targetActors[1], action)
 
   local verbstring = Message.inflector(action.name, pluralize)
 
-  return string.format("%s %s %s.", ownerstring, verbstring, targetString)
+  if action:getTarget(1) and not action.messageIgnoreTarget then
+    local targetString = Message.actorString(action.targetActors[1], action)
+    local finalString = string.format("%s %s %s.", ownerstring, verbstring, targetString)
+    return finalString:sub(1, 1):upper()..finalString:sub(2)
+  else
+    local finalString = string.format("%s %s.", ownerstring, verbstring)
+    return finalString:sub(1, 1):upper()..finalString:sub(2)
+  end
 end
 
 return Message

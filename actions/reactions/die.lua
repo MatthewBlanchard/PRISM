@@ -2,6 +2,7 @@ local Reaction = require "reaction"
 
 local Die = Reaction:extend()
 Die.name = "die"
+Die.messageIgnoreTarget = true
 
 function Die:__new(owner, targets, damage)
   Reaction.__new(self, owner, targets)

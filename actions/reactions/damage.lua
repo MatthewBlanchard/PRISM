@@ -19,7 +19,6 @@ function Damage:perform(level)
   self.owner.HP = math.max(self.owner.HP - self.damage, 0)
   level:addEffect(effects.DamageEffect(self.dealer.position, self.owner.position, self.damage, self.damage > 0 and true or false))
   if self.owner.HP == 0 then
-    print(self.dealer.name)
     local die = self.owner:getReaction(reactions.Die)(self.owner, {self.dealer}, self.damage)
     level:performAction(die)
   end

@@ -73,7 +73,6 @@ function ActorTarget:validate(owner, actor)
     range = owner:getRange(self.rtype, actor) <= self.range
   end
 
-  print("TEST", self:checkRequirements(actor) and range)
   return self:checkRequirements(actor) and range
 end
 

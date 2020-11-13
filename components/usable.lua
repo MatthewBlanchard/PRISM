@@ -26,7 +26,6 @@ end
 function Usable:addUseAction(action)
   table.insert(self.useActions, action)
   if not self.defaultUseAction then
-    print(action.name)
     self.defaultUseAction = action
   end
 end
