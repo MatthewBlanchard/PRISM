@@ -132,6 +132,16 @@ function Actor:applyCondition(condition)
   condition.owner = self
 end
 
+function Actor:hasCondition(condition)
+  for i = 1, #self.conditions do
+    if self.conditions[i]:is(condition) then
+      return true
+    end
+  end
+
+  return false
+end
+
 function Actor:removeCondition(condition)
   for i = 1, #self.conditions do
     if self.conditions[i]:is(condition) then
@@ -155,22 +165,9 @@ end
 function Actor:getRangeVec(type, vector)
   local pos = self.position
   if type == "box" then
-    local range
-    local i = 1
-    while not range do
-      if
-      vector.x >= pos.x - i and
-      vector.x <= pos.x + i and
-      vector.y >= pos.y - i and
-      vector.y <= pos.y + i
-      then
-        range = i
-      end
-
-      i = i + 1
-    end
-
-    return range
+    local xDist = math.abs(vector.x - pos.x)
+    local yDist = math.abs(vector.y - pos.y)
+    return math.max(xDist, yDist)
   else
     return math.sqrt(math.pow(pos.x - vector.x, 2) + math.pow(pos.y - vector.y, 2))
   end

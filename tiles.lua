@@ -28,6 +28,7 @@ local tiles = {
 	chest_large_open = 279,
 	glowshroom = 282,
 	stationarytorch = 283,
+	web = 284,
 	dagger = 359,
 	door_closed = 273,
 	door_open = 272,
@@ -54,7 +55,8 @@ local tiles = {
     shortsword = 358,
     shop = 310,
 		gloop = 311,
-	spider = 358,
+		spider = 312,
+
 	stairs_up = 274,
 	stairs_down = 275,
 	wall = 256,

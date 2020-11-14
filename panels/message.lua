@@ -27,7 +27,6 @@ local function combine(actionStack, curAction, curTable, first)
   end
 
   for k, v in pairs(curTable) do
-    print(k.name, curAction.name)
     if curAction:is(k) then
       local curString = Message.generateString(curAction)
 

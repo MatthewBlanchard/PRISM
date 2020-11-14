@@ -59,7 +59,7 @@ function Sqeeto:act(level)
   end
 
   local x, y, brightest = actUtil.getLightestTile(level, self)
-
+  local spider = actUtil.closestSeenActorByType(self, actors.Webweaver)
   if highestActor then
     if not (highestActor == self.actTarget) then
       wowFactor = true
@@ -67,6 +67,11 @@ function Sqeeto:act(level)
     self.actTarget = highestActor
   else
     self.actTarget = nil
+  end
+
+  if spider then
+    level:addEffect(effects.CharacterDynamic(self, 0, -1, Tiles["bubble_lines"], {1, 1, 1}, .5))
+    return actUtil.moveAway(self, spider)
   end
 
   if self.actTarget then

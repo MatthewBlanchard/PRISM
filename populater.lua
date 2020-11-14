@@ -26,7 +26,7 @@ function Populater(level, map)
 
   local function spawnDoors(room)
     for _, x, y in room._doors:each() do
-      if not doors[hash(x, y)] then
+      if not doors[hash(x, y)] and math.random() > 0.5 then
         local door = actors.Door()
         door.position.x = x
         door.position.y = y
@@ -79,7 +79,6 @@ function Populater(level, map)
     actors.Bow,
     actors.Ring_of_protection,
     actors.Ring_of_regeneration,
-    actors.Armor,
     actors.Cloak_of_invisibility,
     actors.Slippers_of_swiftness,
     actors.Wand_of_lethargy,
@@ -135,6 +134,10 @@ function Populater(level, map)
     spawnShards(room, 3, 10)
   end
 
+  local function populateSpiderRoom(room)
+    spawnActor(room, actors.Webweaver())
+  end
+
   local function populateRoom(room)
     spawnDoors(room)
 
@@ -154,6 +157,8 @@ function Populater(level, map)
       spawnActor(room, actor)
       room.actors = room.actors or {}
       table.insert(room.actors, actor)
+
+      populateSpiderRoom(room)
     end
 
     spawnShards(room, 0, 2)

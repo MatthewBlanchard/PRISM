@@ -160,9 +160,9 @@ function AIController.closestSeenActorByType(actor, type)
   local closest
   local dist = math.huge
   for k, v in pairs(actor.seenActors) do
-    if v:is(type) and v:getRange(actor) < dist then
+    if v:is(type) and v:getRange("box", actor) < dist then
       closest = v
-      dist = v:getRange(actor)
+      dist = v:getRange("box", actor)
     end
   end
 
