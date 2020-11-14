@@ -26,7 +26,7 @@ function Populater(level, map)
 
   local function spawnDoors(room)
     for _, x, y in room._doors:each() do
-      if not doors[hash(x, y)] and math.random() > 0.5 then
+      if not doors[hash(x, y)] and math.random() > 0.25 then
         local door = actors.Door()
         door.position.x = x
         door.position.y = y
@@ -139,7 +139,6 @@ function Populater(level, map)
   end
 
   local function populateRoom(room)
-    spawnDoors(room)
 
     if #room._doors == 2 and not treasureRoom then
       populateTreasureRoom(room)
@@ -159,6 +158,7 @@ function Populater(level, map)
       table.insert(room.actors, actor)
 
       populateSpiderRoom(room)
+      return
     end
 
     spawnShards(room, 0, 2)

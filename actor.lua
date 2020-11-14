@@ -1,6 +1,7 @@
 local Object = require "object"
 local Vector2 = require "vector"
 local Tiles = require "tiles"
+local Condition = require "condition"
 
 local Actor = Object:extend()
 Actor.passable = true
@@ -128,6 +129,10 @@ function Actor:getReaction(reaction)
 end
 
 function Actor:applyCondition(condition)
+  if self:hasCondition(getmetatable(condition)) and condition.stackable == false then
+    self:removeCondition(condition)
+  end
+
   table.insert(self.conditions, condition)
   condition.owner = self
 end
