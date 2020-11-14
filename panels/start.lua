@@ -7,7 +7,12 @@ function Start:__new(display)
 end
 
 function Start:draw()
-  self.display:writeCenter("Below the Garden", math.floor(self.h / 2))
+  self.display:clear(nil, nil, nil, nil, nil, nil, {0, 0, 0})
+  self.display:writeCenter("Below the Garden", math.floor(self.h / 2), {0.5, 0.5, 0.7}, {0, 0, 0})
+end
+
+function Start:handleKeyPress(keypress)
+  game.interface:pop()
 end
 
 return Start
