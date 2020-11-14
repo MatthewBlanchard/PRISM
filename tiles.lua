@@ -9,7 +9,10 @@ local tiles = {
 	bubble_ellipsis = 297,
 	bubble_heart = 298,
 	bubble_stun = 299,
-
+	bubble_sad = 300,
+	bubble_food = 301,
+	bubble_music = 302,
+	bubble_angry = 303,
 
 	armor = 354,
 	arrow = 378,

@@ -46,6 +46,18 @@ function Webweaver:act(level)
     target = player
   end
 
+  if self._lastTarget ~= target then
+    if self._lastTarget then
+      if self._lastTarget:is(actors.Sqeeto) then
+        level:addEffect(effects.CharacterDynamic(self, 0, -1, Tiles["bubble_food"], {1, 1, 1}, .5))
+      elseif self._lastTarget:is(actors.Player) then
+        level:addEffect(effects.CharacterDynamic(self, 0, -1, Tiles["bubble_angry"], {1, 1, 1}, .5))
+      end
+    end
+  end
+
+  self._lastTarget = target
+  
   if target then
     local targetRange = target:getRange("box", self)
     if targetRange == 1 then

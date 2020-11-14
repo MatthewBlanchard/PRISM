@@ -28,7 +28,7 @@ function Zap:perform(level)
   local target = self.targetActors[2]
 
   local fov, actors = level:getAOE("fov", target, self.aoeRange)
-  local damage = ROT.Dice.roll("6d6")
+  local damage = ROT.Dice.roll("2d6")
 
   for _, actor in ipairs(actors) do
     if targets.Creature:checkRequirements(actor) then

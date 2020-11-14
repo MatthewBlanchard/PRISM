@@ -423,6 +423,12 @@ function Level:getAOE(type, position, range)
     end
 
     return fov, seenActors
+  elseif type == "box" then
+    for k, other in ipairs(self.actors) do
+      if other:getRange(position) <= range then
+        table.insert(seenActors, other)
+      end
+    end
   end
 end
 
