@@ -7,7 +7,7 @@ function Start:__new(display)
 end
 
 function Start:draw()
-  self.display:writeCenter("Below the Garden", self.h / 2)
+  self.display:writeCenter("Below the Garden", math.floor(self.h / 2))
 end
 
 return Start
