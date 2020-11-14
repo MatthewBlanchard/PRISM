@@ -46,7 +46,6 @@ function Webweaver:act(level)
     target = player
   end
 
-  print(target)
   if target then
     local targetRange = target:getRange("box", self)
     if targetRange == 1 then

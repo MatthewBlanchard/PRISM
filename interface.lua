@@ -70,6 +70,34 @@ local function shouldDrawExplored(explored, x, y)
   end
 end
 
+local function calculateLight(x, y, fov, light)
+  if fov[x][y] == 0 then return light[x][y] end
+
+  local finalCol = { 0, 0, 0 }
+  local cols = {}
+
+  for i = -1, 1, 1 do
+    for j = -1, 1, 1 do
+      if fov[x+i] and fov[x+i][y+j] and fov[x+i][y+j] == 0 then
+        table.insert(cols, light[x+i][y+j])
+      end
+    end
+  end
+
+  local count = #cols
+  for i = 1, count do
+    for j = 1, 3 do
+      finalCol[j] = finalCol[j] + cols[i][j]
+    end
+  end
+
+  for j = 1, 3 do
+    finalCol[j] = finalCol[j] / count
+  end
+
+  return finalCol
+end
+
 function Interface:draw()
   local fov = game.curActor.fov
   local explored = game.curActor.explored
@@ -88,7 +116,7 @@ function Interface:draw()
           -- do a bit of blending to keep it in line with the ambient
           -- fog of war
           local finalColor
-          local lightCol = light[x][y]
+          local lightCol = calculateLight(x, y, fov, light)
           local lightValue = value(lightCol)
           local ambientValue = value({.175, .375, .175})
 

@@ -26,7 +26,7 @@ function Populater(level, map)
 
   local function spawnDoors(room)
     for _, x, y in room._doors:each() do
-      if not doors[hash(x, y)] and math.random() > 0.25 then
+      if not doors[hash(x, y)] and math.random() > 0.50 then
         local door = actors.Door()
         door.position.x = x
         door.position.y = y
