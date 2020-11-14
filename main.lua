@@ -72,6 +72,7 @@ function love.load()
   table.insert(player.inventory, actors.Wand_of_light())
   table.insert(player.inventory, actors.Plate_of_spikes())
   table.insert(player.inventory, actors.Robe_of_wonders())
+  table.insert(player.inventory, actors.Ring_of_bling())
 
   love.keyboard.setKeyRepeat(true)
 end
