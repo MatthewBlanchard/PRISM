@@ -35,6 +35,7 @@ loadItems("actors", actors, true)
 local Level = require "level"
 local Interface = require "interface"
 local Display = require "display.display"
+local Start = require "panels.start"
 
 ------
 -- Global
@@ -61,6 +62,7 @@ function love.load()
   game.Player = actors.Player()
 
   local interface = Interface(display)
+  interface:push(Start(display, interface))
   local level = Level(map)
 
   game.level = level
