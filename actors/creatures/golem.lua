@@ -13,12 +13,12 @@ Golem.components = {
   components.Move{speed = 100, passable = false},
   components.Stats
   {
-    STR = 13,
-    DEX = 10,
-    INT = 4,
-    CON = 8,
-    maxHP = 6,
-    AC = 13
+    ATK = 2,
+    MGK = 0,
+    PR = 1,
+    MR = 2,
+    maxHP = 12,
+    AC = 5
   },
   components.Aicontroller()
 }

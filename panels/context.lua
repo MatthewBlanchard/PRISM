@@ -11,7 +11,7 @@ end
 function ContextPanel:setTarget(target)
   self.targetActor = target
   self.descHeight = 0
-  if self.targetActor and self.targetActor.description then 
+  if self.targetActor and self.targetActor.description then
     self.descHeight = math.ceil(#self.targetActor.description / (self.w - 2))
   end
   self.h = self:correctHeight(self.descHeight + 3)
@@ -26,7 +26,7 @@ function ContextPanel:draw()
   self:write(self:correctWidth(self.targetActor.name, self.w - 2), 2, 2, nil, Panel.backgroundColor)
   self:write(self.targetActor.char, w + 3, 2, self.targetActor.color, Panel.backgroundColor)
 
-  if self.targetActor.description then 
+  if self.targetActor.description then
     self:writeText(self.targetActor.description, 2, 3, self.w - 2, nil, Panel.backgroundColor)
   end
 

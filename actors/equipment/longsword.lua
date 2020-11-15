@@ -8,7 +8,7 @@ Longsword.name = "longsword"
 Longsword.components = {
   components.Item(),
   components.Weapon{
-    stat = "STR",
+    stat = "ATK",
     name = "Longsword",
     dice = "1d8",
     time = 100

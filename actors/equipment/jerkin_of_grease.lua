@@ -4,7 +4,7 @@ local Tiles = require "tiles"
 
 local FreedomOfMovement = Condition:extend()
 FreedomOfMovement.name = "FreedomOfMovement"
-FreedomOfMovement.description= "You have a 85 move speed and can't be reduced."
+FreedomOfMovement.description= "You have an 85 move speed and can't be reduced."
 
 FreedomOfMovement:setTime(actions.Move,
   function(self, level, actor, action)

@@ -8,7 +8,6 @@ function Scheduler:__new()
 end
 
 function Scheduler:add(actor, time, lastAct)
-  print(actor.name, time, lastAct)
   local schedTable = {}
   schedTable.actor = actor
   schedTable.time = 0 or time

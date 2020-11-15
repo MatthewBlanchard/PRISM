@@ -20,13 +20,12 @@ Player.components = {
 
   components.Stats
   {
-    STR = 10,
-    DEX = 10,
-    INT = 10,
-    CON = 10,
-    WIS = 10,
+    ATK = 0,
+    MGK = 0,
+    PR = 0,
+    MR = 0,
     maxHP = 10,
-    AC = 10
+    AC = 0
   },
 
   components.Progression(),
@@ -36,7 +35,7 @@ Player.components = {
     defaultAttack =
     {
       name = "Stronk Fists",
-      stat = "STR",
+      stat = "ATK",
       dice = "1d1"
     }
   },

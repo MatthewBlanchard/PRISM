@@ -4,7 +4,7 @@ local Stats = Component:extend()
 
 local validStats =
 {
-  STR = "getSTR", DEX = "getDEX", INT = "getINT", CON = "getCON", WIS = "getWIS"
+  ATK = "getATK", MGK = "getMGK", PR = "getPR", MR = "getMR"
 }
 
 function Stats:__new(options)
@@ -40,14 +40,11 @@ end
 
 function Stats.rollCheck(actor, stat)
   if not validStats[stat] then
-    error("Invalid stat check made by actor: " .. actor .. " for stat: " .. stat)
-  end
-
-  if actor[stat] == 0 then
-    return 0
+    error("Invalid stat check made by actor: " .. actor.name .. " for stat: " .. stat)
   end
 
   local roll = ROT.Dice.roll("1d20", 1)
+  print(roll + actor:getStatBonus(stat), roll)
   return roll + actor:getStatBonus(stat), roll
 end
 
@@ -63,19 +60,17 @@ end
 
 function Stats.getStatBonus(actor, stat)
   if not validStats[stat] then
-    error("Invalid bonus request made by actor: " .. actor .. " for stat: " .. stat)
+    error("Invalid bonus request made by actor: " .. actor.name .. " for stat: " .. stat)
   end
 
   local condmods = 0
   for k, cond in pairs(actor:getConditions()) do
-    if stat == "STR" then
-    end
     if cond[validStats[stat]] then
       condmods = condmods + cond[validStats[stat]](cond, actor)
     end
   end
 
-  return math.floor(diffFromTen(actor[stat] + condmods) / 2)
+  return math.floor(actor[stat] + condmods)
 end
 
 function Stats.getStat(actor, stat)
@@ -85,8 +80,6 @@ function Stats.getStat(actor, stat)
 
   local condmods = 0
   for k, cond in pairs(actor:getConditions()) do
-    if stat == "STR" then
-    end
     if cond[validStats[stat]] then
       condmods = condmods + cond[validStats[stat]](cond, actor)
     end
@@ -103,7 +96,7 @@ function Stats.getAC(actor)
     end
   end
 
-  return actor.AC + condmods
+  return 10 + actor.AC + condmods
 end
 
 function Stats.getMaxHP(actor)

@@ -13,7 +13,6 @@ Exit.name = "descend"
 Exit.targets = {targetStair}
 
 function Exit:perform(level)
-  print "YEET"
   level.exit = true
 end
 

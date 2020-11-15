@@ -37,6 +37,10 @@ Gloop.components = {
   components.Sight{ range = 2, fov = true, explored = false },
   components.Move{speed = 100, passable = true},
   components.Stats{
+    ATK = 0,
+    MGK = 0,
+    PR = 0,
+    MR = 0,
     maxHP = 1,
     AC = 0
   },

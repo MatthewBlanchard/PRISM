@@ -3,6 +3,7 @@ local Tiles = require "tiles"
 
 local Panel = Object:extend()
 Panel.borderColor = {.5, .5, .6, 1}
+Panel.defaultForegroundColor = {1, 1, 1}
 Panel.backgroundColor = {.09, .09, .09}
 
 function Panel:__new(display, parent, x, y, w, h)
@@ -123,7 +124,7 @@ function Panel:write(c, x, y, fg, bg)
     error("Tried to write out of bounds to a panel!")
   end
 
-  self.display:write(c, self.x + x - 1, self.y + y - 1, fg, bg or self.defaultBackgroundColor)
+  self.display:write(c, self.x + x - 1, self.y + y - 1, fg or self.defaultForegroundColor, bg or self.defaultBackgroundColor)
 end
 
 function Panel:writeBG(x, y, bg)

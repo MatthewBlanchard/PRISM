@@ -4,6 +4,7 @@ local Tiles = require "tiles"
 local RingOfBling = Actor:extend()
 RingOfBling.char = Tiles["ring"]
 RingOfBling.name = "Ring of Bling"
+RingOfBling.description = "Wandering monster stop and stare at this extravagant ring! When you pick up shards sometimes you'll find an extra!"
 
 RingOfBling.components = {
   components.Item(),

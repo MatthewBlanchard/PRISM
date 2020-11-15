@@ -16,7 +16,7 @@ Dagger_of_Venom.color = {0.1, 1, 0.1}
 Dagger_of_Venom.components = {
   components.Item(),
   components.Weapon{
-    stat = "DEX",
+    stat = "ATK",
     name = "Dagger of Venom",
     dice = "1d4+1",
     bonus = 1,

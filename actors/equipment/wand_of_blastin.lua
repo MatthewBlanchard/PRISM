@@ -10,7 +10,7 @@ ZapTarget.positional = false
 
 
 local ZapWeapon = {
-  stat = "INT",
+  stat = "MGK",
   name = "Wand of Blastin'",
   dice = "1d8",
 }
@@ -28,6 +28,7 @@ end
 
 local WandOfBlastin = Actor:extend()
 WandOfBlastin.name = "Wand of Blastin\'"
+WandOfBlastin.description = "This thing packs a punch. Hope I'm not around when you start blastin'"
 WandOfBlastin.color = {0.8, 0.8, 0.8, 1}
 WandOfBlastin.char = Tiles["wand_pointy"]
 WandOfBlastin.stackable = false

@@ -5,7 +5,7 @@ local Tiles = require "tiles"
 local Webweaver = Actor:extend()
 
 Webweaver.char = Tiles["spider"]
-Webweaver.name = "webweaver"
+Webweaver.name = "weaver"
 Webweaver.color = {0.7, 0.7, 0.9}
 
 Webweaver.components = {
@@ -13,9 +13,12 @@ Webweaver.components = {
   components.Move{ speed = 75, passable = false },
   components.Stats
   {
-    DEX = 12,
+    ATK = 1,
+    MGK = 0,
+    PR = 2,
+    MR = 0,
     maxHP = 18,
-    AC = 13
+    AC = 3
   },
 
   components.Attacker
@@ -23,7 +26,7 @@ Webweaver.components = {
     defaultAttack =
     {
       name = "Fangs",
-      stat = "DEX",
+      stat = "ATK",
       dice = "1d2",
     }
   },

@@ -8,20 +8,20 @@ function ModifyStats:__new(options)
   self.stats = self.stats or options
 end
 
-function ModifyStats:getSTR()
-  return self.stats["STR"] or 0
+function ModifyStats:getATK()
+  return self.stats["ATK"] or 0
 end
 
-function ModifyStats:getDEX()
-  return self.stats["DEX"] or 0
+function ModifyStats:getMGK()
+  return self.stats["MGK"] or 0
 end
 
-function ModifyStats:getINT()
-  return self.stats["INT"] or 0
+function ModifyStats:getPR()
+  return self.stats["PR"] or 0
 end
 
-function ModifyStats:getCON()
-  return self.stats["CON"] or 0
+function ModifyStats:getMR()
+  return self.stats["MR"] or 0
 end
 
 function ModifyStats:getAC()

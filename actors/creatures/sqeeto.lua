@@ -13,12 +13,12 @@ Sqeeto.components = {
   components.Move{ speed = 100, passable = false},
   components.Stats
   {
-    STR = 8,
-    DEX = 10,
-    INT = 4,
-    CON = 8,
-    maxHP = 4,
-    AC = 13
+    ATK = 0,
+    MGK = 0,
+    PR = 1,
+    MR = 0,
+    maxHP = 12,
+    AC = 15
   },
 
   components.Attacker
@@ -26,7 +26,7 @@ Sqeeto.components = {
     defaultAttack =
     {
       name = "Probiscus",
-      stat = "DEX",
+      stat = "ATK",
       dice = "1d1"
     }
   },

@@ -7,7 +7,7 @@ Webbed.description = "Your movement is 100 slower. Your attacks are 25 slower."
 Webbed:onAction(actions.Move,
   function(self, level, actor, action)
     action.time = action.time + 125
-    if actor:rollCheck("STR") >= 13 then
+    if actor:rollCheck("PR") >= 13 then
       actor:removeCondition(self)
     end
   end

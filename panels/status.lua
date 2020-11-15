@@ -11,9 +11,9 @@ end
 function StatusPanel:draw()
   self:clear()
   self:drawBorders()
-  local hpPercentage = game.curActor.HP / game.curActor.maxHP
+  local hpPercentage = game.curActor.HP / game.curActor:getMaxHP()
   local barLength = math.floor(19 * hpPercentage)
-  local hpString = tostring(game.curActor.HP) .. "/" .. tostring(game.curActor.maxHP) .. " HP"
+  local hpString = tostring(game.curActor.HP) .. "/" .. tostring(game.curActor:getMaxHP()) .. " HP"
 
   for i = 1, 19 do
     local c = string.sub(hpString, i, i)
@@ -28,7 +28,7 @@ function StatusPanel:draw()
   self:write("AC: " .. game.curActor:getAC(), 2, 5, {.75, .75, .75, 1})
 
   local i = 7
-  for k, v in pairs(game.curActor.wallet) do 
+  for k, v in pairs(game.curActor.wallet) do
     self:write(k.name .. "s: ", 2, i, k.color)
     self:write(k.char, 2 + #k.name + 3, i, k.color)
     self:write(tostring(v), #k.name + 4, i, k.color)
@@ -37,14 +37,13 @@ function StatusPanel:draw()
 end
 
 function StatusPanel:statsToString(actor)
-  local STR = actor:getStat("STR")
-  local DEX = actor:getStat("DEX")
-  local CON = actor:getStat("CON")
-  local INT = actor:getStat("INT")
-  local WIS = actor:getStat("INT")
+  local ATK = actor:getStat("ATK")
+  local MGK = actor:getStat("MGK")
+  local PR = actor:getStat("PR")
+  local MR = actor:getStat("MR")
 
-  return self:statToString(STR) .. " " .. self:statToString(DEX) .. " " ..
-         self:statToString(CON) .. " " .. self:statToString(INT) .. " " .. self:statToString(WIS)
+  return self:statToString(ATK) .. " " .. self:statToString(MGK) .. " " ..
+         self:statToString(PR) .. " " .. self:statToString(MR)
 end
 
 function StatusPanel:statToString(stat)

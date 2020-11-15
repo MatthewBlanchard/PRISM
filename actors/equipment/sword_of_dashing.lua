@@ -64,7 +64,7 @@ Sword.name = "Sword of Dashing"
 Sword.components = {
   components.Item(),
   components.Weapon{
-    stat = "STR",
+    stat = "ATK",
     name = "Sword of Dashing",
     dice = "1d6",
     effects = {Dash()}

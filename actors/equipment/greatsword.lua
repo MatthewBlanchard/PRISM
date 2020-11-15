@@ -8,7 +8,7 @@ Greatsword.name = "greatsword"
 Greatsword.components = {
   components.Item(),
   components.Weapon{
-    stat = "STR",
+    stat = "ATK",
     name = "Greatsword",
     dice = "2d6",
     time = 150

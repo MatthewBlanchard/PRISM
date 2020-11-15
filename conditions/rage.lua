@@ -12,7 +12,7 @@ Rage:onAction(reactions.Die,
   end
 )
 
-function Rage:getSTR()
+function Rage:getATK()
     return self.count * 2
 end
 

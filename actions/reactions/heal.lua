@@ -16,7 +16,7 @@ function Heal:__new(owner, targets, heal, source, type)
 end
 
 function Heal:perform(level)
-  self.owner.HP = math.min(self.owner.HP + self.heal, self.owner.maxHP)
+  self.owner.HP = math.min(self.owner.HP + self.heal, self.owner:getMaxHP())
   level:addEffect(effects.HealEffect(self.owner, self.heal))
 end
 

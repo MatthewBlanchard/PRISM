@@ -20,7 +20,7 @@ CleaverMythical.description= "Reduce your opponents to delicious and mysterious 
 CleaverMythical.components = {
   components.Item(),
   components.Weapon{
-    stat = "STR",
+    stat = "ATK",
     name = "Cleaver of Meats",
     dice = "1d6+1",
     bonus = 1,

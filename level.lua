@@ -48,7 +48,6 @@ function Level:update(dt, inputAction)
   end
 
   if self.exit == true then
-    print "yeet"
     return true
   end
 
@@ -251,7 +250,6 @@ function Level:addActor(actor)
   table.insert(self.actors, actor)
 
   if self.initialized and actor:hasComponent(components.Aicontroller) then
-    print(yeet, actor.name)
     self.scheduler:add(actor)
   end
 
@@ -371,9 +369,6 @@ function Level:performAction(action, free)
   -- if this isn't a reaction or free action and the level contains the acting actor
   -- we update it's place in the scheduler
   if not action.reaction and not free and self:hasActor(action.owner) then
-    if action.owner:is(actors.Player) then
-      print(action.name, action.time)
-    end
     self.scheduler:addTime(action.owner, action.time)
   end
 end

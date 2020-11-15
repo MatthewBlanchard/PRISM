@@ -38,10 +38,6 @@ Barrel.blocksVision = false
 Barrel.components = {
   components.Stats
   {
-    STR = 0,
-    DEX = 0,
-    INT = 0,
-    CON = 0,
     maxHP = 1,
   }
 }

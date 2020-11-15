@@ -13,10 +13,10 @@ function Attack:perform(level)
   local weapon = self.weapon or self.owner.wielded
   local roll = self.owner:rollCheck(weapon.stat) + (weapon.bonus or 0)
 
-  print(self.name)
   local target = self:getTarget(1)
   local dmg = ROT.Dice.roll(weapon.dice) + self.owner:getStatBonus(weapon.stat)
 
+  print(roll, target:getAC(), roll, self.owner:getStatBonus(weapon.stat))
   self.time = weapon.time or 100
   if roll >= target:getAC() then
     self.hit = true
