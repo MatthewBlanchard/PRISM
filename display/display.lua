@@ -109,8 +109,11 @@ function Display:draw(noDraw)
    self.tilesetChanged = false
    self.graphics.setCanvas()
    self.graphics.setColor(1, 1, 1, 1)
-   if noDraw then return end
+   if UI then
+     love.graphics.setBlendMode("lighten", "premultiplied")
+   end
    self.graphics.draw(self.canvas)
+   love.graphics.setBlendMode("alpha")
 end
 
 --- Change the tileset.

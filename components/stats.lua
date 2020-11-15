@@ -44,7 +44,6 @@ function Stats.rollCheck(actor, stat)
   end
 
   local roll = ROT.Dice.roll("1d20", 1)
-  print(roll + actor:getStatBonus(stat), roll)
   return roll + actor:getStatBonus(stat), roll
 end
 

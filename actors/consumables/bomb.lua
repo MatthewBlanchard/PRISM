@@ -33,7 +33,11 @@ Bomb.description = "A simple key. You wonder what it unlocks."
 Bomb.innateConditions = {Explode()}
 
 Bomb.components = {
-  components.Item({stackable = true})
+  components.Item({stackable = true}),
+  components.Cost{
+    cost = 7,
+    rarity = "uncommon"
+  }
 }
 
 return Bomb

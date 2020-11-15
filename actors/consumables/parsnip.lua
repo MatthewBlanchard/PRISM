@@ -10,7 +10,8 @@ Parsnip.char = Tiles["parsnip"]
 Parsnip.components = {
   components.Item{ stackable = true },
   components.Usable(),
-  components.Edible{ nutrition = 2 }
+  components.Edible{ nutrition = 2 },
+  components.Cost{}
 }
 
 return Parsnip

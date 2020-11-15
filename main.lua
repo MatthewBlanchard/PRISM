@@ -50,7 +50,7 @@ function love.load()
   local scale = 1
   local w, h = math.floor(81/scale), math.floor(49/scale)
   local w2, h2 = math.floor(81/2), math.floor(49/2)
-  local display = Display:new(w, h, scale, {.09, .09, .09, 0.5}, {.09, .09, .09, 0}, nil, nil, true)
+  local display = Display:new(w, h, scale, nil, {1, 1, 1, 0}, nil, nil, true)
   local viewDisplay2x = Display:new(w2, h2, 2, nil, {.09, .09, .09}, nil, nil, true)
   local viewDisplay1x = Display:new(w, h, 1, nil, {.09, .09, .09}, nil, nil, true)
   local map = ROT.Map.Brogue(display:getWidth() - 11, 44)
@@ -81,7 +81,7 @@ function love.draw()
   game.display:clear()
   game.interface:draw(game.display)
   game.viewDisplay:draw()
-  game.display:draw()
+  game.display:draw("UI")
 end
 
 function love.update(dt)

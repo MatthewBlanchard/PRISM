@@ -2,12 +2,12 @@ local Actor = require "actor"
 local Action = require "action"
 local Tiles = require "tiles"
 
-local Read = Action:extend()
+local Read = actions.Read:extend()
 Read.name = "read"
 Read.targets = {targets.Item}
 
 function Read:perform(level)
-  level:destroyActor(self:getTarget(1))
+  actions.Read:perform(level)
 
   for x = 1, level.width do
 	for y = 1, level.height do
@@ -24,7 +24,9 @@ Scroll.char = Tiles["scroll"]
 
 Scroll.components = {
   components.Item(),
-  components.Usable{Read}
+  components.Usable(),
+  components.Readable{read = Read},
+  components.Cost()
 }
 
 return Scroll

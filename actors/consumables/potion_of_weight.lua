@@ -3,12 +3,12 @@ local Action = require "action"
 local Condition = require "condition"
 local Tiles = require "tiles"
 
-local Drink = Action:extend()
+local Drink = actions.Drink:extend()
 Drink.name = "drink"
 Drink.targets = {targets.Item}
 
 function Drink:perform(level)
-  level:destroyActor(self:getTarget(1))
+  actions.Drink.perform(self, level)
   self.owner:applyCondition(conditions.Weight())
 end
 
@@ -19,7 +19,9 @@ Potion.char = Tiles["potion"]
 
 Potion.components = {
   components.Item({stackable = true}),
-  components.Usable{Drink}
+  components.Usable(),
+  components.Drinkable{drink = Drink},
+  components.Cost()
 }
 
 return Potion

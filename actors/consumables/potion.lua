@@ -3,12 +3,12 @@ local Action = require "action"
 local Condition = require "condition"
 local Tiles = require "tiles"
 
-local Drink = actions.Consume:extend()
+local Drink = actions.Drink:extend()
 Drink.name = "drink"
 Drink.targets = {targets.Item}
 
 function Drink:perform(level)
-  Consume.perform(self, level)
+  actions.Drink.perform(self, level)
 
   local heal = self.owner:getReaction(reactions.Heal)
   level:performAction(heal(self.owner, {self.owner}, 5))
@@ -29,7 +29,9 @@ Potion.components = {
     effect = Potion.lightEffect
   },
   components.Item({stackable = true}),
-  components.Usable{Drink}
+  components.Usable(),
+  components.Drinkable{drink = Drink},
+  components.Cost()
 }
 
 return Potion

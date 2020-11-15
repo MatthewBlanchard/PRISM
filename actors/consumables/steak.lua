@@ -10,7 +10,8 @@ Steak.char = Tiles["steak"]
 Steak.components = {
   components.Item{ stackable = true },
   components.Usable(),
-  components.Edible{ nutrition = 10 }
+  components.Edible{ nutrition = 10 },
+  components.Cost{rarity = "rare"}
 }
 
 return Steak
