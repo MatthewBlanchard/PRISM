@@ -49,7 +49,7 @@ local scrolls = {
 local jewelry = {
   actors.Ring_of_bling,
   actors.Ring_of_protection,
-  actors.Ring_of_regeneration,
+  actors.Ring_of_vitality,
   actors.Band_of_channeling
 }
 

@@ -10,7 +10,9 @@ RingOfRegeneration.components = {
   components.Equipment{
     slot = "ring",
     effects = {
-      conditions.Regeneration()
+      conditions.Modifystats{
+        maxHP = 5
+      }
     }
   }
 }

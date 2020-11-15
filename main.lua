@@ -70,7 +70,7 @@ function love.load()
 
   local player = game.Player
   table.insert(player.inventory, actors.Wand_of_light())
-  table.insert(player.inventory, actors.Jerkin_of_grease())
+  table.insert(player.inventory, actors.Ring_of_vitality())
 
   love.keyboard.setKeyRepeat(true)
 end

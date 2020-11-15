@@ -57,7 +57,7 @@ function Populater(level, map)
 
   local chestContents = {
     actors.Ring_of_protection,
-    actors.Ring_of_regeneration,
+    actors.Ring_of_vitality,
     actors.Armor,
     actors.Cloak_of_invisibility,
     actors.Slippers_of_swiftness,
@@ -78,7 +78,7 @@ function Populater(level, map)
     actors.Arrow,
     actors.Bow,
     actors.Ring_of_protection,
-    actors.Ring_of_regeneration,
+    actors.Ring_of_vitality,
     actors.Cloak_of_invisibility,
     actors.Slippers_of_swiftness,
     actors.Wand_of_lethargy,
