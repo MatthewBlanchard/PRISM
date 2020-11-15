@@ -35,7 +35,7 @@ Explode:afterAction(actions.Throw,
 
 Gloop.components = {
   components.Sight{ range = 2, fov = true, explored = false },
-  components.Move{speed = 120, passable = true},
+  components.Move{speed = 100, passable = true},
   components.Stats{
     maxHP = 1,
     AC = 0

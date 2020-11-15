@@ -9,7 +9,7 @@ Webweaver.name = "webweaver"
 Webweaver.color = {0.7, 0.7, 0.9}
 
 Webweaver.components = {
-  components.Sight{ range = 12, fov = true, explored = false },
+  components.Sight{ range = 8, fov = true, explored = false },
   components.Move{ speed = 75, passable = false },
   components.Stats
   {

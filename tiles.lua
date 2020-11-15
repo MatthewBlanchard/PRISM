@@ -60,6 +60,7 @@ local tiles = {
     shop = 310,
 		gloop = 311,
 		spider = 312,
+		snip = 313,
 
 	stairs_up = 274,
 	stairs_down = 275,
