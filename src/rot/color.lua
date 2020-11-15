@@ -382,7 +382,7 @@ function Color.__mul(a, b) return mul({}, a, b) end
 -- @table Color._cache
 
 Color._cached = {
-  black = { 0, 0, 0 },
+  black = { 0.09, 0.09, 0.09 },
   navy = { 0.0, 0.0, 0.5019607843137255 },
   darkblue = { 0.0, 0.0, 0.5450980392156862 },
   mediumblue = { 0.0, 0.0, 0.803921568627451 },

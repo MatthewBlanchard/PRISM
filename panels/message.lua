@@ -75,6 +75,7 @@ function Message:update(dt)
 end
 
 function Message:draw()
+  self:clear()
   self:drawBorders()
   for i = 1, self.h - 2 do
     local message = self.messages[#self.messages - (i - 1)]

@@ -405,9 +405,9 @@ function Display:drawText(x, y, text, maxWidth)
                   cx = cx + 1 -- add an extra position
                end
                fg = (fg == '' or not fg) and self.defaultForegroundColor
-                  or type(fg) == 'string' and util.Color.fromString(fg) or fg
+                  or type(fg) == 'string' and ROT.Color.fromString(fg) or fg
                bg = (bg == '' or not bg) and self.defaultBackgroundColor
-                  or type(bg) == 'string' and util.Color.fromString(bg) or bg
+                  or type(bg) == 'string' and ROT.Color.fromString(bg) or bg
                self:_writeValidatedString(c, cx, cy, fg, bg)
                cx = cx + 1
                isPrevSpace = isSpace

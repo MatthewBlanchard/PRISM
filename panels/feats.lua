@@ -24,7 +24,7 @@ function FeatsPanel:draw()
     local extra = 0
     for i, feat in ipairs(self.feats) do 
       self:writeFormatted({Colors.YELLOW, i .. ") " .. feat.name}, 2, i * 2 + 2 + extra + descHeight)
-      self:writeText(feat.description, 5, i * 2 + 3 + extra + descHeight, self.w - 5)
+      self:writeText("%b{black}" .. feat.description, 5, i * 2 + 3 + extra + descHeight, self.w - 5)
       descHeight = math.ceil(#feat.description / (self.w - 3))
       extra = 1
     end

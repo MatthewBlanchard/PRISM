@@ -9,6 +9,7 @@ function StatusPanel:__new(display, parent)
 end
 
 function StatusPanel:draw()
+  self:clear()
   self:drawBorders()
   local hpPercentage = game.curActor.HP / game.curActor.maxHP
   local barLength = math.floor(19 * hpPercentage)
