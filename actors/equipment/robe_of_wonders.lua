@@ -18,7 +18,8 @@ RobeOfWonders.components = {
         chance = 0.5
       }
     }
-  }
+  },
+  components.Cost{rarity = "rare"}
 }
 
 return RobeOfWonders

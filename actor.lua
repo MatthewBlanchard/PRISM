@@ -30,7 +30,7 @@ function Actor:__new()
   if self.components then
     local temp = {}
 
-    for k, component in pairs(self.components) do
+    for k, component in ipairs(self.components) do
       if not component:checkRequirements(self) then
         error("Unsupported component added to actor!" .. self.name)
       end
@@ -74,7 +74,7 @@ function Actor:removeComponent(component)
   end
 end
 
-function Actor:hasComponent(type)
+function Actor:hasComponent(type, source)
   for k, component in pairs(self.components) do
     if component:is(type) then
       return true

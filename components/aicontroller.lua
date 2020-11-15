@@ -2,6 +2,7 @@ local Controller = require "components.controller"
 local Vector2 = require "vector"
 
 local AIController = Controller:extend()
+AIController.name = "AIController"
 AIController.inputControlled = false
 
 function AIController:__new(options)

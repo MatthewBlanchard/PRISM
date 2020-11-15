@@ -1,6 +1,7 @@
 local Component = require "component"
 
 local Lifetime = Component:extend()
+Lifetime.name = "Lifetime"
 
 function Lifetime:__new(options)
   self.duration = options.duration

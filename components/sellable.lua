@@ -2,6 +2,7 @@ local Component = require "component"
 local Tiles = require "tiles"
 
 local Sellable = Component:extend()
+Sellable.name = "Sellable"
 
 function Sellable:initialize(actor)
   actor.setShopkeep = self.setShopkeep
@@ -19,7 +20,7 @@ function Sellable:setShopkeep(actor)
   local function unsoldEffect()
     return effects.Character(actor.position.x, actor.position.y - 1, Tiles["bubble_ellipsis"], {1, 1, 1}, 1)
   end
-  
+
   self.soldEffect = soldEffect
   self.notSoldEffect = unsoldEffect
 end

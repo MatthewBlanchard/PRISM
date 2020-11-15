@@ -24,7 +24,8 @@ Dagger_of_Venom.components = {
     effects = {
       poisonOnHit
     }
-  }
+  },
+  components.Cost{rarity = "uncommon"}
 }
 
 return Dagger_of_Venom

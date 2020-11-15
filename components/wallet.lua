@@ -1,6 +1,7 @@
 local Component = require "component"
 
 local Wallet = Component:extend()
+Wallet.name = "wallet"
 
 function Wallet:__new(options)
   self.wallet = {}

@@ -1,7 +1,7 @@
 local Component = require "component"
 
 local Attacker = Component:extend()
-
+Attacker.name = "Attacker"
 Attacker.requirements = {components.Stats}
 
 function Attacker:__new(options)

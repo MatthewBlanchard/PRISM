@@ -1,6 +1,7 @@
 local Component = require "component"
 
 local Move = Component:extend()
+Move.name = "Move"
 
 function Move:__new(options)
   self.speed = options.speed

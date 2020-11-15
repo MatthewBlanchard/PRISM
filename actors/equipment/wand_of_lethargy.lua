@@ -31,7 +31,8 @@ WandOfLethargy.components = {
   components.Wand{
     maxCharges = 5,
     zap = Zap
-  }
+  },
+  components.Cost{rarity = "common"}
 }
 
 return WandOfLethargy

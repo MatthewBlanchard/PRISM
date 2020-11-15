@@ -2,6 +2,7 @@ local Component = require "component"
 local Condition = require "condition"
 
 local Weapon = Component:extend()
+Weapon.name = "Weapon"
 
 Weapon.requirements = {components.Item}
 

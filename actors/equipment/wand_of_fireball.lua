@@ -54,7 +54,8 @@ WandOfFireball.components = {
   components.Wand{
     maxCharges = 5,
     zap = Zap
-  }
+  },
+  components.Cost{rarity = "rare"}
 }
 
 return WandOfFireball

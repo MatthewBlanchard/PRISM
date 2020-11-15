@@ -1,6 +1,7 @@
 local Component = require "component"
 
 local Lock = Component:extend()
+Lock.name = "Lock"
 
 function Lock:initialize(actor)
   actor.setKey = self.setKey

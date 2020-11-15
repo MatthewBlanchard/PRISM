@@ -31,6 +31,7 @@ loadItems("actions", actions, false)
 loadItems("actions/reactions", reactions, true)
 loadItems("conditions", conditions, true)
 loadItems("actors", actors, true)
+Loot = require "loot"
 
 local Level = require "level"
 local Interface = require "interface"

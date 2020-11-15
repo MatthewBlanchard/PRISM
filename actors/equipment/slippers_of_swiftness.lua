@@ -12,7 +12,8 @@ SlippersOfSwiftness.components = {
     effects = {
       conditions.Swiftness
     }
-  }
+  },
+  components.Cost{rarity = "uncommon"}
 }
 
 return SlippersOfSwiftness

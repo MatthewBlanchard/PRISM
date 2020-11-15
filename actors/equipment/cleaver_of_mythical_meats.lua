@@ -28,7 +28,8 @@ CleaverMythical.components = {
     effects = {
       meatOnKill
     }
-  }
+  },
+  components.Cost{rarity = "rare"}
 }
 
 return CleaverMythical

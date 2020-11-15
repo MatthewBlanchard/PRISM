@@ -15,7 +15,8 @@ RingOfBling.components = {
         chance = 0.25
       }
     }
-  }
+  },
+  components.Cost{rarity = "common"}
 }
 
 return RingOfBling

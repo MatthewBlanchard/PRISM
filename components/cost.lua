@@ -1,9 +1,8 @@
 local Component = require "component"
 local Condition = require "condition"
-local Loot = require "loot"
 
 local Cost = Component:extend()
-
+Cost.name = "Cost"
 Cost.requirements = {components.Item}
 
 local dummy = {}

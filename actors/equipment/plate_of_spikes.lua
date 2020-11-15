@@ -30,7 +30,8 @@ PlateOfSpikes.components = {
         AC = 4
       }
     }
-  }
+  },
+  components.Cost{rarity = "rare"}
 }
 
 return PlateOfSpikes

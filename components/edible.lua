@@ -1,6 +1,7 @@
 local Component = require "component"
 
 local Edible = Component:extend()
+Edible.name = "edible"
 
 Edible.requirements = {
   components.Item,

@@ -1,6 +1,7 @@
 local Component = require "component"
 
 local Message = Component:extend()
+Message.name = "message"
 
 function Message:__new()
   self.messages = {}

@@ -27,7 +27,8 @@ JerkinOfGrease.components = {
       },
       FreedomOfMovement()
     }
-  }
+  },
+  components.Cost{rarity = "uncommon"}
 }
 
 return JerkinOfGrease

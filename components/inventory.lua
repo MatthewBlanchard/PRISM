@@ -1,6 +1,7 @@
 local Component = require "component"
 
 local Inventory = Component:extend()
+Inventory.name = "Inventory"
 
 function Inventory:initialize(actor)
   actor.hasItem = self.hasItem
@@ -26,7 +27,7 @@ end
 
 function Inventory.hasItemType(owner, item)
   for k, v in pairs(owner.inventory) do
-    if v:is(item) then 
+    if v:is(item) then
       return k
     end
   end
@@ -49,8 +50,8 @@ function Inventory.removeItem(owner, item)
 end
 
 function Inventory.removeItemType(owner, item)
-  for k, v in pairs(owner.inventory) do 
-    if v:is(item) then 
+  for k, v in pairs(owner.inventory) do
+    if v:is(item) then
       table.remove(owner.inventory, k)
       return
     end

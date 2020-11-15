@@ -12,7 +12,8 @@ BandOfChanneling.components = {
     effects = {
       conditions.Channel()
     }
-  }
+  },
+  components.Cost{rarity = "uncommon"}
 }
 
 return BandOfChanneling

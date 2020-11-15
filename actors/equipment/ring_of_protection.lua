@@ -14,7 +14,8 @@ RingOfProtection.components = {
         AC = 1
       }
     }
-  }
+  },
+  components.Cost{rarity = "uncommon"}
 }
 
 return RingOfProtection

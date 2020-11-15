@@ -9,7 +9,7 @@ local DashEffect = function(start, target)
     local vertical = vec.x == 0
     local positive = vertical and vec.y > 0 or vec.x > 0
 
-    for i = positive and 1 or -1, vertical and vec.y or vec.x, positive and 1 or -1 do 
+    for i = positive and 1 or -1, vertical and vec.y or vec.x, positive and 1 or -1 do
       local x = vertical and start.x or start.x + i
       local y = vertical and start.y + i or start.y
       interface:writeOffset(Tiles["poof"], x, y)
@@ -27,18 +27,18 @@ Dash:onAction(actions.Move,
     local i = 1
 
     local actors = {}
-    for i = 1, #level.actors do 
-      if level.actors[i]:hasComponent(components.Stats) and level.actors[i]:hasComponent(components.Aicontroller) then 
+    for i = 1, #level.actors do
+      if level.actors[i]:hasComponent(components.Stats) and level.actors[i]:hasComponent(components.Aicontroller) then
         table.insert(actors, level.actors[i])
       end
     end
 
-    while true do 
+    while true do
       local pos = actor.position + (action.direction * i)
       i = i + 1
       if not level:getCellPassable(pos.x, pos.y) then
-        for i, actor in ipairs(actors) do 
-          if actor.position == pos then 
+        for i, actor in ipairs(actors) do
+          if actor.position == pos then
             target = actor
             break
           end
@@ -68,7 +68,8 @@ Sword.components = {
     name = "Sword of Dashing",
     dice = "1d6",
     effects = {Dash()}
-  }
+  },
+  components.Cost{rarity = "common"}
 }
 
 return Sword

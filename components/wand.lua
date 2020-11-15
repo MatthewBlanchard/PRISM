@@ -1,6 +1,7 @@
 local Component = require "component"
 
 local Wand = Component:extend()
+Wand.name = "Wand"
 
 Wand.requirements = {
   components.Usable

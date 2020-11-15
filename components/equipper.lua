@@ -1,6 +1,7 @@
 local Component = require "component"
 
 local Equipper = Component:extend()
+Equipper.name = "Equipper"
 
 Equipper.requirements = {components.Stats, components.Inventory}
 

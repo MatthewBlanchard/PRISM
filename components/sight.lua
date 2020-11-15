@@ -1,6 +1,7 @@
 local Component = require "component"
 
 local Sight = Component:extend()
+Sight.name = "Sight"
 
 function Sight:__new(options)
   self.range = options.range

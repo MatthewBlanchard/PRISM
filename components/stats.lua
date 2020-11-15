@@ -1,6 +1,7 @@
 local Component = require "component"
 
 local Stats = Component:extend()
+Stats.name = "Stats"
 
 local validStats =
 {

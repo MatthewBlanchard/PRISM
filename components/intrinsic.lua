@@ -2,6 +2,7 @@ local Component = require "component"
 local Action = require "action"
 
 local IntrinsicAction = Component:extend()
+IntrinsicAction.name = "IntrinsicAction"
 
 IntrinsicAction.requirements = {
   components.Aicontroller

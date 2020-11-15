@@ -38,6 +38,7 @@ local function pulse(baseColor, period, intensity)
 end
 
 local Light = Component:extend()
+Light.name = "Light"
 
 Light.effects = {
   flicker = flicker,

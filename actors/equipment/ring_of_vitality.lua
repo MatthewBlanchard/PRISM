@@ -3,7 +3,7 @@ local Tiles = require "tiles"
 
 local RingOfRegeneration = Actor:extend()
 RingOfRegeneration.char = Tiles["ring"]
-RingOfRegeneration.name = "Ring of Regeneration"
+RingOfRegeneration.name = "Ring of Vitality"
 
 RingOfRegeneration.components = {
   components.Item(),
@@ -14,7 +14,8 @@ RingOfRegeneration.components = {
         maxHP = 5
       }
     }
-  }
+  },
+  components.Cost{rarity = "common"}
 }
 
 return RingOfRegeneration

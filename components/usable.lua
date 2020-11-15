@@ -1,6 +1,7 @@
 local Component = require "component"
 
 local Usable = Component:extend()
+Usable.name = "Usable"
 
 function Usable:__new(actions, default)
   self.useActions = actions or {}

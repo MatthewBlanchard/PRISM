@@ -1,6 +1,7 @@
 local Component = require "component"
 
 local Readable = Component:extend()
+Readable.name = "Readable"
 
 Readable.requirements = {
   components.Item,

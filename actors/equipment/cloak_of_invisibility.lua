@@ -18,7 +18,8 @@ CloakOfInvisibility.components = {
       },
       conditions.Invisibility()
     }
-  }
+  },
+  components.Cost{rarity = "rare"}
 }
 
 return CloakOfInvisibility

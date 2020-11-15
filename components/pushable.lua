@@ -1,6 +1,7 @@
 local Component = require "component"
 
 local Pushable = Component:extend()
+Pushable.name = "Pushable"
 
 Pushable.requirements = {
   components.Usable,
