@@ -219,9 +219,9 @@ function Level:updateScryActors(actor)
   for i, condition in ipairs(actor:getConditions()) do
     local e = condition:getActionEvents("onScrys", self) or dummy
     for i, event in ipairs(e) do
-      local scryedActor = event:fire(condition, self, actor)
+      local scryedActors = event:fire(condition, self, actor)
 
-      if scryedActor then
+      for _, scryedActor in ipairs(scryedActors) do
         scryed[scryedActor] = true
       end
     end

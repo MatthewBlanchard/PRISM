@@ -22,6 +22,8 @@ local tiles = {
 	bow = 336,
 	steak = 338,
 	cleaver = 339,
+	tiara = 342,
+
 	box = 265,
 	boots = 372,
 	cloak = 357,

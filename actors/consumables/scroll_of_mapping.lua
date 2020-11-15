@@ -7,7 +7,7 @@ Read.name = "read"
 Read.targets = {targets.Item}
 
 function Read:perform(level)
-  actions.Read:perform(level)
+  actions.Read.perform(self, level)
 
   for x = 1, level.width do
 	for y = 1, level.height do
