@@ -31,6 +31,9 @@ function Start:draw()
 end
 
 function Start:handleKeyPress(keypress)
+  if self.fadeTime then
+    game.interface:pop()
+  end
   self.fadeTime = self.time
 end
 
