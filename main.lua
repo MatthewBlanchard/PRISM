@@ -20,7 +20,7 @@ local function loadItems(directoryName, items, recurse)
 
       items[name] = require(fileName)
     elseif info.type == "directory" and recurse then
-      loadItems(fileName, items)
+      loadItems(fileName, items, recurse)
     end
   end
 end
