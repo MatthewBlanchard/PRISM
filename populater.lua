@@ -156,8 +156,6 @@ function Populater(level, map)
       spawnActor(room, actor)
       room.actors = room.actors or {}
       table.insert(room.actors, actor)
-
-      populateSpiderRoom(room)
       return
     end
 
@@ -168,6 +166,7 @@ function Populater(level, map)
   end
 
   table.insert(toSpawn, actors.Prism())
+  table.insert(toSpawn, actors.Stairs())
 
   local startRoom = table.remove(map._rooms, love.math.random(1, #map._rooms))
 

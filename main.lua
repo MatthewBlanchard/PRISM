@@ -96,6 +96,12 @@ function love.update(dt)
     curActor = game.level:update(dt, game.interface:getAction())
   end
 
+  if curActor == true then
+    local map = ROT.Map.Brogue(game.display:getWidth() - 11, 44)
+    game.level = Level(map)
+    game.Player.explored = {}
+  end
+
   game.curActor = game.curActor or curActor
   game.interface:update(dt, game.level)
 end

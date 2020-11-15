@@ -5,6 +5,8 @@ local populateMap = require "populater"
 local Level = Object:extend()
 
 function Level:__new(map)
+  self.initialized = false
+
   self.map = {}
   self.width = map._width
   self.height = map._height
@@ -28,14 +30,12 @@ function Level:__new(map)
   populateMap(self, map)
 end
 
-local initialized
-local waitingFor
 function Level:update(dt, inputAction)
   self.dt = dt
   if not lightinit then self:updateLighting(false, dt or 0) lightinit = true end
 
   -- if our scheduler is not initialized we need to populate it first
-  if not initialized then
+  if not self.initialized then
     for actor in self:eachActor(components.Controller, components.Aicontroller) do
       self.scheduler:add(actor)
     end
@@ -44,18 +44,23 @@ function Level:update(dt, inputAction)
     -- damage over time effects
     self.scheduler:add("tick")
 
-    initialized = true
+    self.initialized = true
+  end
+
+  if self.exit == true then
+    print "yeet"
+    return true
   end
 
   -- if we are waiting for an actor we check if we got an action if not we keep
   -- on waiting
-  if waitingFor then
+  if self.waitingFor then
     if inputAction then
       self:performAction(inputAction)
-      waitingFor = nil
+      self.waitingFor = nil
       return nil
     else
-      return waitingFor
+      return self.waitingFor
     end
   end
 
@@ -74,12 +79,12 @@ function Level:update(dt, inputAction)
     else
       self:updateFOV(actor)
 
-      -- if we find a player controlled actor we set waitingFor and return it
+      -- if we find a player controlled actor we set self.waitingFor and return it
       -- this hands things off to the interface which generates a command for
       -- the actor
       if actor.inputControlled then
-        waitingFor = actor
-        return waitingFor
+        self.waitingFor = actor
+        return self.waitingFor
       end
 
       -- if we don't have a player controlled actor we ask the actor for it's
@@ -245,7 +250,8 @@ end
 function Level:addActor(actor)
   table.insert(self.actors, actor)
 
-  if initialized and actor:hasComponent(components.Controller, components.Aicontroller) then
+  if self.initialized and actor:hasComponent(components.Aicontroller) then
+    print(yeet, actor.name)
     self.scheduler:add(actor)
   end
 

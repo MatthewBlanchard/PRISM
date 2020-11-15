@@ -32,6 +32,7 @@ local tiles = {
 	glowshroom = 282,
 	stationarytorch = 283,
 	web = 284,
+	stairs = 286,
 	dagger = 359,
 	door_closed = 273,
 	door_open = 272,
