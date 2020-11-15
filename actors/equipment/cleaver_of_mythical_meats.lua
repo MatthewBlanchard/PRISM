@@ -15,6 +15,7 @@ end
 local CleaverMythical = Actor:extend()
 CleaverMythical.char = Tiles["cleaver"]
 CleaverMythical.name = "Cleaver of Meats"
+CleaverMythical.desc = "Reduce your opponents to delicious and mysterious meats!"
 
 CleaverMythical.components = {
   components.Item(),

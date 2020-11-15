@@ -43,6 +43,7 @@ local Condition = Object:extend()
 Condition.onActions = {}
 Condition.afterActions = {}
 Condition.onTicks = {}
+Condition.setTimes = {}
 
 function Condition:extend()
   local self = Object.extend(self)
@@ -50,10 +51,11 @@ function Condition:extend()
   -- Since we're defining these as static elements in a table that shouldn't be changed
   -- on instantiated objects we have to copy these tables or all changes will end up on the base
   -- class.
-  local oldOnActions, oldAfterActions = self.onActions, self.afterActions
+  local oldOnActions, oldAfterActions, oldSetTime = self.onActions, self.afterActions, self.setTimes
   local oldOnTick = self.onTicks
   self.onActions = {}
   self.afterActions = {}
+  self.setTimes = {}
   self.onTicks = {}
   self.onScrys = {}
 
@@ -63,6 +65,10 @@ function Condition:extend()
 
   for k, v in pairs(oldAfterActions) do
     self.afterActions[k] = v
+  end
+
+  for k, v in pairs(oldSetTime) do
+    self.setTimes[k] = v
   end
 
   for k, v in pairs(oldOnTick) do
@@ -131,6 +137,13 @@ end
 function Condition:afterAction(action, func)
   local e = Event(action, func)
   table.insert(self.afterActions, e)
+  return e
+end
+
+function Condition:setTime(action, func)
+  local e = Event(action, func)
+
+  table.insert(self.setTimes, e)
   return e
 end
 

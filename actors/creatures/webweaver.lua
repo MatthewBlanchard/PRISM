@@ -10,7 +10,7 @@ Webweaver.color = {0.7, 0.7, 0.9}
 
 Webweaver.components = {
   components.Sight{ range = 12, fov = true, explored = false },
-  components.Move{ speed = 75, passable = false },
+  components.Move{ speed = 100, passable = false },
   components.Stats
   {
     DEX = 12,
@@ -57,7 +57,7 @@ function Webweaver:act(level)
   end
 
   self._lastTarget = target
-  
+
   if target then
     local targetRange = target:getRange("box", self)
     if targetRange == 1 then

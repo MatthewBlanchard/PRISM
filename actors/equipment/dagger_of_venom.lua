@@ -10,6 +10,7 @@ end
 local Dagger_of_Venom = Actor:extend()
 Dagger_of_Venom.char = Tiles["dagger"]
 Dagger_of_Venom.name = "Dagger of Venom"
+Dagger_of_Venom.desc = "Inflicts a dangerous poison on your enemies!"
 Dagger_of_Venom.color = {0.1, 1, 0.1}
 
 Dagger_of_Venom.components = {

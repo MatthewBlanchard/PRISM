@@ -4,7 +4,7 @@ local Tiles = require "tiles"
 local CloakOfInvisibility = Actor:extend()
 CloakOfInvisibility.char = Tiles["cloak"]
 CloakOfInvisibility.name = "Cloak of Invisibility"
-CloakOfInvisibility.desc = "The inside of the cloak swirls in unfathomable patterns."
+CloakOfInvisibility.desc = "The inside of the cloak swirls in unfathomable patterns. You are invisible while wearing it."
 
 CloakOfInvisibility.components = {
   components.Item(),

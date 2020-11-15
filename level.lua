@@ -365,20 +365,25 @@ function Level:performAction(action, free)
   action:perform(self)
 
   self:triggerActionEvents("afterActions", action)
+  self:triggerActionEvents("setTimes", action)
+
 
   -- if this isn't a reaction or free action and the level contains the acting actor
   -- we update it's place in the scheduler
   if not action.reaction and not free and self:hasActor(action.owner) then
+    if action.owner:is(actors.Player) then
+      print(action.name, action.time)
+    end
     self.scheduler:addTime(action.owner, action.time)
   end
 end
 
 local dummy = {} -- just to avoid making garbage
-function Level:triggerActionEvents(type, action)
-  if type == "onTicks" then
+function Level:triggerActionEvents(onType, action)
+  if type(onType) == "onTick" then
     for _, actor in ipairs(self.actors) do
       for i, condition in ipairs(actor:getConditions()) do
-        local e = condition:getActionEvents(type, self) or dummy
+        local e = condition:getActionEvents(onType, self) or dummy
         for i, event in ipairs(e) do
           event:fire(condition, self, actor)
         end
@@ -391,7 +396,7 @@ function Level:triggerActionEvents(type, action)
   if not action then return nil end
 
   for k, condition in ipairs(action.owner:getConditions()) do
-    local e = condition:getActionEvents(type, self, action)
+    local e = condition:getActionEvents(onType, self, action)
     if e then
       for k, event in ipairs(e) do
         event:fire(condition, self, action.owner, action)
@@ -404,7 +409,7 @@ function Level:triggerActionEvents(type, action)
   for k, actor in ipairs(action:getTargets()) do
     if actor.getConditions then
       for k, condition in ipairs(actor:getConditions()) do
-        local e = condition:getActionEvents(type, self, action)
+        local e = condition:getActionEvents(onType, self, action)
         if e then
           for k, event in ipairs(e) do
             event:fire(condition, self, actor, action)

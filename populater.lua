@@ -156,6 +156,10 @@ function Populater(level, map)
       spawnActor(room, actor)
       room.actors = room.actors or {}
       table.insert(room.actors, actor)
+
+      if math.random() > 0.50 then
+        populateSpiderRoom(room)
+      end
       return
     end
 
