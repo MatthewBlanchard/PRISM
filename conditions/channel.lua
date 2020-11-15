@@ -14,7 +14,7 @@ Channel:afterAction(actions.Zap,
     for _, other in ipairs(actors) do
       if other ~= actor then
         if targets.Creature:checkRequirements(other) then
-          local damage = other:getReaction(reactions.Damage)(actor, {self.owner}, damage, wand)
+          local damage = other:getReaction(reactions.Damage)(other, {actor}, damage, wand)
           level:performAction(damage)
         end
       end
