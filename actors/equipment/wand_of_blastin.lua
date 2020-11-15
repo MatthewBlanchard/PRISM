@@ -36,7 +36,7 @@ WandOfBlastin.components = {
   components.Item(),
   components.Usable(),
   components.Wand{
-    maxCharges = 5,
+    maxCharges = 12,
     zap = Zap
   }
 }
