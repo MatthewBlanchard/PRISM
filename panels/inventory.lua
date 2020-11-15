@@ -3,6 +3,7 @@ local ItemPanel = require "panels.item"
 
 local InventoryPanel = Panel:extend()
 InventoryPanel.interceptInput = true
+InventoryPanel.bg = {.09, .09, .09}
 
 function InventoryPanel:__new(display, parent)
   Panel.__new(self, display, parent, 47, 12, 35, 11)

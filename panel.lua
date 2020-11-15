@@ -3,6 +3,7 @@ local Tiles = require "tiles"
 
 local Panel = Object:extend()
 Panel.borderColor = {.5, .5, .6, 1}
+Panel.backgroundColor = {.09, .09, .09}
 
 function Panel:__new(display, parent, x, y, w, h)
   self.display = display
@@ -11,6 +12,7 @@ function Panel:__new(display, parent, x, y, w, h)
   self.y = y or 1
   self.w = w or display and display:getWidth() or 1
   self.h = h or display and display:getHeight() or 1
+  self.defaultBackgroundColor = Panel.backgroundColor
 
   self.panels = {}
 end
@@ -28,8 +30,8 @@ end
 function Panel:draw(x, y)
 end
 
-function Panel:clear()
-  self.display:clear(nil, self.x, self.y, self.w, self.h)
+function Panel:clear(c, fg, bg)
+  self.display:clear(c or ' ', self.x, self.y, self.w, self.h, fg, bg or self.defaultBackgroundColor)
 end
 
 function Panel:drawBorders(width, height)
@@ -102,13 +104,13 @@ end
 
 function Panel:drawHorizontal(c, first, last, y)
   for i = first, last do
-    self:write(c, 1 + i, y, Panel.borderColor)
+    self:write(c, 1 + i, y, Panel.borderColor, Panel.backgroundColor)
   end
 end
 
 function Panel:drawVertical(c, first, last, x)
   for i = first, last do
-    self:write(c, x, 1 + i, Panel.borderColor)
+    self:write(c, x, 1 + i, Panel.borderColor, Panel.backgroundColor)
   end
 end
 
@@ -121,7 +123,7 @@ function Panel:write(c, x, y, fg, bg)
     error("Tried to write out of bounds to a panel!")
   end
 
-  self.display:write(c, self.x + x - 1, self.y + y - 1, fg, bg)
+  self.display:write(c, self.x + x - 1, self.y + y - 1, fg, bg or self.defaultBackgroundColor)
 end
 
 function Panel:writeBG(x, y, bg)
@@ -136,7 +138,7 @@ function Panel:writeFormatted(s, x, y, bg)
     error("Tried to write out of bounds to a panel!")
   end
 
-  self.display:writeFormatted(s, self.x + x - 1, self.y + y - 1, bg)
+  self.display:writeFormatted(s, self.x + x - 1, self.y + y - 1, bg or self.defaultBackgroundColor)
 end
 
 function Panel:writeText(s, x, y, maxWidth)

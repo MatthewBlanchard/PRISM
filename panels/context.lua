@@ -18,15 +18,16 @@ function ContextPanel:setTarget(target)
 end
 
 function ContextPanel:draw()
+  self:clear()
   self:drawBorders()
 
   local w = #self.targetActor.name
 
-  self:write(self:correctWidth(self.targetActor.name, self.w - 2), 2, 2, nil, {0.3, 0.3, 0.3, 1})
-  self:write(self.targetActor.char, w + 3, 2, self.targetActor.color, {0.3, 0.3, 0.3, 1})
+  self:write(self:correctWidth(self.targetActor.name, self.w - 2), 2, 2, nil, Panel.backgroundColor)
+  self:write(self.targetActor.char, w + 3, 2, self.targetActor.color, Panel.backgroundColor)
 
   if self.targetActor.description then 
-    self:writeText(self.targetActor.description, 2, 3, self.w - 2)
+    self:writeText(self.targetActor.description, 2, 3, self.w - 2, nil, Panel.backgroundColor)
   end
 
   Panel.draw(self)

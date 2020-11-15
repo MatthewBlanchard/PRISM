@@ -13,6 +13,7 @@ function Interface:__new(display)
   Panel.__new(self, display)
   self.statusPanel = Status(display)
   self.messagePanel = Message(display)
+  self.defaultBackgroundColor = display.defaultBackgroundColor
   self.stack = {}
 end
 
