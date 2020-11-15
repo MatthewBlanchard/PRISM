@@ -13,6 +13,8 @@ function Cost:__new(options)
 end
 
 function Cost:initialize(actor)
+  print("rarity ", self.rarity)
+  print("dood")
   actor.rarity = self.rarity
   actor.cost = self.cost or Loot.generateBasePrice(actor)
   print(actor.name, actor.cost)

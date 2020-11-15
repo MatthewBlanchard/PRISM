@@ -17,8 +17,8 @@ Sqeeto.components = {
     MGK = 0,
     PR = 1,
     MR = 0,
-    maxHP = 12,
-    AC = 15
+    maxHP = 4,
+    AC = 2
   },
 
   components.Attacker

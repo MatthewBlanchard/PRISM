@@ -68,26 +68,6 @@ function Populater(level, map)
     actors.Dagger_of_venom
   }
 
-  local shopContents = {
-    actors.Bomb,
-    actors.Potion_of_rage,
-    actors.Potion_of_weight,
-    actors.Potion,
-    actors.Scroll_of_enlightenment,
-    actors.Scroll_of_mapping,
-    actors.Arrow,
-    actors.Bow,
-    actors.Ring_of_protection,
-    actors.Ring_of_vitality,
-    actors.Cloak_of_invisibility,
-    actors.Slippers_of_swiftness,
-    actors.Wand_of_lethargy,
-    actors.Wand_of_swapping,
-    actors.Wand_of_fireball,
-    actors.Wand_of_random_teleportation,
-    actors.Dagger_of_venom
-  }
-
   local function populateShopRoom(room)
     local shop = actors.Shopkeep()
     shop.position.x, shop.position.y = room:getCenterTile()
@@ -99,14 +79,29 @@ function Populater(level, map)
     torch.position.x = shop.position.x - 1
     level:addActor(torch)
 
+    local shopItems = {
+      {
+        components.Weapon,
+        components.Wand
+      },
+      {
+        components.Equipment
+      },
+      {
+        components.Edible,
+        components.Drinkable,
+        components.Readable
+      }
+    }
     for i = 1, 3 do
-      local item = shopContents[love.math.random(1, #shopContents)]()
+      local itemTable =shopItems[i]
+      local item = Loot.generateLoot(itemTable[love.math.random(1, #itemTable)])
       local product = actors.Product()
       product.position.x = shop.position.x + i*2
       product.position.y = shop.position.y
 
       product:setItem(item)
-      product:setPrice(actors.Shard, 1)
+      product:setPrice(actors.Shard, item.cost)
       product:setShopkeep(shop)
       level:addActor(product)
     end

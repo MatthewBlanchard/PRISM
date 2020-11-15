@@ -12,6 +12,7 @@ RobeOfWonders.components = {
     slot = "body",
     effects = {
       conditions.Modifystats{
+        MGK = 1,
         AC = 1
       },
       conditions.Refundcharge{

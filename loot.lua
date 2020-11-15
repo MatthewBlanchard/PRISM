@@ -29,4 +29,25 @@ function lootUtil.generateBasePrice(actor)
   return price * rarityModifier[actor.rarity]
 end
 
+function lootUtil.generateLoot(comp, rarity)
+  print "YEET"
+  local found = {}
+  local rarity = rarity or "mythic"
+  local rarityMod = rarityModifier[rarity]
+
+  for k, actor in pairs(actors) do
+    local costComponent = actor:getComponent(components.Cost)
+    if
+      costComponent and
+      rarityModifier[costComponent.rarity] <= rarityMod and
+      actor:hasComponent(comp)
+    then
+      table.insert(found, actor)
+    end
+  end
+
+  return found[love.math.random(1, #found)]()
+end
+
+
 return lootUtil

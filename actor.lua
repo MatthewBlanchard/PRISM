@@ -84,6 +84,14 @@ function Actor:hasComponent(type, source)
   return false
 end
 
+function Actor:getComponent(type, source)
+  for k, component in pairs(self.components) do
+    if component:is(type) then
+      return component
+    end
+  end
+end
+
 function Actor:initializeComponents()
   for k, component in ipairs(self.components) do
     component:initialize(self)
