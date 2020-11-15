@@ -10,6 +10,7 @@ local magicArmor = {
   actors.Cloak_of_invisibility,
   actors.Plate_of_spikes,
   actors.Robe_of_wonders,
+  actors.Jerkin_of_grease
 }
 
 local basicWeapon = {

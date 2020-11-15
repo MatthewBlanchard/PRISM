@@ -3,23 +3,21 @@ local Condition = require "condition"
 local Tiles = require "tiles"
 
 local FreedomOfMovement = Condition:extend()
-FreedomOfMovement.name = "Swiftness"
-FreedomOfMovement.description = "Your actions take 25% less time."
+FreedomOfMovement.name = "FreedomOfMovement"
+FreedomOfMovement.description= "You have a 85 move speed and can't be reduced."
 
 FreedomOfMovement:setTime(actions.Move,
   function(self, level, actor, action)
-    print(action.time)
     action.time = math.min(action.time, 85)
-    print(action.time)
   end
 )
 
-local LeatherArmor = Actor:extend()
-LeatherArmor.char = Tiles["armor"]
-LeatherArmor.name = "Jerkin of Grease"
-LeatherArmor.desc = "Nothing can slow you down with this armor on. You also move a bit faster."
+local JerkinOfGrease = Actor:extend()
+JerkinOfGrease.char = Tiles["armor"]
+JerkinOfGrease.name = "Mantle of Broken Chains"
+JerkinOfGrease.description = "Nothing can slow you down with this armor on. You also move a bit faster."
 
-LeatherArmor.components = {
+JerkinOfGrease.components = {
   components.Item(),
   components.Equipment{
     slot = "body",
@@ -32,4 +30,4 @@ LeatherArmor.components = {
   }
 }
 
-return LeatherArmor
+return JerkinOfGrease

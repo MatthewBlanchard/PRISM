@@ -4,7 +4,7 @@ local Tiles = require "tiles"
 local RobeOfWonders = Actor:extend()
 RobeOfWonders.char = Tiles["cloak"]
 RobeOfWonders.name = "Robe of Wonders"
-RobeOfWonders.desc = "This robe feels weightless. It's made of thin shiny cloth."
+RobeOfWonders.description= "This robe feels weightless. It's made of thin shiny cloth."
 
 RobeOfWonders.components = {
   components.Item(),
@@ -12,7 +12,7 @@ RobeOfWonders.components = {
     slot = "body",
     effects = {
       conditions.Modifystats{
-        AC = 2
+        AC = 1
       },
       conditions.Refundcharge{
         chance = 0.5
