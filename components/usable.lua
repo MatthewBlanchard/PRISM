@@ -4,21 +4,17 @@ local Usable = Component:extend()
 Usable.name = "Usable"
 
 function Usable:__new(actions, default)
-  self.useActions = actions
+  self.useActions = actions or {}
   self.defaultUseAction = default
 end
 
 function Usable:initialize(actor)
-  local useActions
-  if self.useActions then
-    useActions = {}
-    local pop = table.remove(actions, 1)
-    while pop do
-      table.insert(useActions, pop)
-    end
+  actor.useActions = {}
+
+  for _, action in ipairs(self.useActions) do
+    table.insert(actor.useActions, action)
   end
 
-  actor.useActions = useActions or {}
   actor.defaultUseAction = self.defaultUseAction
   actor.addUseAction = self.addUseAction
   actor.removeUseAction = self.removeUseAction

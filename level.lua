@@ -375,7 +375,8 @@ end
 
 local dummy = {} -- just to avoid making garbage
 function Level:triggerActionEvents(onType, action)
-  if type(onType) == "onTick" then
+  if onType == "onTicks" then
+    print(onType)
     for _, actor in ipairs(self.actors) do
       for i, condition in ipairs(actor:getConditions()) do
         local e = condition:getActionEvents(onType, self) or dummy

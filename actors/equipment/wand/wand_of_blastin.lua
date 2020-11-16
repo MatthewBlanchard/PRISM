@@ -40,7 +40,7 @@ WandOfBlastin.components = {
     maxCharges = 12,
     zap = Zap
   },
-  components.Cost{rarity = "common"}
+  components.Cost{rarity = "uncommon"}
 }
 
 return WandOfBlastin

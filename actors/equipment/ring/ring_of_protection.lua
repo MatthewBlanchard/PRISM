@@ -11,7 +11,9 @@ RingOfProtection.components = {
     slot = "ring",
     effects = {
       conditions.Modifystats{
-        AC = 1
+        AC = 1,
+        PR = 1,
+        MR = 1
       }
     }
   },

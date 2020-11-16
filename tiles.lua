@@ -25,6 +25,7 @@ local tiles = {
 	tiara = 342,
 
 	box = 265,
+	blank = 266,
 	boots = 372,
 	cloak = 357,
 	chest = 276,

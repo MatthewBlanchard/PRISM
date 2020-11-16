@@ -12,8 +12,12 @@ Gaze.time = 0
 function Gaze:perform(level)
   level:destroyActor(self:getTarget(1))
   level:addMessage("You gaze into the prism. It shatters!", self.owner)
+
   -- TODO: Better way to do this
   game.interface:push(FeatsPanel(game.interface.display, game.interface, {conditions.Rapidfire, conditions.Swiftness}))
+
+  self.owner.maxHP = self.owner.maxHP + 5
+  self.owner.HP = self.owner.HP + 5
 end
 
 local Prism = Actor:extend()

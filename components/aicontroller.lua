@@ -85,9 +85,7 @@ end
 
 function AIController.tileHasCreature(actor, current)
   for _, seen in ipairs(actor.seenActors) do
-    print(seen.name)
     if seen.position.x == current.x and seen.position.y == current.y  then
-      print "YERR"
       return true
     end
   end

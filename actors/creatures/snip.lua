@@ -3,11 +3,24 @@ local Vector2 = require "vector"
 local Tiles = require "tiles"
 local Condition = require "condition"
 
+local SingOnEat = Condition:extend()
+SingOnEat.name = "Sing on Eat"
+
+SingOnEat:onAction(actions.Eat,
+  function(self, level, actor, action)
+    level:addEffect(effects.CharacterDynamic(action.owner, 0, -1, Tiles["bubble_music"], {1, 1, 1}, .5))
+  end
+):where(Condition.ownerIsTarget)
+
 local Snip = Actor:extend()
 
 Snip.char = Tiles["snip"]
 Snip.name = "snip"
 Snip.color = {0.97, 0.93, 0.55, 1}
+
+Snip.innateConditions = {
+  SingOnEat
+}
 
 Snip.components = {
   components.Sight{ range = 6, fov = true, explored = false },
