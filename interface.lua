@@ -162,6 +162,10 @@ function Interface:draw()
     end
   end
 
+  local actor = game.curActor
+  local lightValue = math.min(value(light[actor.position.x][actor.position.y]), 0.5)
+  self:writeOffset(actor.char, actor.position.x, actor.position.y, clerp(ambientColor, actor.color, lightValue / 0.5))
+
   if self.curEffect then
     self._curEffectDone = true
     local done = self.curEffect(self.dt, self) or self._curEffectDone

@@ -16,7 +16,6 @@ function Attack:perform(level)
   local target = self:getTarget(1)
   local dmg = ROT.Dice.roll(weapon.dice) + self.owner:getStatBonus(weapon.stat)
 
-  print(roll, target:getAC(), roll, self.owner:getStatBonus(weapon.stat))
   self.time = weapon.time or 100
   if roll >= target:getAC() then
     self.hit = true
@@ -25,7 +24,7 @@ function Attack:perform(level)
     return
   end
 
-  level:addEffect(effects.DamageEffect(self.owner.position, target.position, dmg, false))
+  level:addEffect(effects.DamageEffect(self.owner.position, target, dmg, false))
 end
 
 return Attack

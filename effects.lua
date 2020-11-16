@@ -10,7 +10,7 @@ effects.HealEffect = function(actor, heal)
     t = t + dt
 
     local color = {.1, 1, .1, 1}
-    interface:effectWriteOffset(Tiles["heal"], actor.position.x, actor.position.y, color)
+    interface:effectWriteOffset(actor.char, actor.position.x, actor.position.y, color)
     interface:effectWriteOffset(tostring(heal), actor.position.x + 1, actor.position.y, color)
     if t > .4 then return true end
   end
@@ -46,7 +46,8 @@ effects.OpenEffect = function(actor)
   end
 end
 
-effects.DamageEffect = function(source, position, dmg, hit)
+effects.DamageEffect = function(source, actor, dmg, hit)
+  local position = actor.position
   local t = 0
 
   local dirx, diry = position.x - source.x, position.y - source.y

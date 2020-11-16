@@ -53,6 +53,11 @@ function Populater(level, map)
     spawnDoors(room)
     spawnActor(room, game.Player)
     spawnActor(room, actors.Box())
+    spawnActor(room, actors.Snip())
+    spawnActor(room, actors.Snip())
+    spawnActor(room, actors.Snip())
+    spawnActor(room, actors.Snip())
+
   end
 
   local chestContents = {
@@ -155,6 +160,15 @@ function Populater(level, map)
       if math.random() > 0.50 then
         populateSpiderRoom(room)
       end
+      return
+    end
+
+    if false then
+      spawnShards(room, 2, 4)
+      spawnShrooms(room, 0, 2)
+      spawnActor(room, actors.Snip())
+      spawnActor(room, actors.Snip())
+      spawnActor(room, actors.Snip())
       return
     end
 

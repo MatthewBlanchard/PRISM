@@ -10,7 +10,6 @@ Scrying:onScry(
   function(self, level, actor)
     local scryed = {}
     for actor in level:eachActor(components.Aicontroller) do
-      print("yeet")
       table.insert(scryed, actor)
     end
 

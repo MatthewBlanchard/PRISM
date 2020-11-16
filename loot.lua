@@ -25,12 +25,10 @@ function lootUtil.generateBasePrice(actor)
     end
   end
 
-  print(actor.name, price * rarityModifier[actor.rarity])
   return price * rarityModifier[actor.rarity]
 end
 
 function lootUtil.generateLoot(comp, rarity)
-  print "YEET"
   local found = {}
   local rarity = rarity or "mythic"
   local rarityMod = rarityModifier[rarity]

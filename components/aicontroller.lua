@@ -83,8 +83,19 @@ function AIController.move(actor, moveVec)
     return actor:getAction(actions.Move)(actor, moveVec)
 end
 
+function AIController.tileHasCreature(actor, current)
+  for _, seen in ipairs(actor.seenActors) do
+    print(seen.name)
+    if seen.position.x == current.x and seen.position.y == current.y  then
+      print "YERR"
+      return true
+    end
+  end
 
-function AIController.moveToward(actor, target)
+  return false
+end
+
+function AIController.moveToward(actor, target, avoidCreatures)
   local mx = target.position.x - actor.position.x > 0 and 1 or target.position.x - actor.position.x < 0 and - 1 or 0
   local my = target.position.y - actor.position.y > 0 and 1 or target.position.y - actor.position.y < 0 and - 1 or 0
 
@@ -102,8 +113,13 @@ function AIController.moveToward(actor, target)
       local dist = target:getRange("box", current)
 
       if dist < closestDist and AIController.isPassable(actor, current) then
-        closestDist = dist
-        closest.x, closest.y = current.x, current.y
+        if avoidCreatures and not AIController.tileHasCreature(actor, current) then
+          closestDist = dist
+          closest.x, closest.y = current.x, current.y
+        elseif not avoidCreatures then
+          closestDist = dist
+          closest.x, closest.y = current.x, current.y
+        end
       end
     end
   end
@@ -111,6 +127,45 @@ function AIController.moveToward(actor, target)
   local moveVec = Vector2(-(actor.position.x - closest.x), -(actor.position.y - closest.y))
   return actor:getAction(actions.Move)(actor, moveVec), moveVec
 end
+
+function AIController.crowdAround(actor, target, avoidCreatures)
+  if actor.position.x == target.position.x and actor.position.y and target.position.y then
+    local moveVec = Vector2(0, 0)
+    return actor:getAction(actions.Move)(actor, moveVec), moveVec
+  end
+
+  local openTiles = {}
+  for x = actor.position.x - 1, actor.position.x + 1 do
+    for y = actor.position.y - 1, actor.position.y + 1 do
+      local current = {x = x, y = y}
+      if AIController.isPassable(actor, current) and not AIController.tileHasCreature(actor, current) then
+        table.insert(openTiles, current)
+      end
+    end
+  end
+
+  local closest = math.huge
+  local closestVec = {x = actor.position.x, y = actor.position.y}
+
+  for i = 1, #openTiles do
+    local range = math.max(target:getRange("box", openTiles[i]), 1)
+    if openTiles[i].x == actor.position.x and openTiles.y == actor.position.y then
+      if range <= closest then
+        closest = range
+        closestVec = openTiles[i]
+      end
+    else
+      if range < closest then
+        closest = range
+        closestVec = openTiles[i]
+      end
+    end
+  end
+
+  local moveVec = Vector2(-(actor.position.x - closestVec.x), -(actor.position.y - closestVec.y))
+  return actor:getAction(actions.Move)(actor, moveVec), moveVec
+end
+
 
 function AIController.moveAway(actor, target)
   local mx = target.position.x - actor.position.x > 0 and -1 or target.position.x - actor.position.x < 0 and 1 or 0
