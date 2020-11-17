@@ -27,7 +27,7 @@ function ContextPanel:draw()
   self:write(self.targetActor.char, w + 3, 2, self.targetActor.color, Panel.backgroundColor)
 
   if self.targetActor.description then
-    self:writeText(self.targetActor.description, 2, 3, self.w - 2, nil, Panel.backgroundColor)
+    self:writeText("%b{black}" .. self.targetActor.description, 2, 3, self.w - 2, nil, Panel.backgroundColor)
   end
 
   Panel.draw(self)
