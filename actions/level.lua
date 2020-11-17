@@ -11,9 +11,8 @@ end
 function LevelUp:perform(level)
   local actor = self.owner
 
-  if self.feat then
-    actor:applyCondition(self.feat)
-  end
+  print("YEET")
+  actor:applyCondition(self.feat())
 end
 
 return LevelUp

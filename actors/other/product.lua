@@ -17,8 +17,8 @@ Buy.targets = {targetProduct}
 
 function Buy:perform(level)
   local product = self.targetActors[1]
-  
-  if not product.forSale then 
+
+  if not product.forSale then
     product.forSale = true
     local itemPanel = BuyPanel(game.display, game.interface, product, 10, 20, 31, 31)
     game.interface:push(itemPanel)
@@ -38,7 +38,7 @@ end
 
 Product.components = {
   components.Sellable(),
-  components.Usable({Buy}, Buy)
+  components.Usable({actions.Buy}, actions.Buy)
 }
 
 return Product

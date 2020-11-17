@@ -5,7 +5,7 @@ Progression.name = "Progression"
 Progression.requirements = {components.Stats}
 
 function Progression:initialize(actor)
-  actor.levels = {ATK = 0, MGK = 0, MR = 0, PR = 0}
+  actor.level = 1
   actor.feats = {}
   actor:addAction(actions.LevelUp)
 end
