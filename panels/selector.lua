@@ -52,51 +52,51 @@ function SelectorPanel:draw()
     self:writeOffset("X", position.x, position.y, self.valid and SelectorPanel.blinkColor or SelectorPanel.invalidColor)
   end
 
-  if self.curTarget.name then 
+  if self.curTarget.name then
     local last = self.line[#self.line == 1 and 1 or #self.line - 1]
     local x = position.x + 2
     local y = position.y
 
-    if last[2] == position.y then 
+    if last[2] == position.y then
       y = position.y - 1
       x = position.x - math.floor(#self.curTarget.name / 2)
     elseif last[1] > position.x then
       x = position.x - 1 - #self.curTarget.name
     end
 
-    self:writeOffset(self.curTarget.name, x, y) 
+    self:writeOffset(self.curTarget.name, x, y)
   end
 
   if self.valid then
-    for i = 2, #self.line - 1 do 
+    for i = 2, #self.line - 1 do
       self:writeOffset("x", self.line[i][1], self.line[i][2], SelectorPanel.lineColor)
     end
   end
-    
+
   if self.curTarget.name then
     self.targetPanel:draw()
   end
 end
 
 function SelectorPanel:getTargetPosition()
-  return self.curTarget.position or self.curTarget
+  if self.curTarget then
+    return self.curTarget.position or self.curTarget
+  elseif self.action:getTargetObject(#self.targets + 1):is(targets.Point) then
+    self.curTarget = game.curActor.position
+    return game.curActor.position
+  else
+    self.targetIndex = 1
+    self.targetPanel:setTarget(game.curActor)
+    self.curTarget = Vector(game.curActor.position.x, game.curActor.position.y)
+    return self.curTarget
+  end
 end
 
 function SelectorPanel:update(dt)
   self.blink = self.blinkFunc(dt)
-
-  if not self.targetIndex then
-    self:tabTarget()
-  end
 end
 
 function SelectorPanel:tabTarget(actor)
-  if not self.targetIndex and self.action:getTargetObject(#self.targets + 1):is(targets.Point) then
-    self.targetIndex = 1
-    self.curTarget = Vector(game.curActor.position.x, game.curActor.position.y)
-    self.targetPanel:setTarget(game.curActor)
-    return
-  end
   local n = 1
   local currentTarget = #self.targets + 1
   local valid = self:getValidTargets(currentTarget)
@@ -109,12 +109,12 @@ function SelectorPanel:tabTarget(actor)
   if self.targetIndex then
     -- If player is holding shift, go back a target
     if love.keyboard.isDown("lshift") then
-      if self.targetIndex == 1 then 
+      if self.targetIndex == 1 then
         n = #valid
-      else 
+      else
         n = self.targetIndex - 1
       end
-    else 
+    else
       if self.targetIndex + 1 > #valid then
         n = 1
       else
@@ -131,7 +131,7 @@ function SelectorPanel:updateTarget(target)
   self.curTarget = target
   self.targetPanel:setTarget(self.curTarget)
   local line, valid = Bresenham.line(game.curActor.position.x, game.curActor.position.y, self:getTargetPosition().x, self:getTargetPosition().y, bresenhamCallback)
-  self.line = line 
+  self.line = line
   self.valid = valid
 end
 
@@ -140,7 +140,7 @@ function SelectorPanel:moveTarget(direction)
   local valid = self:getValidTargets(#self.targets + 1)
 
   -- check if the new position lands on a valid actor
-  for i = 1, #valid do 
+  for i = 1, #valid do
     if position == valid[i].position then
       self:updateTarget(valid[i])
       return
@@ -186,7 +186,7 @@ function SelectorPanel:handleKeyPress(keypress)
   elseif self.action.targets[#self.targets + 1]:is(targets.Point) and self.movementTranslation[keypress] then
     self:moveTarget(self.movementTranslation[keypress])
   elseif keypress == "return" and self.valid then
-    if  self.action.targets[#self.targets + 1]:is(targets.Point) and 
+    if  self.action.targets[#self.targets + 1]:is(targets.Point) and
         self.action:validateTarget(#self.targets + 1, game.curActor, self.curTarget)     then
       table.insert(self.targets, self.curTarget.position or self.curTarget)
     else

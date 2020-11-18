@@ -5,69 +5,47 @@ local populateMap = require "populater"
 local Level = Object:extend()
 
 function Level:__new(map)
-  self.initialized = false
-
-  self.map = {}
-  self.width = map._width
-  self.height = map._height
-
-  self.temporaryLights = {}
-  self.light = {}
   self.actors = {}
+  self.light = {}
+  self.temporaryLights = {}
   self.effects = {}
 
   self.scheduler = Scheduler()
 
+  -- we add a special tick to the scheduler that's used for durations and
+  -- damage over time effects
+  self.scheduler:add("tick")
+
   self.fov = ROT.FOV.Recursive(self:getVisibilityCallback())
 
+  -- let's create our map and fill it with the info from the supplied
+  -- rotLove map
+  self.map = {}
+  self.width = map._width
+  self.height = map._height
+  map:create(self:getMapCallback())
+  populateMap(self, map)
+
+  -- Some initialization on the lighting
   self.lighting = ROT.Lighting(self:getLightReflectivityCallback(), {range = 50, passes = 3})
   self.lighting:setFOV(self.fov)
-
-  map:create(self:getMapCallback())
-
-  -- temporary code before we get more complicated level gen in
-  -- just pop a few doors where rotLove's level gen indicates
-  populateMap(self, map)
 end
 
-function Level:update(dt, inputAction)
-  self.dt = dt
-  if not lightinit then self:updateLighting(false, dt or 0) lightinit = true end
+function Level:update()
+  self:updateLighting(false, 0)
 
-  -- if our scheduler is not initialized we need to populate it first
-  if not self.initialized then
-    for actor in self:eachActor(components.Controller, components.Aicontroller) do
-      self.scheduler:add(actor)
-    end
-
-    -- we add a special tick to the scheduler that's used for durations and
-    -- damage over time effects
-    self.scheduler:add("tick")
-
-    self.initialized = true
-  end
-
-  if self.exit == true then
-    return true
-  end
-
-  -- if we are waiting for an actor we check if we got an action if not we keep
-  -- on waiting
-  if self.waitingFor then
-    if inputAction then
-      self:performAction(inputAction)
-      self.waitingFor = nil
-      return nil
-    else
-      return self.waitingFor
-    end
-  end
-
+  -- no brakes baby
   while true do
     -- check if we should quit before we move onto the next actor
     if self.shouldQuit then return love.event.push('quit') end
 
-    -- grab the next actor off the scheduler
+    -- ok I lied there are brakes. We return "descend" back to the main thread.
+    -- That signals that we're done and that it should scrap this thread and
+    -- spin up a new level.
+    if self.exit == true then
+      return "descend"
+    end
+
     local actor = self.scheduler:next()
 
     if actor == "tick" then
@@ -78,22 +56,22 @@ function Level:update(dt, inputAction)
     else
       self:updateFOV(actor)
 
-      -- if we find a player controlled actor we set self.waitingFor and return it
-      -- this hands things off to the interface which generates a command for
-      -- the actor
+      local action
       if actor.inputControlled then
-        self.waitingFor = actor
-        return self.waitingFor
+        -- if we find a player controlled actor we set self.waitingFor and return it
+        -- this hands things off to the interface which generates a command for
+        -- the actor
+        _, action = coroutine.yield(actor)
+      else
+
+        -- if we don't have a player controlled actor we ask the actor for it's
+        -- next action through it's controller
+        -- TODO: don't provide act with level
+        action = actor:act(self)
       end
 
-      -- if we don't have a player controlled actor we ask the actor for it's
-      -- next action through it's controller
-
-      -- TODO: don't provide act with level
-      local action = actor:act(self)
       assert(not (action == nil))
       self:performAction(action)
-      -- we continue to the next actor
     end
   end
 end
@@ -195,10 +173,22 @@ function Level:updateEffectLighting(dt)
   self:updateLighting(true, dt)
 end
 
+function Level:suppressEffects()
+  self.suppressEffect = true
+end
+
 function Level:addEffect(effect)
   -- we push the effect onto the effects stack and then the interface
   -- resolves these
-  table.insert(self.effects, 1, effect)
+  table.insert(self.effects, effect)
+
+  if self.suppressEffect then return end
+  coroutine.yield("effect")
+end
+
+function Level:resumeEffects()
+  self.suppressEffect = false
+  coroutine.yield("effect", effect)
 end
 
 function Level:invalidateLighting(actor)
@@ -249,7 +239,9 @@ end
 function Level:addActor(actor)
   table.insert(self.actors, actor)
 
-  if self.initialized and actor:hasComponent(components.Aicontroller) then
+  if actor:hasComponent(components.Aicontroller) or
+    actor:hasComponent(components.Controller)
+  then
     self.scheduler:add(actor)
   end
 
@@ -376,7 +368,6 @@ end
 local dummy = {} -- just to avoid making garbage
 function Level:triggerActionEvents(onType, action)
   if onType == "onTicks" then
-    print(onType)
     for _, actor in ipairs(self.actors) do
       for i, condition in ipairs(actor:getConditions()) do
         local e = condition:getActionEvents(onType, self) or dummy

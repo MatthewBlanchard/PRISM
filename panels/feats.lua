@@ -22,11 +22,9 @@ function FeatsPanel:draw()
     self:writeText(feat.description, 3, 5, self.w - 3)
   else
     self:write("Pick a Feat!", 9, 2)
-    print(#self.feats)
     local descHeight = 0
     local extra = 0
     for k, feat in pairs(self.feats) do
-      print(k, feat, feat.name)
       self:writeFormatted({Colors.YELLOW, k .. ") " .. feat.name}, 2, k * 2 + 2 + extra + descHeight)
       self:writeText("%b{black}" .. feat.description, 5, k * 2 + 3 + extra + descHeight, self.w - 5)
       descHeight = descHeight + math.ceil(#feat.description / (self.w - 5))
@@ -44,7 +42,6 @@ function FeatsPanel:handleKeyPress(keypress)
   else
     local feat = self.feats[tonumber(keypress)]
     if feat then
-      print("yeet", feat)
       game.interface:setAction(actions.Level(game.curActor, feat))
       game.interface:reset()
     end

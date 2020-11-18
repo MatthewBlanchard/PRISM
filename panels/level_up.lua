@@ -24,7 +24,7 @@ function LevelUpPanel:handleKeyPress(keypress)
     if feats then
       game.interface:push(FeatsPanel(self.display, self.parent, stat, feats))
     else
-      game.interface:setAction(actions.Level(game.curActor, stat))
+      game.level:performAction(actions.Level(game.curActor, stat))
     end
   end
 end

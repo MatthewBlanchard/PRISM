@@ -1,5 +1,6 @@
 local Tiles = require "tiles"
 local Color = require "color"
+local Bresenham = require "bresenham"
 
 local effects = {}
 
@@ -80,6 +81,20 @@ effects.DamageEffect = function(source, actor, dmg, hit)
 
     t = t + dt
     if t > .2 then return true end
+  end
+end
+
+effects.throw = function(thrown, thrower, location)
+  local line, valid = Bresenham.line(thrower.position.x, thrower.position.y, location.x, location.y)
+  local lineIndex = 1
+  local t = 0
+
+  return function(dt, interface)
+    local index = math.floor(t/0.033) + 1
+    interface:effectWriteOffset(thrown.char, line[index][1], line[index][2], thrown.color)
+
+    t = t + dt
+    if index == #line then return true end
   end
 end
 

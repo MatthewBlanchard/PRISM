@@ -20,11 +20,8 @@ end
 function Interface:update(dt)
   self.dt = dt
   self.messagePanel:update(dt)
-  game.level:updateEffectLighting(dt)
 
-  if #game.level.effects > 0 and not self.curEffect then
-    self.curEffect = table.remove(game.level.effects, 1)
-  end
+  game.level:updateEffectLighting(dt)
 
   if not self:peek() then return end
   self:peek():update(dt)
@@ -166,10 +163,20 @@ function Interface:draw()
   local lightValue = math.min(value(light[actor.position.x][actor.position.y]), 0.5)
   self:writeOffset(actor.char, actor.position.x, actor.position.y, clerp(ambientColor, actor.color, lightValue / 0.5))
 
-  if self.curEffect then
-    self._curEffectDone = true
-    local done = self.curEffect(self.dt, self) or self._curEffectDone
-    if done then self.curEffect = nil end
+  if not self.animating then
+    game.level.effects = {}
+  end
+
+  if #game.level.effects ~= 0 then
+    for i = #game.level.effects, 1, -1 do
+      local curEffect = game.level.effects[i]
+      self._curEffectDone = true
+      local done = curEffect(self.dt, self) or self._curEffectDone
+
+      if done then
+        table.remove(game.level.effects, i)
+      end
+    end
   end
 
   self.statusPanel:draw()
@@ -199,6 +206,9 @@ Interface.keybinds = {
   l = "log",
   m = "map"
 }
+
+function Interface:clearEffects()
+end
 
 function Interface:handleKeyPress(keypress)
   if self:peek() then
@@ -265,8 +275,6 @@ end
 
 function Interface:setAction(action)
   self.action = action
-  game.level.effects = {}
-  game.interface.curEffect = nil
 end
 
 function Interface:getAction()

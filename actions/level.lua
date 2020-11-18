@@ -1,7 +1,7 @@
 local Action = require "action"
 
 local LevelUp = Action:extend()
-LevelUp.time = 100
+LevelUp.time = 0
 
 function LevelUp:__new(owner, feat)
   Action.__new(self, owner)
@@ -11,7 +11,6 @@ end
 function LevelUp:perform(level)
   local actor = self.owner
 
-  print("YEET")
   actor:applyCondition(self.feat())
 end
 

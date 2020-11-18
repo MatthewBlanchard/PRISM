@@ -70,9 +70,10 @@ function love.load()
   game.interface = interface
 
   local player = game.Player
+  game.curActor = player
   table.insert(player.inventory, actors.Wand_of_light())
   table.insert(player.inventory, actors.Tiara_of_telepathy())
-  table.insert(player.inventory, actors.Scroll_of_enlightenment())
+  table.insert(player.inventory, actors.Bomb())
   table.insert(player.inventory, actors.Prism())
 
   love.keyboard.setKeyRepeat(true)
@@ -87,25 +88,75 @@ function love.draw()
   game.display:draw("UI")
 end
 
+local storedKeypress
+local updateCoroutine
+local waiting = false
+local animations = true
 function love.update(dt)
-  next_time = next_time + min_dt
+  game.level:updateEffectLighting(dt)
 
-  local curActor
-  while not curActor and (#game.level.effects == 0) do
-    curActor = game.level:update(dt, game.interface:getAction())
+  if not updateCoroutine then
+    updateCoroutine = coroutine.create(game.level.update)
   end
 
-  if curActor == true then
-    local map = ROT.Map.Brogue(game.display:getWidth() - 11, 44)
-    game.level = Level(map)
-    game.Player.explored = {}
+  local awaitedAction = game.interface:getAction()
+
+  -- we're waiting and there's no input so stop advancing
+  if waiting and not awaitedAction then return end
+  waiting = false
+
+  -- don't advance game state while we're rendering effects please
+  if #game.level.effects ~= 0 then return end
+
+  local success, ret, effect
+  success, ret, effect = coroutine.resume(updateCoroutine, game.level, awaitedAction)
+
+  if success == false then
+    error(ret .. debug.traceback(updateCoroutine))
   end
 
-  game.curActor = game.curActor or curActor
+  game.interface.effects = {}
+
+  if coroutine.status(updateCoroutine) == "suspended" then
+    -- if level update returns a table we know we've got out guy so we set
+    -- curActor to let the interface know to unlock input
+    if type(ret) == "table" then
+      game.curActor = ret
+      waiting = true
+      if storedKeypress then
+        print(storedKeypress)
+        love.keypressed(storedKeypress[1], storedKeypress[2])
+      end
+
+      game.interface.animating = true
+    end
+  end
+
+  if coroutine.status(updateCoroutine) == "dead" then
+    -- The coroutine has not stopped running and returned "descend".
+    -- It's time for us to load a new level.
+    if ret == "descend" then
+      local map = ROT.Map.Brogue(game.display:getWidth() - 11, 44)
+      game.level = Level(map)
+      game.Player.explored = {}
+    end
+
+    updateCoroutine = coroutine.create(game.level.update)
+  end
+
   game.interface:update(dt, game.level)
 end
 
 function love.keypressed(key, scancode)
-  if not game.curActor then return end
+  if not waiting then
+    game.interface.animating = false
+    game.interface.effects = {}
+    print("YEET", key, scancode)
+    storedKeypress = {key, scancode}
+    return
+  end
+
+  storedKeypress = nil
+  -- if there is no current actor than we freeze input
   game.interface:handleKeyPress(key, scancode)
 end
