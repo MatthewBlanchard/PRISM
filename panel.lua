@@ -95,6 +95,23 @@ function Panel:effectWriteOffset(toWrite, x, y, fg, bg)
   game.viewDisplay:write(toWrite, mx, my, fg, bg)
 end
 
+function Panel:effectWriteOffsetUI(toWrite, x, y, fg, bg)
+  local viewW, viewH = self.display.widthInChars, self.display.heightInChars
+  local mx = (x - (game.curActor.position.x - math.floor(viewW/2)))
+  local my = (y - (game.curActor.position.y - math.floor(viewH/2)))
+
+  if mx < 1 or mx > viewW or my < 1 or my > viewH then
+    return
+  end
+
+  if not game.curActor.fov[x] or not game.curActor.fov[x][y] then
+    return
+  end
+
+  self._curEffectDone = false
+  self.display:write(toWrite, mx, my, fg, bg)
+end
+
 function Panel:writeOffsetBG(x, y, bg)
   local interface = game.interface
   local mx = (x - (game.curActor.position.x - interface.viewX)) + 1

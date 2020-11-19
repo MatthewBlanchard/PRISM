@@ -4,11 +4,11 @@ local Tiles = require "tiles"
 local StationaryTorch = Actor:extend()
 StationaryTorch.char = Tiles["stationarytorch"]
 StationaryTorch.name = "StationaryTorch"
-StationaryTorch.color = { 0.8666, 0.4509, 0.0862, 1}
+StationaryTorch.color = {0.5, 0.5, 0.8}
 
 StationaryTorch.components = {
   components.Light{
-    color = { 0.8666, 0.4509, 0.0862, 1},
+    color = {0.5, 0.5, 0.8},
     intensity = 2
   }
 }

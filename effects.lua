@@ -78,13 +78,12 @@ effects.DamageEffect = function(source, actor, dmg, hit)
     interface:effectWriteOffset(char, position.x, position.y, color)
 
     if hit then
-      local xoffset = math.min(dirx * dmglen, 1)
-      local xoffset = xoffset == 0 and 1 or xoffset
-      interface:effectWriteOffset(dmgstring, position.x + xoffset, position.y, color)
+      interface:effectWriteOffsetUI(181, position.x + 1, position.y, color)
+      interface:effectWriteOffsetUI(dmgstring, position.x + 2, position.y, {1, 1, 1}, color)
     end
 
     t = t + dt
-    if t > .2 then return true end
+    if t > 1 then return true end
   end
 end
 

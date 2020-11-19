@@ -2,6 +2,7 @@ local Actor = require "actor"
 local Action = require "action"
 local Tiles = require "tiles"
 local FeatsPanel = require "panels.feats"
+local SwirlPanel = require "panels.swirl"
 
 local Gaze = Action:extend()
 Gaze.name = "gaze"
@@ -34,6 +35,8 @@ function Gaze:perform(level)
     local feat2 = table.remove(feats, love.math.random(1, #feats))
     local feat3 = table.remove(feats, love.math.random(1, #feats))
 
+    game.music:changeSong(game.music.ominousmusic, true)
+    game.interface:push(SwirlPanel(game.interface.display, game.interface))
     game.interface:push(FeatsPanel(game.interface.display, game.interface, {feat1, feat2, feat3}))
   end
 

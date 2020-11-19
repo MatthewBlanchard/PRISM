@@ -1,4 +1,5 @@
 ROT = require 'src.rot'
+MusicManager = require "musicmanager"
 
 conditions = {}
 reactions = {}
@@ -56,6 +57,7 @@ function love.load()
   local viewDisplay1x = Display:new(w, h, 1, nil, {.09, .09, .09}, nil, nil, true)
   local map = ROT.Map.Brogue(display:getWidth() - 11, 44)
 
+  game.music = MusicManager()
   game.display = display
   game.viewDisplay1x = viewDisplay1x
   game.viewDisplay2x = viewDisplay2x
@@ -94,6 +96,8 @@ local waiting = false
 local animations = true
 function love.update(dt)
   game.level:updateEffectLighting(dt)
+  game.music:update(dt)
+  game.interface:update(dt, game.level)
 
   if not updateCoroutine then
     updateCoroutine = coroutine.create(game.level.update)
@@ -108,13 +112,10 @@ function love.update(dt)
   -- don't advance game state while we're rendering effects please
   if #game.level.effects ~= 0 then return end
 
-  print(waiting, awaitedAction and awaitedAction.name)
   local success, ret, effect = coroutine.resume(updateCoroutine, game.level, awaitedAction)
   if not game.interface.animating and success and ret == "effect" then
-    print("STARLOOP: ", success, ret)
     while success and ret == "effect" do
-      success, ret, effect = coroutine.resume(updateCoroutine, game.level, awaitedAction)
-      print("MIDLOOP: ", success, ret)
+      success, ret = coroutine.resume(updateCoroutine, game.level, awaitedAction)
     end
   end
 
@@ -128,14 +129,13 @@ function love.update(dt)
     -- if level update returns a table we know we've got out guy so we set
     -- curActor to let the interface know to unlock input
     if type(ret) == "table" then
-      print "YEET"
       game.curActor = ret
       waiting = true
       if storedKeypress then
-        print(storedKeypress)
         love.keypressed(storedKeypress[1], storedKeypress[2])
       end
 
+      game.level.effects = {}
       game.interface.animating = true
     end
   end
@@ -151,15 +151,12 @@ function love.update(dt)
 
     updateCoroutine = coroutine.create(game.level.update)
   end
-
-  game.interface:update(dt, game.level)
 end
 
 function love.keypressed(key, scancode)
   if not waiting then
     game.interface.animating = false
     game.interface.effects = {}
-    print("YEET", key, scancode)
     storedKeypress = {key, scancode}
     return
   end

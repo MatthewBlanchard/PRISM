@@ -10,6 +10,15 @@ function Start:update(dt)
   self.time = self.time or 0
   self.time = self.time + dt
 end
+
+local lines = {
+  "As fate would have it you tumbled down the well.", -- A
+  "The cold air kissed your naked skin as you fell.", -- A
+  "Beckoned onward by curiosity.", -- B
+  "Delayed only by my verbosity.", -- B
+  "What awaits you below the garden only time will tell." -- A
+}
+
 function Start:draw()
   local a = 1
   local t = math.min(1, self.time / 4)
@@ -35,6 +44,7 @@ function Start:handleKeyPress(keypress)
     game.interface:pop()
   end
   self.fadeTime = self.time
+  game.music:changeSong(game.music.mainmusic)
 end
 
 return Start
