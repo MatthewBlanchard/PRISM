@@ -160,8 +160,10 @@ function Interface:draw()
   end
 
   local actor = game.curActor
-  local lightValue = math.min(value(light[actor.position.x][actor.position.y]), 0.5)
-  self:writeOffset(actor.char, actor.position.x, actor.position.y, clerp(ambientColor, actor.color, lightValue / 0.5))
+  if light[actor.position.x] and light[actor.position.x][actor.position.y] then
+    local lightValue = math.min(value(light[actor.position.x][actor.position.y]), 0.5)
+    self:writeOffset(actor.char, actor.position.x, actor.position.y, clerp(ambientColor, actor.color, lightValue / 0.5))
+  end
 
   if not self.animating then
     game.level.effects = {}

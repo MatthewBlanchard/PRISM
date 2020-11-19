@@ -5,7 +5,7 @@ local Tiles = require "tiles"
 
 local Explode = Condition:extend()
 Explode.range = 4
-Explode.color = {0.8, 0.8, 0.1}
+Explode.color = {0.8 * 3, 0.8 * 3, 0.1 * 3}
 
 Explode:afterAction(actions.Throw,
   function(self, level, actor, action)
@@ -13,6 +13,7 @@ Explode:afterAction(actions.Throw,
 	local damage = ROT.Dice.roll("6d6")
 
   level:destroyActor(actor)
+  table.insert(level.temporaryLights, effects.LightEffect(actor.position.x, actor.position.y, 0.6, Explode.color))
   level:addEffect(effects.ExplosionEffect(fov, actor.position, Explode.range))
 
   level:suppressEffects()
@@ -23,8 +24,7 @@ Explode:afterAction(actions.Throw,
   	  end
   	end
   level:resumeEffects()
-  
-  table.insert(level.temporaryLights, effects.LightEffect(actor.position.x, actor.position.y, 0.6, Explode.color))
+
   end
 ):where(Condition.ownerIsTarget)
 

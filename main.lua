@@ -108,8 +108,15 @@ function love.update(dt)
   -- don't advance game state while we're rendering effects please
   if #game.level.effects ~= 0 then return end
 
-  local success, ret, effect
-  success, ret, effect = coroutine.resume(updateCoroutine, game.level, awaitedAction)
+  print(waiting, awaitedAction and awaitedAction.name)
+  local success, ret, effect = coroutine.resume(updateCoroutine, game.level, awaitedAction)
+  if not game.interface.animating and success and ret == "effect" then
+    print("STARLOOP: ", success, ret)
+    while success and ret == "effect" do
+      success, ret, effect = coroutine.resume(updateCoroutine, game.level, awaitedAction)
+      print("MIDLOOP: ", success, ret)
+    end
+  end
 
   if success == false then
     error(ret .. debug.traceback(updateCoroutine))
@@ -121,6 +128,7 @@ function love.update(dt)
     -- if level update returns a table we know we've got out guy so we set
     -- curActor to let the interface know to unlock input
     if type(ret) == "table" then
+      print "YEET"
       game.curActor = ret
       waiting = true
       if storedKeypress then

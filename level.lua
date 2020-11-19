@@ -348,7 +348,15 @@ function Level:moveActor(actor, pos)
   end
 end
 
-function Level:performAction(action, free)
+function Level:addEffectAfterAction(effect)
+  self.effectAfterAction = effect
+end
+
+function Level:performAction(action, free, animationToPlay)
+  -- this happens sometimes if one effect kills an entity and a second effect
+  -- tries to damage it for instance.
+  if not self:hasActor(action.owner) then return end
+
   self:triggerActionEvents("onActions", action)
 
   self:addMessage(action)
@@ -363,6 +371,9 @@ function Level:performAction(action, free)
   if not action.reaction and not free and self:hasActor(action.owner) then
     self.scheduler:addTime(action.owner, action.time)
   end
+
+  self:addEffect(self.effectAfterAction)
+  self.effectAfterAction = nil
 end
 
 local dummy = {} -- just to avoid making garbage

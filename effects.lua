@@ -60,6 +60,10 @@ effects.DamageEffect = function(source, actor, dmg, hit)
     char = "|"
   end
 
+  if actor:getRange("box", source) > 1 then
+    char = actor.char
+  end
+
   return function(dt, interface)
     local color
     if hit == false then
@@ -149,7 +153,7 @@ effects.LightEffect = function(x, y, duration, color, intensity)
   return function (dt)
       t = t + dt
       if t > duration then return false end
-      return x, y, Color.mul(Color.mul(color,intensity), (1 - t/duration)*2)
+      return x, y, Color.mul(Color.mul(color,intensity), (1 - t/duration))
   end
 end
 

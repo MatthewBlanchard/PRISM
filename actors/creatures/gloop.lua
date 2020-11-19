@@ -55,7 +55,7 @@ local actUtil = components.Aicontroller
 function Gloop:act(level)
   for _, actor in ipairs(self.seenActors) do
     if actor:is(actors.Player) then
-      level:addEffect(effects.CharacterDynamic(self, 0, -1, Tiles["bubble_lines"], {1, 1, 1}, .5))
+      level:addEffectAfterAction(effects.CharacterDynamic(self, 0, -1, Tiles["bubble_lines"], {1, 1, 1}, .5))
       self._meanderDirection = nil
       return actUtil.moveAway(self, actor)
     end

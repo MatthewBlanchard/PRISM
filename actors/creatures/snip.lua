@@ -47,7 +47,7 @@ function Snip:act(level)
 
   if target then
     if self:getRange("box", target) < 3 and target == player then
-      level:addEffect(effects.CharacterDynamic(self, 0, -1, Tiles["bubble_music"], {1, 1, 1}, .5))
+      level:addEffectAfterAction(effects.CharacterDynamic(self, 0, -1, Tiles["bubble_music"], {1, 1, 1}, .5))
     end
     return actUtil.crowdAround(self, target, true)
   end

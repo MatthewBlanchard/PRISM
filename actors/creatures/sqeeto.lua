@@ -42,7 +42,7 @@ function Sqeeto:act(level)
 
   local function playAnim(animateBool, actor)
     if not animateBool then return end
-    level:addEffect(effects.CharacterDynamic(actor, 0, -1, Tiles["bubble_surprise"], {1, 1, 1}, .5))
+    level:addEffectAfterAction(effects.CharacterDynamic(actor, 0, -1, Tiles["bubble_surprise"], {1, 1, 1}, .5))
   end
 
   for k, v in pairs(self.seenActors) do
