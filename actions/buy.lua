@@ -1,5 +1,11 @@
 local Action = require "action"
 
+local targetProduct = targets.Actor:extend()
+
+function targetProduct:validate(owner, actor)
+  return actor:is(actors.Product)
+end
+
 local Buy = Action:extend()
 Buy.name = "buy"
 Buy.targets = {targetProduct}
@@ -7,7 +13,7 @@ Buy.targets = {targetProduct}
 function Buy:__new(owner, targets)
   Action.__new(self, owner, targets)
   self.product = self:getTarget(1)
-  self.price = product.price
+  self.price = self.product.price
 end
 
 function Buy:perform(level)
