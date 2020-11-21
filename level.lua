@@ -29,6 +29,7 @@ function Level:__new(map)
   -- Some initialization on the lighting
   self.lighting = ROT.Lighting(self:getLightReflectivityCallback(), {range = 50, passes = 3})
   self.lighting:setFOV(self.fov)
+  self:updateLighting(false, 0)
 end
 
 function Level:update()

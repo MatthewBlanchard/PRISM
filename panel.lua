@@ -35,6 +35,17 @@ function Panel:clear(c, fg, bg)
   self.display:clear(c or ' ', self.x, self.y, self.w, self.h, fg, bg or self.defaultBackgroundColor)
 end
 
+function Panel:darken(c, fg, bg)
+  for x = self.x, self.x + self.w - 1 do
+    for y = self.y, self.y + self.h - 1 do
+      local bg = self.display:getBackgroundColor(x, y)
+      bg = ROT.Color.multiplyScalar(bg, 0.15)
+      self.display:write(' ', x, y, {1, 1, 1}, bg)
+    end
+  end
+end
+
+
 function Panel:drawBorders(width, height)
   local w = width or self.w
   local h = height or self.h

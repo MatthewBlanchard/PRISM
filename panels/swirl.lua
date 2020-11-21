@@ -25,7 +25,7 @@ function SwirlPanel:draw()
   for x = 1, self.display:getWidth() do
     for y = 1, self.display:getHeight() do
       local char = chars[math.floor(love.math.noise(x/10, y/10, self.time)*#chars)]
-      self:write(182, x, y, char, {0, 0, 0, 0})
+      self:write(" ", x, y, {1, 1, 1}, char)
     end
   end
 end

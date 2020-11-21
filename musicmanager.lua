@@ -2,7 +2,7 @@ local Object = require "object"
 
 local MusicManager = Object:extend()
 
-MusicManager.mainmusic = love.audio.newSource("music/mainloop.ogg", "stream")
+MusicManager.mainmusic = love.audio.newSource("music/mainloop_cassette.ogg", "stream")
 MusicManager.ominousmusic = love.audio.newSource("music/ominous.ogg", "stream")
 MusicManager.mainmusic:setLooping(true)
 MusicManager.ominousmusic:setLooping(true)
@@ -54,19 +54,27 @@ function MusicManager:changeSong(upNext, shouldSkipPlay)
   self.transitionTime = 0
   self.transition = coroutine.create(
     function(dt)
-      self.playing:stop()
+      if upNext == self.ominousmusic then
+        self.playing:pause()
+      else
+        self.playing:stop()
+      end
 
-      if self.playing ~= self.cassette_hiss and self.playing ~= self.ominousmusic then
+      if  self.playing ~= self.cassette_hiss and self.playing ~= self.ominousmusic then
         self.cassette_stop:play()
         self:yieldWhilePlaying(self.cassette_stop)
 
-        self.cassette_remove:play()
-        self:yieldWhilePlaying(self.cassette_remove)
+        if upNext ~= self.ominousmusic then
+          self.cassette_remove:play()
+          self:yieldWhilePlaying(self.cassette_remove)
+        end
       end
 
       if not shouldSkipPlay then
-        self.cassette_insert:play()
-        self:yieldWhilePlaying(self.cassette_insert)
+        if self.playing ~= self.ominousmusic then
+          self.cassette_insert:play()
+          self:yieldWhilePlaying(self.cassette_insert)
+        end
 
         self.cassette_play:play()
         self:yieldWhilePlaying(self.cassette_play)
@@ -78,7 +86,7 @@ function MusicManager:changeSong(upNext, shouldSkipPlay)
       if upNext == self.ominousmusic then
         upNext:setVolume(0)
         self.transitionStartFade = self.transitionTime
-        self:yieldWhileFading(upNext, 1)
+        self:yieldWhileFading(upNext, 3)
       end
     end
   )

@@ -77,7 +77,9 @@ local function calculateLight(x, y, fov, light)
   for i = -1, 1, 1 do
     for j = -1, 1, 1 do
       if fov[x+i] and fov[x+i][y+j] and fov[x+i][y+j] == 0 then
-        table.insert(cols, light[x+i][y+j])
+        if light[x+i] and light[x+i][y+j] then
+          table.insert(cols, light[x+i][y+j])
+        end
       end
     end
   end
