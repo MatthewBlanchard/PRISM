@@ -9,7 +9,9 @@ Channel:afterAction(actions.Zap,
 
     local fov, actors = level:getAOE("fov", actor.position, 1)
 
-    local damage = ROT.Dice.roll("1d4")
+    local damage = actor:getStatBonus("MGK")
+
+    level:addEffect(effects.ExplosionEffect(fov, actor.position, 1, {1, 1, 1}))
 
     for _, other in ipairs(actors) do
       if other ~= actor then
@@ -19,8 +21,6 @@ Channel:afterAction(actions.Zap,
         end
       end
     end
-
-    level:addEffect(effects.ExplosionEffect(fov, actor.position, 1, {1, 1, 1}))
   end
 )
 

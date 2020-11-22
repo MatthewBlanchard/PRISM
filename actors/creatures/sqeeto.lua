@@ -31,7 +31,8 @@ Sqeeto.components = {
     }
   },
 
-  components.Aicontroller()
+  components.Aicontroller(),
+  components.Animated()
 }
 
 local actUtil = components.Aicontroller

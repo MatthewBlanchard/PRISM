@@ -45,7 +45,8 @@ Gloop.components = {
     AC = 0
   },
   components.Item{stackable = true},
-  components.Aicontroller()
+  components.Aicontroller(),
+  components.Animated()
 }
 
 Gloop.innateConditions = {Explode()}

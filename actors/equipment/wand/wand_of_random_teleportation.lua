@@ -41,7 +41,7 @@ WandOfRandomTeleportation.components = {
     maxCharges = 5,
     zap = Zap
   },
-  components.Cost{rarity = "common"}
+  components.Cost{rarity = "uncommon"}
 }
 
 return WandOfRandomTeleportation

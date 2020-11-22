@@ -19,7 +19,7 @@ CloakOfInvisibility.components = {
       conditions.Invisibility()
     }
   },
-  components.Cost{rarity = "rare"}
+  components.Cost{rarity = "mythic"}
 }
 
 return CloakOfInvisibility

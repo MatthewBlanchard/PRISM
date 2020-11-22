@@ -4,11 +4,11 @@ local Tiles = require "tiles"
 
 local FreedomOfMovement = Condition:extend()
 FreedomOfMovement.name = "FreedomOfMovement"
-FreedomOfMovement.description= "You have an 85 move speed and can't be reduced."
+FreedomOfMovement.description= "You have an 90 move speed and can't be reduced."
 
 FreedomOfMovement:setTime(actions.Move,
   function(self, level, actor, action)
-    action.time = math.min(action.time, 85)
+    action.time = math.min(action.time, 90)
   end
 )
 
@@ -23,12 +23,13 @@ JerkinOfGrease.components = {
     slot = "body",
     effects = {
       conditions.Modifystats{
-        AC = 2
+        AC = 2,
+        PR = 1
       },
       FreedomOfMovement()
     }
   },
-  components.Cost{rarity = "uncommon"}
+  components.Cost{rarity = "rare"}
 }
 
 return JerkinOfGrease

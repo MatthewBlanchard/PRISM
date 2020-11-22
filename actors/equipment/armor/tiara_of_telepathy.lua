@@ -27,6 +27,10 @@ TiaraOfTelepathy.components = {
   components.Equipment{
     slot = "head",
     effects = {
+      conditions.Modifystats{
+        MR = 1,
+        MGK = 1
+      },
       Scrying
     }
   },

@@ -1,20 +1,23 @@
 local Actor = require "actor"
 local Tiles = require "tiles"
 
-local Chainmail = Actor:extend()
-Chainmail.char = Tiles["armor"]
-Chainmail.name = "Chainmail"
+local JerkinOfGrease = Actor:extend()
+JerkinOfGrease.char = Tiles["armor"]
+JerkinOfGrease.name = "Mantle of Broken Chains"
+JerkinOfGrease.description = "Nothing can slow you down with this armor on. You also move a bit faster."
 
-Chainmail.components = {
+JerkinOfGrease.components = {
   components.Item(),
   components.Equipment{
     slot = "body",
     effects = {
       conditions.Modifystats{
-        AC = 3
-      }
+        AC = 2,
+        PR = 1
+      },
     }
-  }
+  },
+  components.Cost{rarity = "rare"}
 }
 
-return Chainmail
+return JerkinOfGrease

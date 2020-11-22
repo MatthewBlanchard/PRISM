@@ -29,16 +29,17 @@ function Zap:perform(level)
 
   local fov, actors = level:getAOE("fov", target, self.aoeRange)
   local damage = ROT.Dice.roll("2d6")
+  table.insert(level.temporaryLights, FireballLightEffect(target.x, target.y, 0.6))
+  level:addEffect(effects.ExplosionEffect(fov, target, self.aoeRange))
 
+  level:suppressEffects()
   for _, actor in ipairs(actors) do
     if targets.Creature:checkRequirements(actor) then
       local damage = actor:getReaction(reactions.Damage)(actor, {self.owner}, damage, self.targetActors[1])
       level:performAction(damage)
     end
   end
-
-  level:addEffect(effects.ExplosionEffect(fov, target, self.aoeRange))
-  table.insert(level.temporaryLights, FireballLightEffect(target.x, target.y, 0.6))
+  level:resumeEffects()
 end
 
 local WandOfFireball = Actor:extend()

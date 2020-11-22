@@ -20,12 +20,28 @@ MusicManager.cassette_hiss:setLooping(true)
 function MusicManager:__new()
   self.playing = self.cassette_hiss
   self.cassette_hiss:play()
+
+  love.audio.setEffect('distortReality', {
+  	type = 'distortion',
+  	gain = .25,
+  	edge = .25,
+  })
 end
 
 function MusicManager:update(dt)
   if self.transition then
     local success, ret = coroutine.resume(self.transition, dt)
   end
+end
+
+function MusicManager:startDistortion()
+  self.playing:setPitch(0.95)
+  self.playing:setEffect("distortReality")
+end
+
+function MusicManager:endDistortion()
+  self.playing:setPitch(1)
+  self.playing:setEffect("distortReality", false)
 end
 
 function MusicManager:yieldWhilePlaying(source)

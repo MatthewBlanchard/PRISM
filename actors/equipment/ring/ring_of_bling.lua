@@ -16,7 +16,7 @@ RingOfBling.components = {
       }
     }
   },
-  components.Cost{rarity = "common"}
+  components.Cost{rarity = "rare"}
 }
 
 return RingOfBling

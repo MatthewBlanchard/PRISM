@@ -36,7 +36,8 @@ Snip.components = {
   components.Item{stackable = true},
   components.Usable(),
   components.Edible{nutrition = 2},
-  components.Aicontroller()
+  components.Aicontroller(),
+  components.Animated()
 }
 
 local actUtil = components.Aicontroller

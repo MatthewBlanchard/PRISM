@@ -18,7 +18,7 @@ Dagger_of_Venom.components = {
   components.Weapon{
     stat = "ATK",
     name = "Dagger of Venom",
-    dice = "1d4+1",
+    dice = "1d4",
     bonus = 1,
     time = 75,
     effects = {

@@ -73,9 +73,9 @@ function love.load()
 
   local player = game.Player
   game.curActor = player
-  table.insert(player.inventory, actors.Wand_of_light())
-  table.insert(player.inventory, actors.Tiara_of_telepathy())
-  table.insert(player.inventory, actors.Bomb())
+  table.insert(player.inventory, actors.Wand_of_blastin())
+  table.insert(player.inventory, actors.Robe_of_wonders())
+  table.insert(player.inventory, actors.Circlet_of_channeling())
   table.insert(player.inventory, actors.Prism())
 
   love.keyboard.setKeyRepeat(true)
@@ -92,7 +92,7 @@ end
 
 local storedKeypress
 local updateCoroutine
-local waiting = false
+game.waiting = false
 local animations = true
 function love.update(dt)
   game.level:updateEffectLighting(dt)
@@ -106,8 +106,8 @@ function love.update(dt)
   local awaitedAction = game.interface:getAction()
 
   -- we're waiting and there's no input so stop advancing
-  if waiting and not awaitedAction then return end
-  waiting = false
+  if game.waiting and not awaitedAction then return end
+  game.waiting = false
 
   -- don't advance game state while we're rendering effects please
   if #game.level.effects ~= 0 then return end
@@ -130,7 +130,7 @@ function love.update(dt)
     -- curActor to let the interface know to unlock input
     if type(ret) == "table" then
       game.curActor = ret
-      waiting = true
+      game.waiting = true
       if storedKeypress then
         love.keypressed(storedKeypress[1], storedKeypress[2])
       end
@@ -154,7 +154,7 @@ function love.update(dt)
 end
 
 function love.keypressed(key, scancode)
-  if not waiting then
+  if not game.waiting then
     game.interface.animating = false
     game.interface.effects = {}
     storedKeypress = {key, scancode}

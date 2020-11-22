@@ -27,7 +27,8 @@ PlateOfSpikes.components = {
     effects = {
       OnHitRecieved,
       conditions.Modifystats{
-        AC = 4
+        AC = 4,
+        PR = 1
       }
     }
   },

@@ -47,6 +47,8 @@ Player.components = {
     "ring",
     "feet",
     "cloak"
-  }
+  },
+
+  components.Animated()
 }
 return Player

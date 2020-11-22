@@ -22,7 +22,7 @@ CleaverMythical.components = {
   components.Weapon{
     stat = "ATK",
     name = "Cleaver of Meats",
-    dice = "1d6+1",
+    dice = "1d6",
     bonus = 1,
     time = 100,
     effects = {

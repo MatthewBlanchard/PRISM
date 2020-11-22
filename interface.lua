@@ -15,9 +15,11 @@ function Interface:__new(display)
   self.messagePanel = Message(display)
   self.defaultBackgroundColor = display.defaultBackgroundColor
   self.stack = {}
+  self.t = 0
 end
 
 function Interface:update(dt)
+  self.t = (self.t + dt)%0.600
   self.dt = dt
   self.messagePanel:update(dt)
 
@@ -136,35 +138,74 @@ function Interface:draw()
     end
   end
 
-  for k, actor in pairs(scryActors) do
-    local x, y = actor.position.x, actor.position.y
-    self:writeOffset(actor.char, x, y, actor.color)
+  local function getAnimationChar(actor)
+    if not actor:hasComponent(components.Animated) then return actor.char end
+    print(game.waiting)
+      if self.t > 0.400 then
+        print "YEET"
+        return actor.char+16
+      end
+
+    return actor.char
   end
 
+  local distortion = false
   for k, actor in pairs(seenActors) do
-    if not actor:hasComponent(components.Move) then
-      local x, y = actor.position.x, actor.position.y
-      if light[x] and light[x][y] then
-        local lightValue = math.min(value(light[x][y]), 0.5)
-        self:writeOffset(actor.char, x, y, clerp(ambientColor, actor.color, lightValue / 0.5))
+    if actor:hasComponent(components.Realitydistortion) then
+      distortion = true
+    end
+  end
+
+  if distortion then
+    game.music:startDistortion()
+  else
+    game.music:endDistortion()
+  end
+
+  local function drawActors(actorTable, conditional)
+    for k, actor in pairs(actorTable) do
+      local char = getAnimationChar(actor)
+      print(char)
+      if conditional and conditional(actor) or true then
+        local x, y = actor.position.x, actor.position.y
+        if actorTable ~= scryActors and light[x] and light[x][y] then
+          local lightValue = math.min(value(light[x][y]), 0.5)
+          self:writeOffset(char, x, y, clerp(ambientColor, actor.color, lightValue / 0.5))
+        else
+          self:writeOffset(char, x, y, actor.color)
+        end
       end
     end
   end
 
-  for k, actor in pairs(seenActors) do
-    if actor:hasComponent(components.Move) then
-      local x, y = actor.position.x, actor.position.y
-      if light[x] and light[x][y] then
-        local lightValue = math.min(value(light[x][y]), 0.5)
-        self:writeOffset(actor.char, x, y, clerp(ambientColor, actor.color, lightValue / 0.5))
-      end
-    end
-  end
+  drawActors(scryActors)
 
+  -- draw things that don't move furst
+  drawActors(seenActors,
+    function(actor)
+      return not actor:hasComponent(components.Move)
+    end
+  )
+
+  -- next up draw things that move but don't block movement
+  drawActors(seenActors,
+    function(actor)
+      return actor:hasComponent(components.Move) and actor.passable
+    end
+  )
+
+  -- now we draw the stuff that moves and blocks movement
+  drawActors(seenActors,
+    function(actor)
+      return actor:hasComponent(components.Move) and not actor.passable
+    end
+  )
+
+  -- now we draw the player
   local actor = game.curActor
   if light[actor.position.x] and light[actor.position.x][actor.position.y] then
     local lightValue = math.min(value(light[actor.position.x][actor.position.y]), 0.5)
-    self:writeOffset(actor.char, actor.position.x, actor.position.y, clerp(ambientColor, actor.color, lightValue / 0.5))
+    self:writeOffset(getAnimationChar(actor), actor.position.x, actor.position.y, clerp(ambientColor, actor.color, lightValue / 0.5))
   end
 
   if not self.animating then

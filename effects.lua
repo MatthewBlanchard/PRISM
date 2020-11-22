@@ -78,8 +78,48 @@ effects.DamageEffect = function(source, actor, dmg, hit)
     interface:effectWriteOffset(char, position.x, position.y, color)
 
     if hit then
-      interface:effectWriteOffsetUI(181, position.x + 1, position.y, color)
-      interface:effectWriteOffsetUI(dmgstring, position.x + 2, position.y, {1, 1, 1}, color)
+      interface:effectWriteOffsetUI(181, position.x, position.y, 1, -1, color)
+      interface:effectWriteOffsetUI(dmgstring, position.x, position.y, 2, -1, {1, 1, 1}, color)
+    end
+
+    t = t + dt
+    if t > 1 then return true end
+  end
+end
+
+effects.DamageEffect = function(source, actor, dmg, hit)
+  local position = actor.position
+  local t = 0
+
+  local dirx, diry = position.x - source.x, position.y - source.y
+
+  local char = "/"
+  if dirx < 0 then
+    char = "\\"
+  elseif dirx == 0 then
+    char = "|"
+  end
+
+  if actor:getRange("box", source) > 1 then
+    char = actor.char
+  end
+
+  return function(dt, interface)
+    local color
+    if hit == false then
+      color = {.6, .6, .6, 1}
+    else
+      color = {1, .1, .1, 1}
+    end
+
+    local dmgstring = tostring(dmg)
+    local dmglen = string.len(dmgstring)
+
+    interface:effectWriteOffset(char, position.x, position.y, color)
+
+    if hit then
+      interface:effectWriteOffsetUI(181, position.x, position.y, 1, -1, color)
+      interface:effectWriteOffsetUI(dmgstring, position.x, position.y, 2, -1, {1, 1, 1}, color)
     end
 
     t = t + dt
@@ -95,6 +135,30 @@ effects.throw = function(thrown, thrower, location)
   return function(dt, interface)
     local index = math.floor(t/0.033) + 1
     interface:effectWriteOffset(thrown.char, line[index][1], line[index][2], thrown.color)
+
+    t = t + dt
+    if index == #line then return true end
+  end
+end
+
+local zapchars = {
+  Tiles.projectile1,
+  Tiles.projectile2,
+  Tiles.projectile3,
+}
+effects.Zap = function(wand, zapper, location)
+  local color = wand.color or wand
+  local line, valid = Bresenham.line(zapper.position.x, zapper.position.y, location.x, location.y)
+  local lineIndex = 1
+  local t = 0
+
+  return function(dt, interface)
+    local index = math.floor(t/0.033) + 1
+    local index2 = math.max(index - 1, 1)
+    local index3 = math.max(index - 2, 1)
+    interface:effectWriteOffset(zapchars[3], line[index3][1], line[index3][2], color)
+    interface:effectWriteOffset(zapchars[2], line[index2][1], line[index2][2], color)
+    interface:effectWriteOffset(zapchars[1], line[index][1], line[index][2], color)
 
     t = t + dt
     if index == #line then return true end

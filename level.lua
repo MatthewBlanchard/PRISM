@@ -249,6 +249,10 @@ function Level:addActor(actor)
   if actor:hasComponent(components.Sight) then
     self:updateFOV(actor)
   end
+
+  for seen in self:eachActor(components.Sight) do
+    self:updateSeenActors(seen)
+  end
 end
 
 function Level:hasActor(actor)

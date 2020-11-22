@@ -34,7 +34,8 @@ Webweaver.components = {
   components.Intrinsic{
     action = actions.Web
   },
-  components.Aicontroller()
+  components.Aicontroller(),
+  components.Animated()
 }
 
 local actUtil = components.Aicontroller
