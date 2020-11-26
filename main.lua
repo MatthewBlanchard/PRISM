@@ -1,5 +1,6 @@
 ROT = require 'src.rot'
 MusicManager = require "musicmanager"
+vector22 = require "vector"
 
 conditions = {}
 reactions = {}
@@ -77,6 +78,7 @@ function love.load()
   table.insert(player.inventory, actors.Robe_of_wonders())
   table.insert(player.inventory, actors.Circlet_of_channeling())
   table.insert(player.inventory, actors.Prism())
+  table.insert(player.inventory, actors.Axe())
 
   love.keyboard.setKeyRepeat(true)
 end

@@ -310,6 +310,19 @@ function Level:destroyActor(actor)
   end
 end
 
+function Level:getActorsAtPosition(x, y)
+  local actorsAtPosition = {}
+  for i = 1, #self.actors do
+    local actorPosition= self.actors[i].position
+
+    if actorPosition.x == x and actorPosition.y == y then
+      table.insert(actorsAtPosition, self.actors[i])
+    end
+  end
+
+  return actorsAtPosition
+end
+
 function Level:checkLoseCondition()
   local foundPlayerActor = false
 

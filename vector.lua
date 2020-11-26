@@ -27,4 +27,18 @@ function Vector2.__mul(a, b)
   return Vector2(a.x * b, a.y * b)
 end
 
+function Vector2:__tostring()
+  return "x: " .. self.x .. " y: " .. self.y
+end
+
+Vector2.UP = Vector2(0, -1)
+Vector2.RIGHT = Vector2(1, 0)
+Vector2.DOWN = Vector2(0, 1)
+Vector2.LEFT = Vector2(-1, 0)
+Vector2.UP_RIGHT = Vector2(1, -1)
+Vector2.UP_LEFT = Vector2(-1, -1)
+Vector2.DOWN_RIGHT = Vector2(1, 1)
+Vector2.DOWN_LEFT = Vector2(-1, 1)
+
+
 return Vector2

@@ -14,6 +14,7 @@ local tiles = {
 	bubble_music = 302,
 	bubble_angry = 303,
 
+  axe = 343,
 	armor = 354,
 	arrow = 378,
 	barrel = 281,
