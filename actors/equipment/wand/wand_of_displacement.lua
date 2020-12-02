@@ -2,17 +2,7 @@ local Actor = require "actor"
 local Action = require "action"
 local Condition = require "condition"
 local Tiles = require "tiles"
-
-local function PoofEffect(pos1)
-  local t = 0
-  return function(dt, interface)
-    t = t + dt
-
-    local color = {.4, .4, .4, 1}
-    interface:writeOffset(Tiles["poof"], pos1.x, pos1.y, color)
-    if t > .3 then return true end
-  end
-end
+local Vector2 = require "vector"
 
 local Zap = actions.Zap:extend()
 Zap.name = "zap"
@@ -24,8 +14,8 @@ function Zap:perform(level)
   local position = self.owner.position
 
   local x, y = level:getRandomWalkableTile()
-  self.owner.position = { x = x, y = y}
-  level:addEffect(PoofEffect(self.owner.position))
+  self.owner.position = Vector2(x, y)
+  level:addEffect(effects.Character(x, y, Tiles["poof"], {.4, .4, .4}, 0.3))
 end
 
 local WandOfRandomTeleportation = Actor:extend()

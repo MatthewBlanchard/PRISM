@@ -9,11 +9,13 @@ Drink.targets = {targets.Item}
 
 function Drink:perform(level)
   actions.Drink.perform(self, level)
-  self.owner:applyCondition(conditions.Rage())
+  local recall = conditions.Recall()
+  recall:setPosition(self.owner.position)
+  self.owner:applyCondition(recall)
 end
 
 local Potion = Actor:extend()
-Potion.name = "Extract of Anger"
+Potion.name = "Potion of Recall"
 Potion.color = {0.5, 0.5, 0.5, 1}
 Potion.char = Tiles["potion"]
 

@@ -74,11 +74,12 @@ function love.load()
 
   local player = game.Player
   game.curActor = player
-  table.insert(player.inventory, actors.Wand_of_blastin())
+  table.insert(player.inventory, actors.Wand_of_displacement())
   table.insert(player.inventory, actors.Robe_of_wonders())
   table.insert(player.inventory, actors.Circlet_of_channeling())
   table.insert(player.inventory, actors.Prism())
   table.insert(player.inventory, actors.Axe())
+  table.insert(player.inventory, actors.Potion_of_recall())
 
   love.keyboard.setKeyRepeat(true)
 end

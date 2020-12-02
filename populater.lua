@@ -66,7 +66,7 @@ function Populater(level, map)
     actors.Wand_of_lethargy,
     actors.Wand_of_swapping,
     actors.Wand_of_fireball,
-    actors.Wand_of_random_teleportation,
+    actors.Wand_of_displacement,
     actors.Dagger_of_venom
   }
 
