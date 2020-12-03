@@ -79,7 +79,7 @@ function love.load()
   table.insert(player.inventory, actors.Circlet_of_channeling())
   table.insert(player.inventory, actors.Prism())
   table.insert(player.inventory, actors.Axe())
-  table.insert(player.inventory, actors.Potion_of_recall())
+  table.insert(player.inventory, actors.Potion_of_focus())
 
   love.keyboard.setKeyRepeat(true)
 end
