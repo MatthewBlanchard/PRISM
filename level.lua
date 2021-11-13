@@ -7,6 +7,7 @@ local Level = Object:extend()
 function Level:__new(map)
   self.actors = {}
   self.light = {}
+  self.effectlight = {}
   self.temporaryLights = {}
   self.effects = {}
 
@@ -555,8 +556,6 @@ function Level:getLightingCallback()
 end
 
 function Level:getLightingEffectCallback()
-  self.effectlight = {}
-
   return function(x, y, color)
     if not self.effectlight[x] then self.effectlight[x] = {} end
     self.effectlight[x][y] = color
