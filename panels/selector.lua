@@ -34,6 +34,7 @@ function SelectorPanel:__new(display, parent, action, targets)
   self.blinkFunc = blink(0.3)
   self.targets = targets or {}
   self.movementTranslation = self:getRoot().movementTranslation
+
   -- Where the cursor is pointing
   self.curTarget = nil
 
@@ -48,6 +49,9 @@ end
 
 function SelectorPanel:draw()
   local position = self:getTargetPosition()
+
+  if not self.curTarget then return end
+
   if not self.blink then
     self:writeOffset("X", position.x, position.y, self.valid and SelectorPanel.blinkColor or SelectorPanel.invalidColor)
   end
@@ -84,11 +88,16 @@ function SelectorPanel:getTargetPosition()
   elseif self.action:getTargetObject(#self.targets + 1):is(targets.Point) then
     self.curTarget = game.curActor.position
     return game.curActor.position
-  else
+  else 
     self.targetIndex = 1
-    self.targetPanel:setTarget(game.curActor)
-    self.curTarget = Vector(game.curActor.position.x, game.curActor.position.y)
-    return self.curTarget
+    local target = self:getValidTargets(self.targetIndex + 1)
+    if #target == 0 then
+       game.level:addMessage("There are no targets.", game.curActor)
+       game.interface:pop()
+       return
+    end
+    self:updateTarget(target[1])
+    return self.curTarget.position
   end
 end
 
@@ -186,7 +195,7 @@ function SelectorPanel:handleKeyPress(keypress)
   elseif self.action.targets[#self.targets + 1]:is(targets.Point) and self.movementTranslation[keypress] then
     self:moveTarget(self.movementTranslation[keypress])
   elseif keypress == "return" and self.valid then
-    if  self.action.targets[#self.targets + 1]:is(targets.Point) and
+    if self.action.targets[#self.targets + 1]:is(targets.Point) and
         self.action:validateTarget(#self.targets + 1, game.curActor, self.curTarget)     then
       table.insert(self.targets, self.curTarget.position or self.curTarget)
     else
