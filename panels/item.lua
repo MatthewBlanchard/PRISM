@@ -16,11 +16,13 @@ function ItemPanel:__new(display, parent, target, x, y, w, h)
   end
 
   for k, action in pairs(game.curActor.actions) do
-    if action:getNumTargets() > 0 and action:validateTarget(1, game.curActor, self.targetActor) and not action:is(actions.Attack) then
+    if action:getNumTargets() > 0 and
+        action:validateTarget(1, game.curActor, self.targetActor) and
+        not action:is(actions.Attack) then
       table.insert(self.allowedActions, action)
     end
   end
-  
+
   self.h = self:correctHeight(4 + self.descHeight + #self.allowedActions)
 end
 
@@ -44,7 +46,7 @@ function ItemPanel:handleKeyPress(keypress)
       game.interface:setAction(chosenAction(game.curActor, self.targetActor))
     else
       self.currentAction = chosenAction
-      game.interface:push(Selector(self.display, self, chosenAction, {self.targetActor}))
+      game.interface:push(Selector(self.display, self, chosenAction, { self.targetActor }))
     end
   end
 end

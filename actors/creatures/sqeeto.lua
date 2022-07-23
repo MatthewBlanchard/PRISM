@@ -11,8 +11,7 @@ Sqeeto.color = {0.8, 0.7, 0.09}
 Sqeeto.components = {
   components.Sight{ range = 4, fov = true, explored = false },
   components.Move{ speed = 100, passable = false},
-  components.Stats
-  {
+  components.Stats{
     ATK = 0,
     MGK = 0,
     PR = 1,
@@ -21,8 +20,7 @@ Sqeeto.components = {
     AC = 2
   },
 
-  components.Attacker
-  {
+  components.Attacker{
     defaultAttack =
     {
       name = "Probiscus",

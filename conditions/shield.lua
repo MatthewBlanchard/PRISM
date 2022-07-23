@@ -2,7 +2,7 @@ local Condition = require "condition"
 
 local Shield = Condition:extend()
 Shield.name = "shield"
-Shield.breaks = {actors.Wand_of_fireball, actors.Bomb}
+Shield.breaks = { actors.Wand_of_fireball, actors.Bomb }
 
 function Shield:__new()
   Condition.__new(self)
@@ -18,15 +18,15 @@ end
 
 Shield:onReaction(reactions.Damage,
   function(self, level, actor, action)
-    if self.hasShield then 
-      action.damage = 0 
-    else 
+    if self.hasShield then
+      action.damage = 0
+    else
       return
     end
 
     if action.source then
-      for _,v in pairs(Shield.breaks) do
-        if v:is(action.source) then 
+      for _, v in pairs(Shield.breaks) do
+        if v:is(action.source) then
           self:lose(level, action)
         end
       end
@@ -34,7 +34,7 @@ Shield:onReaction(reactions.Damage,
       self:lose(level, action)
     end
 
-    if self.hasShield then 
+    if self.hasShield then
       level:addMessage("Your attack is blocked by the golem's shield.", action.dealer)
     end
   end
@@ -42,9 +42,9 @@ Shield:onReaction(reactions.Damage,
 
 Shield:onTick(
   function(self, level, actor, action)
-    if not self.hasShield then 
+    if not self.hasShield then
       self.ticks = self.ticks + 1
-      if self.ticks == self.cooldown then 
+      if self.ticks == self.cooldown then
         self.hasShield = true
         self.ticks = 0
       end

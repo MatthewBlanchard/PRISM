@@ -5,7 +5,7 @@ Action.time = 100
 
 function Action:__new(owner, targets)
   if targets and not targets[1] then
-    targets = {targets}
+    targets = { targets }
   end
 
   self.owner = owner

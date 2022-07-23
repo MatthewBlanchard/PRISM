@@ -11,18 +11,16 @@ Webweaver.color = {0.7, 0.7, 0.9}
 Webweaver.components = {
   components.Sight{ range = 8, fov = true, explored = false },
   components.Move{ speed = 75, passable = false },
-  components.Stats
-  {
+  components.Stats{
     ATK = 1,
     MGK = 0,
     PR = 2,
     MR = 0,
-    maxHP = 18,
+    maxHP = 8,
     AC = 3
   },
 
-  components.Attacker
-  {
+  components.Attacker{
     defaultAttack =
     {
       name = "Fangs",

@@ -19,7 +19,7 @@ function Interface:__new(display)
 end
 
 function Interface:update(dt)
-  self.t = (self.t + dt)%0.600
+  self.t = (self.t + dt) % 0.600
   self.dt = dt
   self.messagePanel:update(dt)
 
@@ -44,16 +44,15 @@ local function clerp(start, finish, t)
 end
 
 local function cmul(c1, s)
-  return {c1[1] * s, c1[2] * s, c1[3] * s}
+  return { c1[1] * s, c1[2] * s, c1[3] * s }
 end
 
 local function cadd(c1, c2)
-  return {c1[1] + c2[1], c1[2] + c2[2], c1[3] + c2[3]}
+  return { c1[1] + c2[1], c1[2] + c2[2], c1[3] + c2[3] }
 end
 
-
 local function csub(c1, c2)
-  return {c1[1] - c2[1], c1[2] - c2[2], c1[3] - c2[3]}
+  return { c1[1] - c2[1], c1[2] - c2[2], c1[3] - c2[3] }
 end
 
 local function shouldDrawExplored(explored, x, y)
@@ -61,8 +60,8 @@ local function shouldDrawExplored(explored, x, y)
 
   for i = -1, 1 do
     for j = -1, 1 do
-      if explored[x+i] then
-        if explored[x+i][y+j] == 0 then
+      if explored[x + i] then
+        if explored[x + i][y + j] == 0 then
           return true
         end
       end
@@ -78,9 +77,9 @@ local function calculateLight(x, y, fov, light)
 
   for i = -1, 1, 1 do
     for j = -1, 1, 1 do
-      if fov[x+i] and fov[x+i][y+j] and fov[x+i][y+j] == 0 then
-        if light[x+i] and light[x+i][y+j] then
-          table.insert(cols, light[x+i][y+j])
+      if fov[x + i] and fov[x + i][y + j] and fov[x + i][y + j] == 0 then
+        if light[x + i] and light[x + i][y + j] then
+          table.insert(cols, light[x + i][y + j])
         end
       end
     end
@@ -106,7 +105,7 @@ function Interface:draw()
   local seenActors = game.curActor.seenActors
   local scryActors = game.curActor.scryActors
   local light = game.level.effectlight
-  local ambientColor = {.175, .175, .175}
+  local ambientColor = { .175, .175, .175 }
 
   local viewX, viewY = game.viewDisplay.widthInChars, game.viewDisplay.heightInChars
   local sx, sy = game.curActor.position.x, game.curActor.position.y
@@ -120,7 +119,7 @@ function Interface:draw()
           local finalColor
           local lightCol = calculateLight(x, y, fov, light)
           local lightValue = value(lightCol)
-          local ambientValue = value({.175, .375, .175})
+          local ambientValue = value({ .175, .375, .175 })
 
           if lightValue < ambientValue then
             local t = 1 - lightValue / ambientValue
@@ -141,10 +140,10 @@ function Interface:draw()
   local function getAnimationChar(actor)
     if not actor:hasComponent(components.Animated) then return actor.char end
     print(game.waiting)
-      if self.t > 0.400 then
-        print "YEET"
-        return actor.char+16
-      end
+    if self.t > 0.400 then
+      print "YEET"
+      return actor.char + 16
+    end
 
     return actor.char
   end
@@ -205,7 +204,8 @@ function Interface:draw()
   local actor = game.curActor
   if light[actor.position.x] and light[actor.position.x][actor.position.y] then
     local lightValue = math.min(value(light[actor.position.x][actor.position.y]), 0.5)
-    self:writeOffset(getAnimationChar(actor), actor.position.x, actor.position.y, clerp(ambientColor, actor.color, lightValue / 0.5))
+    self:writeOffset(getAnimationChar(actor), actor.position.x, actor.position.y,
+      clerp(ambientColor, actor.color, lightValue / 0.5))
   end
 
   if not self.animating then
@@ -233,14 +233,14 @@ end
 
 Interface.movementTranslation = {
   -- cardinal
-  w = Vector2(0, - 1),
+  w = Vector2(0, -1),
   s = Vector2(0, 1),
   a = Vector2(-1, 0),
   d = Vector2(1, 0),
 
   -- diagonal
-  q = Vector2(-1, - 1),
-  e = Vector2(1, - 1),
+  q = Vector2(-1, -1),
+  e = Vector2(1, -1),
   z = Vector2(-1, 1),
   c = Vector2(1, 1)
 }
@@ -296,11 +296,10 @@ function Interface:handleKeyPress(keypress)
     end
 
     if enemy then
-      if
-        enemy:hasComponent(components.Usable) and
-        enemy.defaultUseAction and
-        enemy.defaultUseAction:validateTarget(1, game.curActor, enemy) and
-        not love.keyboard.isDown("lctrl")
+      if enemy:hasComponent(components.Usable) and
+          enemy.defaultUseAction and
+          enemy.defaultUseAction:validateTarget(1, game.curActor, enemy) and
+          not love.keyboard.isDown("lctrl")
       then
         if not enemy.passable or love.keyboard.isDown("lshift") then
           return self:setAction(enemy.defaultUseAction(game.curActor, enemy))

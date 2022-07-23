@@ -131,7 +131,7 @@ local function contains(t, word)
 end
 
 local function endsWith(str, ending)
-  return ending == "" or str:sub(-#ending) == ending
+  return ending == "" or str:sub(- #ending) == ending
 end
 
 local function inflector(mode)

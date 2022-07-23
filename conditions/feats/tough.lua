@@ -10,7 +10,7 @@ end
 
 Tough:setTime(actions.Move,
   function(self, level, actor, action)
-    action.time = action.time + 15
+    action.time = action.time + 5
   end
 )
 

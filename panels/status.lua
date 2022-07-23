@@ -19,13 +19,13 @@ function StatusPanel:draw()
     local c = string.sub(hpString, i, i)
     c = c == "" and " " or c
 
-    local bg = barLength >= i and {.3, .3, .3, 1} or {.2, .1, .1, 1}
-    self:write(c, i + 1, 3, {.75, .75, .75, 1}, bg)
+    local bg = barLength >= i and { .3, .3, .3, 1 } or { .2, .1, .1, 1 }
+    self:write(c, i + 1, 3, { .75, .75, .75, 1 }, bg)
   end
 
   local statbonus = game.curActor:getStatBonus(game.curActor.wielded.stat)
-  self:write(game.curActor.wielded.name, 2, 4, {.75, .75, .75, 1})
-  self:write("AC: " .. game.curActor:getAC(), 2, 5, {.75, .75, .75, 1})
+  self:write(game.curActor.wielded.name, 2, 4, { .75, .75, .75, 1 })
+  self:write("AC: " .. game.curActor:getAC(), 2, 5, { .75, .75, .75, 1 })
 
   local i = 7
   for k, v in pairs(game.curActor.wallet) do
@@ -43,7 +43,7 @@ function StatusPanel:statsToString(actor)
   local MR = actor:getStat("MR")
 
   return self:statToString(ATK) .. " " .. self:statToString(MGK) .. " " ..
-         self:statToString(PR) .. " " .. self:statToString(MR)
+      self:statToString(PR) .. " " .. self:statToString(MR)
 end
 
 function StatusPanel:statToString(stat)

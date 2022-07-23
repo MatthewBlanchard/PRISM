@@ -24,9 +24,9 @@ end
 
 local SelectorPanel = Panel:extend()
 SelectorPanel.interceptInput = true
-SelectorPanel.blinkColor = {0.2, 0.2, 0.6, 1}
-SelectorPanel.invalidColor = {0.6, 0, 0, 1}
-SelectorPanel.lineColor = {0.5, 0.5, 0.5}
+SelectorPanel.blinkColor = { 0.2, 0.2, 0.6, 1 }
+SelectorPanel.invalidColor = { 0.6, 0, 0, 1 }
+SelectorPanel.lineColor = { 0.5, 0.5, 0.5 }
 
 function SelectorPanel:__new(display, parent, action, targets)
   Panel.__new(self, display, parent, 1, 1, display:getWidth(), display:getHeight())
@@ -88,13 +88,13 @@ function SelectorPanel:getTargetPosition()
   elseif self.action:getTargetObject(#self.targets + 1):is(targets.Point) then
     self.curTarget = game.curActor.position
     return game.curActor.position
-  else 
+  else
     self.targetIndex = 1
     local target = self:getValidTargets(self.targetIndex + 1)
     if #target == 0 then
-       game.level:addMessage("There are no targets.", game.curActor)
-       game.interface:pop()
-       return
+      game.level:addMessage("There are no targets.", game.curActor)
+      game.interface:pop()
+      return
     end
     self:updateTarget(target[1])
     return self.curTarget.position
@@ -139,7 +139,8 @@ end
 function SelectorPanel:updateTarget(target)
   self.curTarget = target
   self.targetPanel:setTarget(self.curTarget)
-  local line, valid = Bresenham.line(game.curActor.position.x, game.curActor.position.y, self:getTargetPosition().x, self:getTargetPosition().y, bresenhamCallback)
+  local line, valid = Bresenham.line(game.curActor.position.x, game.curActor.position.y, self:getTargetPosition().x,
+    self:getTargetPosition().y, bresenhamCallback)
   self.line = line
   self.valid = valid
 end
@@ -196,7 +197,7 @@ function SelectorPanel:handleKeyPress(keypress)
     self:moveTarget(self.movementTranslation[keypress])
   elseif keypress == "return" and self.valid then
     if self.action.targets[#self.targets + 1]:is(targets.Point) and
-        self.action:validateTarget(#self.targets + 1, game.curActor, self.curTarget)     then
+        self.action:validateTarget(#self.targets + 1, game.curActor, self.curTarget) then
       table.insert(self.targets, self.curTarget.position or self.curTarget)
     else
       table.insert(self.targets, self.curTarget)

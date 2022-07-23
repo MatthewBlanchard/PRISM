@@ -13,7 +13,7 @@ Rage:onAction(reactions.Die,
 )
 
 function Rage:getATK()
-    return self.count * 2
+  return self.count * 2
 end
 
 return Rage

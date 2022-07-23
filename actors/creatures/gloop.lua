@@ -19,15 +19,18 @@ Explode:afterAction(actions.Throw,
     local fov, actors = level:getAOE("fov", actor.position, Explode.range)
   	local damage = ROT.Dice.roll(self.damage) + 1
 
+    level:addEffect(effects.ExplosionEffect(fov, actor.position, Explode.range, Explode.color))
+  	table.insert(level.temporaryLights, effects.LightEffect(actor.position.x, actor.position.y, 0.6, Explode.color, 2))
+    
+    level:suppressEffects()
   	for _, a in ipairs(actors) do
   	  if targets.Creature:checkRequirements(a) then
   	    local damage = a:getReaction(reactions.Damage)(a, {action.owner}, damage, actor)
   		  level:performAction(damage)
   	  end
   	end
+    level:resumeEffects()
 
-  	level:addEffect(effects.ExplosionEffect(fov, actor.position, Explode.range, Explode.color))
-  	table.insert(level.temporaryLights, effects.LightEffect(actor.position.x, actor.position.y, 0.6, Explode.color, 2))
   	level:destroyActor(actor)
   end
 ):where(Condition.ownerIsTarget)

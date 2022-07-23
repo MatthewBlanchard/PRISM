@@ -1,4 +1,4 @@
-ROT = require 'src.rot'
+ROT = require 'rot/rot'
 MusicManager = require "musicmanager"
 vector22 = require "vector"
 
@@ -18,7 +18,7 @@ local function loadItems(directoryName, items, recurse)
     love.filesystem.getInfo(fileName, info)
     if info.type == "file" then
       fileName = string.gsub(fileName, ".lua", "")
-      local name = string.gsub(item:sub(1, 1):upper()..item:sub(2), ".lua", "")
+      local name = string.gsub(item:sub(1, 1):upper() .. item:sub(2), ".lua", "")
 
       items[name] = require(fileName)
     elseif info.type == "directory" and recurse then
@@ -47,15 +47,15 @@ game = {}
 
 
 function love.load()
-  min_dt = 1/30 --fps
+  min_dt = 1 / 30 --fps
   next_time = love.timer.getTime()
 
   local scale = 1
-  local w, h = math.floor(81/scale), math.floor(49/scale)
-  local w2, h2 = math.floor(81/2), math.floor(49/2)
-  local display = Display:new(w, h, scale, nil, {1, 1, 1, 0}, nil, nil, true)
-  local viewDisplay2x = Display:new(w2, h2, 2, nil, {.09, .09, .09}, nil, nil, true)
-  local viewDisplay1x = Display:new(w, h, 1, nil, {.09, .09, .09}, nil, nil, true)
+  local w, h = math.floor(81 / scale), math.floor(49 / scale)
+  local w2, h2 = math.floor(81 / 2), math.floor(49 / 2)
+  local display = Display:new(w, h, scale, nil, { 1, 1, 1, 0 }, nil, nil, true)
+  local viewDisplay2x = Display:new(w2, h2, 2, nil, { .09, .09, .09 }, nil, nil, true)
+  local viewDisplay1x = Display:new(w, h, 1, nil, { .09, .09, .09 }, nil, nil, true)
   local map = ROT.Map.Brogue(display:getWidth() - 11, 44)
 
   game.music = MusicManager()
@@ -74,12 +74,10 @@ function love.load()
 
   local player = game.Player
   game.curActor = player
-  table.insert(player.inventory, actors.Wand_of_displacement())
-  table.insert(player.inventory, actors.Robe_of_wonders())
-  table.insert(player.inventory, actors.Circlet_of_channeling())
-  table.insert(player.inventory, actors.Prism())
-  table.insert(player.inventory, actors.Axe())
-  table.insert(player.inventory, actors.Potion_of_focus())
+  table.insert(player.inventory, actors.Tiara_of_telepathy())
+  table.insert(player.inventory, actors.Jerkin_of_grease())
+  table.insert(player.inventory, actors.Wand_of_blastin())
+  table.insert(player.inventory, actors.Gloop())
 
   love.keyboard.setKeyRepeat(true)
 end
@@ -160,7 +158,7 @@ function love.keypressed(key, scancode)
   if not game.waiting then
     game.interface.animating = false
     game.interface.effects = {}
-    storedKeypress = {key, scancode}
+    storedKeypress = { key, scancode }
     return
   end
 

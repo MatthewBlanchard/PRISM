@@ -18,8 +18,7 @@ Player.components = {
   components.Wallet{ autoPick = true },
   components.Controller{ inputControlled = true },
 
-  components.Stats
-  {
+  components.Stats{
     ATK = 0,
     MGK = 0,
     PR = 0,
@@ -30,8 +29,7 @@ Player.components = {
 
   components.Progression(),
 
-  components.Attacker
-  {
+  components.Attacker{
     defaultAttack =
     {
       name = "Stronk Fists",

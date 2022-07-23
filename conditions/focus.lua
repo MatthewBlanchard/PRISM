@@ -4,7 +4,7 @@ local Focus = ModifyStats:extend()
 Focus.name = "focus"
 Focus:setDuration(1500)
 Focus.stats = {
-	AC = -3
+  AC = -3
 }
 
 Focus:onAction(actions.Attack,
@@ -14,4 +14,3 @@ Focus:onAction(actions.Attack,
 )
 
 return Focus
-

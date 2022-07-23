@@ -9,7 +9,8 @@ Message.initialHeight = 5
 Message.toggledHeight = 11
 
 function Message:__new(display, parent)
-  Panel.__new(self, display, parent, 1, game.display:getHeight() - Message.initialHeight + 1, game.display:getWidth(), Message.initialHeight)
+  Panel.__new(self, display, parent, 1, game.display:getHeight() - Message.initialHeight + 1, game.display:getWidth(),
+    Message.initialHeight)
   self.messages = {}
 end
 
@@ -80,9 +81,9 @@ function Message:draw()
   for i = 1, self.h - 2 do
     local message = self.messages[#self.messages - (i - 1)]
     if message then
-      local msg = message:sub(1, 1):upper()..message:sub(2)
+      local msg = message:sub(1, 1):upper() .. message:sub(2)
       local fadeAmount = (self.h == 11) and i / 3 or i
-      self:write(msg, 2, i + 1, {1 / fadeAmount, 1 / fadeAmount, 1 / fadeAmount, 1})
+      self:write(msg, 2, i + 1, { 1 / fadeAmount, 1 / fadeAmount, 1 / fadeAmount, 1 })
     end
   end
 end
@@ -121,10 +122,10 @@ function Message.generateString(action)
   if action:getTarget(1) and not action.messageIgnoreTarget then
     local targetString = Message.actorString(action.targetActors[1], action)
     local finalString = string.format("%s %s %s.", ownerstring, verbstring, targetString)
-    return finalString:sub(1, 1):upper()..finalString:sub(2)
+    return finalString:sub(1, 1):upper() .. finalString:sub(2)
   else
     local finalString = string.format("%s %s.", ownerstring, verbstring)
-    return finalString:sub(1, 1):upper()..finalString:sub(2)
+    return finalString:sub(1, 1):upper() .. finalString:sub(2)
   end
 end
 

@@ -11,10 +11,10 @@ function Recall:setPosition(pos)
 end
 
 function Recall:onDurationEnd(level, actor)
-  if level:getCellPassable(self.pos.x, self.pos.y) then 
+  if level:getCellPassable(self.pos.x, self.pos.y) then
     actor.position = self.pos
-    level:addEffect(effects.Character(self.pos.x, self.pos.y, Tiles["poof"], {.4, .4, .4}, 0.3))
+    level:addEffect(effects.Character(self.pos.x, self.pos.y, Tiles["poof"], { .4, .4, .4 }, 0.3))
   end
 end
 
-return Recall 
+return Recall

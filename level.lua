@@ -28,7 +28,7 @@ function Level:__new(map)
   populateMap(self, map)
 
   -- Some initialization on the lighting
-  self.lighting = ROT.Lighting(self:getLightReflectivityCallback(), {range = 50, passes = 3})
+  self.lighting = ROT.Lighting(self:getLightReflectivityCallback(), { range = 50, passes = 3 })
   self.lighting:setFOV(self.fov)
   self:updateLighting(false, 0)
 end
@@ -108,7 +108,7 @@ function Level:updateFOV(actor)
 end
 
 local function cmul(col, scalar)
-  return {col[1] * scalar, col[2] * scalar, col[3] * scalar}
+  return { col[1] * scalar, col[2] * scalar, col[3] * scalar }
 end
 
 local lightinit = false
@@ -145,7 +145,7 @@ function Level:updateLighting(effect, dt)
 
       if not color then table.remove(self.temporaryLights, i) end
 
-      table.insert(lightsToClean, {x, y})
+      table.insert(lightsToClean, { x, y })
       local curLight = self.lighting:getLight(x, y)
       if curLight then
         self.lighting:setLight(x, y, ROT.Color.add(color, curLight))
@@ -163,7 +163,7 @@ function Level:updateLighting(effect, dt)
 
   -- Once we've accumulated our light we clear the buffer of the existing lights.
   for actor in self:eachActor(components.Light) do
-      self.lighting:setLight(actor.position.x, actor.position.y, nil)
+    self.lighting:setLight(actor.position.x, actor.position.y, nil)
   end
 
   for _, light in ipairs(lightsToClean) do
@@ -229,20 +229,19 @@ function Level:updateSeenActors(actor)
 
   for k, other in ipairs(self.actors) do
     if (other:isVisible() or actor == other) and
-    actor.fov[other.position.x] and
-    actor.fov[other.position.x][other.position.y]
+        actor.fov[other.position.x] and
+        actor.fov[other.position.x][other.position.y]
     then
       table.insert(actor.seenActors, other)
     end
   end
 end
 
-
 function Level:addActor(actor)
   table.insert(self.actors, actor)
 
   if actor:hasComponent(components.Aicontroller) or
-    actor:hasComponent(components.Controller)
+      actor:hasComponent(components.Controller)
   then
     self.scheduler:add(actor)
   end
@@ -266,7 +265,7 @@ end
 
 function Level:getActorByType(type)
   for i = 1, #self.actors do
-    if self.actors[i]:is(type)then
+    if self.actors[i]:is(type) then
       return self.actors[i]
     end
   end
@@ -314,7 +313,7 @@ end
 function Level:getActorsAtPosition(x, y)
   local actorsAtPosition = {}
   for i = 1, #self.actors do
-    local actorPosition= self.actors[i].position
+    local actorPosition = self.actors[i].position
 
     if actorPosition.x == x and actorPosition.y == y then
       table.insert(actorsAtPosition, self.actors[i])
@@ -444,7 +443,7 @@ function Level:getAOE(type, position, range)
     self.fov:compute(position.x, position.y, range, self:getAOEFOVCallback(fov))
     for k, other in ipairs(self.actors) do
       if fov[other.position.x] and
-      fov[other.position.x][other.position.y]
+          fov[other.position.x][other.position.y]
       then
         table.insert(seenActors, other)
       end
@@ -485,7 +484,7 @@ end
 
 function Level:eachActor(...)
   local n = 1
-  local comp = {...}
+  local comp = { ... }
   return function()
     for i = n, #self.actors do
       n = i + 1
@@ -603,6 +602,5 @@ function Level:getRandomWalkableTile()
     end
   end
 end
-
 
 return Level

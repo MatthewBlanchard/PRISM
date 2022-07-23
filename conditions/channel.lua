@@ -11,12 +11,12 @@ Channel:afterAction(actions.Zap,
 
     local damage = actor:getStatBonus("MGK")
 
-    level:addEffect(effects.ExplosionEffect(fov, actor.position, 1, {1, 1, 1}))
+    level:addEffect(effects.ExplosionEffect(fov, actor.position, 1, { 1, 1, 1 }))
 
     for _, other in ipairs(actors) do
       if other ~= actor then
         if targets.Creature:checkRequirements(other) then
-          local damage = other:getReaction(reactions.Damage)(other, {actor}, damage, wand)
+          local damage = other:getReaction(reactions.Damage)(other, { actor }, damage, wand)
           level:performAction(damage)
         end
       end

@@ -35,10 +35,9 @@ function lootUtil.generateLoot(comp, rarity)
 
   for k, actor in pairs(actors) do
     local costComponent = actor:getComponent(components.Cost)
-    if
-      costComponent and
-      rarityModifier[costComponent.rarity] <= rarityMod and
-      actor:hasComponent(comp)
+    if costComponent and
+        rarityModifier[costComponent.rarity] <= rarityMod and
+        actor:hasComponent(comp)
     then
       table.insert(found, actor)
     end
@@ -46,6 +45,5 @@ function lootUtil.generateLoot(comp, rarity)
 
   return found[love.math.random(1, #found)]()
 end
-
 
 return lootUtil

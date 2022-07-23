@@ -11,14 +11,6 @@ function Start:update(dt)
   self.time = self.time + dt
 end
 
-local lines = {
-  "As fate would have it you tumbled down the well.", -- A
-  "The cold air kissed your naked skin as you fell.", -- A
-  "Beckoned onward by curiosity.", -- B
-  "Delayed only by my verbosity.", -- B
-  "What awaits you below the garden only time will tell." -- A
-}
-
 function Start:draw()
   local a = 1
   local t = math.min(1, self.time / 4)
@@ -34,9 +26,9 @@ function Start:draw()
   end
 
   local tC = math.max(0.09, 0.9 * t)
-  self.display:clear(nil, nil, nil, nil, nil, nil, {.09, .09, .09, a})
-  self.display:writeCenter("Below the Garden", math.floor(self.h / 2)-10, {tC, tC, tC, a}, {.09, .09, .09, a})
-  self.display:writeCenter("Press any key to begin.", math.floor(self.h / 2), {tC, tC, tC, a}, {.09, .09, .09, a})
+  self.display:clear(nil, nil, nil, nil, nil, nil, { .09, .09, .09, a })
+  self.display:writeCenter("The Garden", math.floor(self.h / 2) - 10, { tC, tC, tC, a }, { .09, .09, .09, a })
+  self.display:writeCenter("Press any key to begin.", math.floor(self.h / 2), { tC, tC, tC, a }, { .09, .09, .09, a })
 end
 
 function Start:handleKeyPress(keypress)

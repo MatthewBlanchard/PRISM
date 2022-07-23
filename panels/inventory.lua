@@ -3,7 +3,7 @@ local ItemPanel = require "panels.item"
 
 local InventoryPanel = Panel:extend()
 InventoryPanel.interceptInput = true
-InventoryPanel.bg = {.09, .09, .09}
+InventoryPanel.bg = { .09, .09, .09 }
 
 function InventoryPanel:__new(display, parent)
   Panel.__new(self, display, parent, 47, 12, 35, 11)
@@ -11,17 +11,17 @@ function InventoryPanel:__new(display, parent)
   self.indices = {}
 
   local count = 0
-  for i, v in ipairs(game.curActor.inventory) do 
+  for i, v in ipairs(game.curActor.inventory) do
     local meta = getmetatable(v)
 
-    if not v.stackable then 
-      self.items[v] = {v}
+    if not v.stackable then
+      self.items[v] = { v }
       count = count + 1
-    elseif self.items[meta] then 
+    elseif self.items[meta] then
       table.insert(self.items[meta], v)
-    else 
+    else
       count = count + 1
-      self.items[meta] = {v}
+      self.items[meta] = { v }
     end
   end
 
@@ -36,14 +36,14 @@ function InventoryPanel:draw()
 
   local title = self:correctWidth("Inventory", self.w - 2)
   local w = string.len(title)
-  self:write(title, 2, 2, {1, 1, 1, 1}, {.3, .3, .3, 1})
+  self:write(title, 2, 2, { 1, 1, 1, 1 }, { .3, .3, .3, 1 })
 
   local i = 1
   for meta, list in pairs(self.items) do
 
     local inventoryString = self:correctWidth(i .. " " .. meta.name, self.w - 5)
     inventoryString = inventoryString .. (#list > 1 and (" x" .. #list) or "")
-    self:write(inventoryString, 2, 2 + i, {1, 1, 1, 1})
+    self:write(inventoryString, 2, 2 + i, { 1, 1, 1, 1 })
     self:write(meta.char, 3, 2 + i, meta.color)
     self.indices[i] = list[1]
     i = i + 1

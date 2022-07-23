@@ -32,18 +32,18 @@ function Display:new(w, h, scale, dfg, dbg, fullOrFlags, tilesetInfo, window)
    t.heightInChars = h and h or 24
    t.scale = scale or 1
    t.glyphs = {}
-   t.chars = {{}}
-   t.backgroundColors = {{}}
-   t.foregroundColors = {{}}
-   t.oldChars = {{}}
-   t.oldBackgroundColors = {{}}
-   t.oldForegroundColors = {{}}
+   t.chars = { {} }
+   t.backgroundColors = { {} }
+   t.foregroundColors = { {} }
+   t.oldChars = { {} }
+   t.oldBackgroundColors = { {} }
+   t.oldForegroundColors = { {} }
    t.graphics = love.graphics
 
    t:setTileset(tilesetInfo)
 
    if window then
-      love.window.setMode(t.charWidth*t.widthInChars, t.charHeight*t.heightInChars, {vsync=false})
+      love.window.setMode(t.charWidth * t.widthInChars, t.charHeight * t.heightInChars, { vsync = false })
    end
 
    t.drawQ = t.graphics.draw
@@ -54,7 +54,7 @@ function Display:new(w, h, scale, dfg, dbg, fullOrFlags, tilesetInfo, window)
 
    t.graphics.setBackgroundColor(t.defaultBackgroundColor)
 
-   t.canvas = t.graphics.newCanvas(t.charWidth*t.widthInChars, t.charHeight*t.heightInChars)
+   t.canvas = t.graphics.newCanvas(t.charWidth * t.widthInChars, t.charHeight * t.heightInChars)
 
    for i = 1, t.widthInChars do
       t.chars[i]               = {}
@@ -63,7 +63,7 @@ function Display:new(w, h, scale, dfg, dbg, fullOrFlags, tilesetInfo, window)
       t.oldChars[i]            = {}
       t.oldBackgroundColors[i] = {}
       t.oldForegroundColors[i] = {}
-      for j = 1,t.heightInChars do
+      for j = 1, t.heightInChars do
          t.chars[i][j]               = 32
          t.backgroundColors[i][j]    = t.defaultBackgroundColor
          t.foregroundColors[i][j]    = t.defaultForegroundColor
@@ -79,10 +79,10 @@ end
 --- Draw.
 -- The main draw function. This should be called from love.draw() to display any written characters to screen
 function Display:draw(noDraw)
-	local startX = 1
-	local endX = self.widthInChars
-	local startY = 1
-	local endY = self.heightInChars
+   local startX = 1
+   local endX = self.widthInChars
+   local startY = 1
+   local endY = self.heightInChars
 
    self.graphics.setCanvas(self.canvas)
    self.graphics.clear()
@@ -91,20 +91,20 @@ function Display:draw(noDraw)
          local c = self.chars[x][y]
          local bg = self.backgroundColors[x][y]
          local fg = self.foregroundColors[x][y]
-         local px = (x-1)*self.charWidth
-         local py = (y-1)*self.charHeight
-            self:_setColor(bg)
-            self.graphics.rectangle('fill', px, py, self.charWidth, self.charHeight)
-            if c ~= 32 and c ~= 255 then
-               local qd = self.glyphs[c]
-               self:_setColor(fg)
-               self.drawQ(self.glyphSprite, qd, px, py, nil, self.scale)
-            end
-
-            self.oldChars[x][y]            = c
-            self.oldBackgroundColors[x][y] = bg
-            self.oldForegroundColors[x][y] = fg
+         local px = (x - 1) * self.charWidth
+         local py = (y - 1) * self.charHeight
+         self:_setColor(bg)
+         self.graphics.rectangle('fill', px, py, self.charWidth, self.charHeight)
+         if c ~= 32 and c ~= 255 then
+            local qd = self.glyphs[c]
+            self:_setColor(fg)
+            self.drawQ(self.glyphSprite, qd, px, py, nil, self.scale)
          end
+
+         self.oldChars[x][y]            = c
+         self.oldBackgroundColors[x][y] = bg
+         self.oldForegroundColors[x][y] = fg
+      end
    end
    self.tilesetChanged = false
    self.graphics.setCanvas()
@@ -126,7 +126,8 @@ function Display:setTileset(tilesetInfo)
       local sy = y * self.imageCharHeight
       for x = 0, tilesetInfo.perRow - 1 do
          local sx = x * self.imageCharWidth
-         self.glyphs[i] = self.graphics.newQuad(sx, sy, self.imageCharWidth, self.imageCharHeight, self.glyphSprite:getWidth(), self.glyphSprite:getHeight())
+         self.glyphs[i] = self.graphics.newQuad(sx, sy, self.imageCharWidth, self.imageCharHeight,
+            self.glyphSprite:getWidth(), self.glyphSprite:getHeight())
          i = i + 1
       end
    end
@@ -141,12 +142,19 @@ function Display:contains(x, y)
 end
 
 function Display:getCharHeight() return self.charHeight end
+
 function Display:getCharWidth() return self.charWidth end
+
 function Display:getWidth() return self:getWidthInChars() end
+
 function Display:getHeight() return self:getHeightInChars() end
+
 function Display:getHeightInChars() return self.heightInChars end
+
 function Display:getWidthInChars() return self.widthInChars end
+
 function Display:getDefaultBackgroundColor() return self.defaultBackgroundColor end
+
 function Display:getDefaultForegroundColor() return self.defaultForegroundColor end
 
 --- Get a character.
@@ -177,14 +185,14 @@ function Display:getForegroundColor(x, y) return self.foregroundColors[x][y] end
 -- Sets the background color to be used when it is not provided
 -- @tparam table c The background color as a table defined as {r,g,b,a}
 function Display:setDefaultBackgroundColor(c)
-   self.defaultBackgroundColor=c and c or self.defaultBackgroundColor
+   self.defaultBackgroundColor = c and c or self.defaultBackgroundColor
 end
 
 --- Set Defaul Foreground Color.
 -- Sets the foreground color to be used when it is not provided
 -- @tparam table c The foreground color as a table defined as {r,g,b,a}
 function Display:setDefaultForegroundColor(c)
-   self.defaultForegroundColor=c and c or self.defaultForegroundColor
+   self.defaultForegroundColor = c and c or self.defaultForegroundColor
 end
 
 --- Clear the screen.
@@ -207,8 +215,8 @@ function Display:clear(c, x, y, w, h, fg, bg)
    h = self:_validateHeight(y, h)
    fg = self:_validateForegroundColor(fg)
    bg = self:_validateBackgroundColor(bg)
-   for i = 0, h-1 do
-      self:_writeValidatedString(s, x, y+i, fg, bg)
+   for i = 0, h - 1 do
+      self:_writeValidatedString(s, x, y + i, fg, bg)
    end
 end
 
@@ -305,23 +313,24 @@ function Display:writeCenter(s, y, fg, bg)
 end
 
 function Display:_writeValidatedString(s, x, y, fg, bg)
-   for i = 1,#s do
-      self.backgroundColors[x+i-1][y] = bg
-      self.foregroundColors[x+i-1][y] = fg
-      self.chars[x+i-1][y]            = s:byte(i)
+   for i = 1, #s do
+      self.backgroundColors[x + i - 1][y]= bg
+      self.foregroundColors[x + i - 1][y]= fg
+      self.chars[x + i - 1][y]        = s:byte(i)
    end
 end
 
 function Display:_validateX(x, s)
    x = x and x or 1
-   util.assert(x > 0 and x <= self.widthInChars, "X value must be between 0 and ",self.widthInChars)
-   util.assert((x + #s) - 1 <= self.widthInChars, "X value plus length of String must be between 0 and ", self.widthInChars)
+   util.assert(x > 0 and x <= self.widthInChars, "X value must be between 0 and ", self.widthInChars)
+   util.assert((x + #s) - 1 <= self.widthInChars, "X value plus length of String must be between 0 and ",
+      self.widthInChars)
    return x
 end
 
 function Display:_validateX(x)
    x = x and x or 1
-   util.assert(x > 0 and x <= self.widthInChars, "X value must be between 0 and ",self.widthInChars)
+   util.assert(x > 0 and x <= self.widthInChars, "X value must be between 0 and ", self.widthInChars)
    util.assert(x - 1 <= self.widthInChars, "X value plus length of String must be between 0 and ", self.widthInChars)
    return x
 end
@@ -335,21 +344,22 @@ end
 function Display:_validateForegroundColor(c)
    c = c or self.defaultForegroundColor
    util.assert(#c > 2, 'Foreground Color must have at least 3 components')
-   for i = 1, #c do c[i]=self:_clamp(c[i]) end
+   for i = 1, #c do c[i] = self:_clamp(c[i]) end
    return c
 end
 
 function Display:_validateBackgroundColor(c)
    c = c or self.defaultBackgroundColor
    util.assert(#c > 2, 'Background Color must have at least 3 components')
-   for i = 1, #c do c[i]=self:_clamp(c[i]) end
+   for i = 1, #c do c[i] = self:_clamp(c[i]) end
    return c
 end
 
 function Display:_validateHeight(y, h)
-   h=h and h or self.heightInChars-y+1
-   util.assert(h>0, "Height must be greater than 0. Height provided: ",h)
-   util.assert(y+h-1<=self.heightInChars, "Height + y value must be less than screen height. y, height: ",y,', ',h)
+   h = h and h or self.heightInChars - y + 1
+   util.assert(h > 0, "Height must be greater than 0. Height provided: ", h)
+   util.assert(y + h - 1 <= self.heightInChars, "Height + y value must be less than screen height. y, height: ", y, ', '
+      , h)
    return h
 end
 
@@ -358,7 +368,7 @@ function Display:_setColor(c)
 end
 
 function Display:_clamp(n)
-   return n<0 and 0 or n>255 and 255 or n
+   return n < 0 and 0 or n > 255 and 255 or n
 end
 
 --- Draw text.
@@ -374,7 +384,7 @@ function Display:drawText(x, y, text, maxWidth)
    local cx = x
    local cy = y
    local lines = 1
-   if not maxWidth then maxWidth = self.widthInChars-x end
+   if not maxWidth then maxWidth = self.widthInChars - x end
 
    local tokens = util.tokenize(text, maxWidth)
 
@@ -383,34 +393,34 @@ function Display:drawText(x, y, text, maxWidth)
       if token.type == util.TYPE_TEXT then
          local isSpace, isPrevSpace, isFullWidth, isPrevFullWidth
          for i = 1, #token.value do
-               local cc = token.value:byte(i)
-               local c = token.value:sub(i, i)
-               -- TODO: chars will never be full-width without special handling
-               -- TODO: ... so the next 15 lines or so do some pointless stuff
-               -- Assign to `true` when the current char is full-width.
-               isFullWidth = (cc > 0xff00 and cc < 0xff61)
-                  or (cc > 0xffdc and cc < 0xffe8)
-                  or cc > 0xffee
-               -- Current char is space, whatever full-width or half-width both are OK.
-               isSpace = c:byte() == 0x20 or c:byte() == 0x3000
-               -- The previous char is full-width and
-               -- current char is nether half-width nor a space.
-               if isPrevFullWidth and not isFullWidth and not isSpace then
-                  cx = cx + 1 -- add an extra position
-               end
-               -- The current char is full-width and
-               -- the previous char is not a space.
-               if isFullWidth and not isPrevSpace then
-                  cx = cx + 1 -- add an extra position
-               end
-               fg = (fg == '' or not fg) and self.defaultForegroundColor
-                  or type(fg) == 'string' and ROT.Color.fromString(fg) or fg
-               bg = (bg == '' or not bg) and self.defaultBackgroundColor
-                  or type(bg) == 'string' and ROT.Color.fromString(bg) or bg
-               self:_writeValidatedString(c, cx, cy, fg, bg)
-               cx = cx + 1
-               isPrevSpace = isSpace
-               isPrevFullWidth = isFullWidth
+            local cc = token.value:byte(i)
+            local c = token.value:sub(i, i)
+            -- TODO: chars will never be full-width without special handling
+            -- TODO: ... so the next 15 lines or so do some pointless stuff
+            -- Assign to `true` when the current char is full-width.
+            isFullWidth = (cc > 0xff00 and cc < 0xff61)
+                or (cc > 0xffdc and cc < 0xffe8)
+                or cc > 0xffee
+            -- Current char is space, whatever full-width or half-width both are OK.
+            isSpace = c:byte() == 0x20 or c:byte() == 0x3000
+            -- The previous char is full-width and
+            -- current char is nether half-width nor a space.
+            if isPrevFullWidth and not isFullWidth and not isSpace then
+               cx = cx + 1 -- add an extra position
+            end
+            -- The current char is full-width and
+            -- the previous char is not a space.
+            if isFullWidth and not isPrevSpace then
+               cx = cx + 1 -- add an extra position
+            end
+            fg = (fg == '' or not fg) and self.defaultForegroundColor
+                or type(fg) == 'string' and ROT.Color.fromString(fg) or fg
+            bg = (bg == '' or not bg) and self.defaultBackgroundColor
+                or type(bg) == 'string' and ROT.Color.fromString(bg) or bg
+            self:_writeValidatedString(c, cx, cy, fg, bg)
+            cx = cx + 1
+            isPrevSpace = isSpace
+            isPrevFullWidth = isFullWidth
          end
       elseif token.type == util.TYPE_FG then
          fg = token.value or nil
