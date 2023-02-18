@@ -29,6 +29,7 @@ local tiles = {
 	projectile1 = 266,
 	projectile2 = 267,
 	projectile3 = 268,
+	grass = 269,
 	boots = 372,
 	cloak = 357,
 	chest = 276,

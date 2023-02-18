@@ -4,7 +4,6 @@ local OnAttack = Condition:extend()
 OnAttack.name = "OnAttack"
 
 function OnAttack:onAttack(level, attacker, defender, action)
-  print("hey")
 end
 
 OnAttack:afterAction(actions.Attack,

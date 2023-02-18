@@ -1,6 +1,10 @@
 local Object = require "object"
 local Scheduler = require "scheduler"
 local populateMap = require "populater"
+local SparseMap = require "sparsemap"
+
+local Cell = require "cell"
+local Wall = require "cells/wall"
 
 local Level = Object:extend()
 
@@ -16,6 +20,8 @@ function Level:__new(map)
   -- we add a special tick to the scheduler that's used for durations and
   -- damage over time effects
   self.scheduler:add("tick")
+
+  self.sparseMap = SparseMap() -- holds a sparse map of actors in the scene by position
 
   self.fov = ROT.FOV.Recursive(self:getVisibilityCallback())
 
@@ -56,7 +62,9 @@ function Level:update()
       self.scheduler:addTime(actor, 100)
       self:triggerActionEvents("onTicks")
     else
-      self:updateFOV(actor)
+      if actor.sight then 
+        self:updateFOV(actor)
+      end
 
       local action
       if actor.inputControlled then
@@ -84,14 +92,6 @@ end
 
 function Level:addScheduleTime(actor, time)
   self.scheduler:addTime(actor, time)
-end
-
-function Level:getCell(x, y)
-  if self.map[x] then
-    return self.map[x][y]
-  end
-
-  return nil
 end
 
 function Level:updateFOV(actor)
@@ -224,13 +224,25 @@ function Level:updateScryActors(actor)
   end
 end
 
+function Level:grassCheck(actor, other)
+  local otherid = self:getCell(other.position.x, other.position.y).grassID
+  local id = self:getCell(actor.position.x, actor.position.y).grassID
+
+  if not id and not otherid then return true end
+  if not id and otherid then return false end
+  if id and not otherid then return true end
+  if id == otherid then return true end
+  return false
+end
+
 function Level:updateSeenActors(actor)
   actor.seenActors = {}
 
   for k, other in ipairs(self.actors) do
     if (other:isVisible() or actor == other) and
         actor.fov[other.position.x] and
-        actor.fov[other.position.x][other.position.y]
+        actor.fov[other.position.x][other.position.y] and
+        self:grassCheck(actor, other)
     then
       table.insert(actor.seenActors, other)
     end
@@ -239,6 +251,7 @@ end
 
 function Level:addActor(actor)
   table.insert(self.actors, actor)
+  self.sparseMap:insert(actor.position.x, actor.position.y, actor)
 
   if actor:hasComponent(components.Aicontroller) or
       actor:hasComponent(components.Controller)
@@ -253,6 +266,8 @@ function Level:addActor(actor)
   for seen in self:eachActor(components.Sight) do
     self:updateSeenActors(seen)
   end
+
+  self.map[actor.position.x][actor.position.y]:onEnter(self, actor)
 end
 
 function Level:hasActor(actor)
@@ -272,6 +287,8 @@ function Level:getActorByType(type)
 end
 
 function Level:removeActor(actor)
+  self.sparseMap:remove(actor.position.x, actor.position.y, actor)
+
   for k, v in ipairs(self.actors) do
     if v == actor then
       table.remove(self.actors, k)
@@ -335,19 +352,25 @@ function Level:checkLoseCondition()
 end
 
 function Level:moveActor(actor, pos)
+  local oldpos = actor.position
+  -- we copy the position here so that the caller doesn't have to worry about
+  -- allocating a new table
+  actor.position = pos:copy()
+
   -- if this actor exists in another actor's inventory we first remove the item
   -- from their inventory, and then add it to the level.
+  local wasInventory = false
   for invActor in self:eachActor(components.Inventory) do
     local hasItem = invActor:hasItem(actor)
     if hasItem then
       self:addActor(actor)
       table.remove(invActor.inventory, hasItem)
+      wasInventory = true
     end
   end
 
-  -- we copy the position here so that the caller doesn't have to worry about
-  -- allocating a new table
-  actor.position = pos:copy()
+  self.sparseMap:remove(oldpos.x, oldpos.y, actor)
+  self.sparseMap:insert(pos.x, pos.y, actor)
 
   if actor:hasComponent(components.Sight) then
     self:updateFOV(actor)
@@ -364,6 +387,12 @@ function Level:moveActor(actor, pos)
   for seen in self:eachActor(components.Sight) do
     self:updateSeenActors(seen)
   end
+
+  if not wasInventory then
+    self.map[oldpos.x][oldpos.y]:onLeave(self, actor)
+  end
+
+  self.map[pos.x][pos.y]:onEnter(self, actor)
 end
 
 function Level:addEffectAfterAction(effect)
@@ -504,12 +533,24 @@ function Level:eachActor(...)
   end
 end
 
+function Level:setCell(x, y, cell)
+  self.map[x][y] = cell
+end
+
+function Level:getCell(x, y)
+  if self.map[x] then
+    return self.map[x][y]
+  end
+
+  return nil
+end
+
 function Level:getCellPassable(x, y)
-  if not (self:getCell(x, y) == 0) then
+  if not self:getCell(x, y).passable then
     return false
   else
-    for actor in self:eachActor() do
-      if actor.position.x == x and actor.position.y == y and actor.passable == false then
+    for actor, _ in ipairs(self.sparseMap:get(x, y)) do
+      if actor.passable == false then
         return false
       end
     end
@@ -519,15 +560,22 @@ function Level:getCellPassable(x, y)
 end
 
 function Level:getCellPass(x, y)
-  return self:getCell(x, y) == 0
+  return self:getCell(x, y).passable
 end
 
 function Level:getCellVisibility(x, y)
-  if not (self:getCell(x, y) == 0) then
+  if self:getCell(x, y).opaque then
     return false
   else
-    for actor in self:eachActor() do
-      if actor.position.x == x and actor.position.y == y and actor.blocksVision == true then
+    print "SKEET"
+    for _, t in pairs(self.sparseMap) do
+      for actor, _ in ipairs(t) do
+        print(actor.name)
+      end
+    end
+    for actor, _ in ipairs(self.sparseMap:get(x, y)) do
+      print(actor)
+      if actor.blocksVision == true then
         return false
       end
     end
@@ -541,7 +589,12 @@ end
 function Level:getMapCallback()
   return function(x, y, val)
     if not self.map[x] then self.map[x] = {} end
-    self.map[x][y] = val
+    
+    if val == 0 then
+      self.map[x][y] = Cell()
+    else
+      self.map[x][y] = Wall()
+    end
   end
 end
 
@@ -562,8 +615,8 @@ function Level:getLightingEffectCallback()
 end
 
 function Level:getLightReflectivityCallback()
-  return function(x, y)
-    return self:getCell(x, y) == 0 and 1 or 0
+  return function(lighting, x, y)
+    return 0
   end
 end
 
@@ -587,7 +640,7 @@ end
 
 function Level:getAOEFOVCallback(aoeFOV)
   return function(x, y, z)
-    if self:getCell(x, y) == 1 then return end
+    if not self:getCell(x, y).passable then return end
 
     if not aoeFOV[x] then aoeFOV[x] = {} end
     aoeFOV[x][y] = self:getCell(x, y)

@@ -70,14 +70,14 @@ local function shouldDrawExplored(explored, x, y)
 end
 
 local function calculateLight(x, y, fov, light)
-  if fov[x][y] == 0 then return light[x][y] end
+  if fov[x][y].passable then return light[x][y] end
 
   local finalCol = { 0, 0, 0 }
   local cols = {}
 
   for i = -1, 1, 1 do
     for j = -1, 1, 1 do
-      if fov[x + i] and fov[x + i][y + j] and fov[x + i][y + j] == 0 then
+      if fov[x + i] and fov[x + i][y + j] and fov[x + i][y + j].passable then
         if light[x + i] and light[x + i][y + j] then
           table.insert(cols, light[x + i][y + j])
         end
@@ -127,21 +127,19 @@ function Interface:draw()
           else
             finalColor = lightCol
           end
-          self:writeOffset(fov[x][y] == 0 and Tiles["floor"] or Tiles["wall"], x, y, finalColor)
+          self:writeOffset(fov[x][y].tile, x, y, finalColor)
         else
-          self:writeOffset(fov[x][y] == 0 and Tiles["floor"] or Tiles["wall"], x, y, ambientColor)
+          self:writeOffset(fov[x][y].tile, x, y, ambientColor)
         end
-      elseif explored[x] and explored[x][y] and shouldDrawExplored(explored, x, y) then
-        self:writeOffset(explored[x][y] == 0 and Tiles["floor"] or Tiles["wall"], x, y, ambientColor)
+      elseif explored[x] and explored[x][y] then
+        self:writeOffset(explored[x][y].tile, x, y, ambientColor)
       end
     end
   end
 
   local function getAnimationChar(actor)
     if not actor:hasComponent(components.Animated) then return actor.char end
-    print(game.waiting)
     if self.t > 0.400 then
-      print "YEET"
       return actor.char + 16
     end
 
@@ -164,7 +162,6 @@ function Interface:draw()
   local function drawActors(actorTable, conditional)
     for k, actor in pairs(actorTable) do
       local char = getAnimationChar(actor)
-      print(char)
       if conditional and conditional(actor) or true then
         local x, y = actor.position.x, actor.position.y
         if actorTable ~= scryActors and light[x] and light[x][y] then

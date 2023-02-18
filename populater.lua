@@ -1,3 +1,30 @@
+local Vector2 = require "vector"
+local Grass = require "cells.grass"
+
+local function randDirection()
+  local x = math.random(1, 3) - 2
+  local y = math.random(1, 3) - 2
+
+  while x == 0 and y == 0 do
+    x = math.random(1, 3) - 2
+    y = math.random(1, 3) - 2
+  end
+
+  return Vector2(x, y)
+end
+
+local function getRandomWalkableAdjacent(level, x, y)
+  local dir = randDirection()
+
+  while not level:getCellPassable(x + dir.x, y + dir.y) do
+    dir = randDirection()
+  end
+
+  local final = Vector2(x + dir.x, y + dir.y)
+
+  return final
+end
+
 function Populater(level, map)
   local spawnedPrism = false
   local treasureRoom = false
@@ -5,9 +32,33 @@ function Populater(level, map)
   local toSpawn = {}
   local roomsLeft = #map._rooms - 1 -- subtract the starting room
   local doors = {}
+  local grassID = 0
 
   local function hash(x, y)
     return x and y * 0x4000000 + x or false --  26-bit x and y
+  end
+
+  local function spawnGrass(room)
+    local x, y = room:getRandomWalkableTile()
+
+    local grass = Grass()
+    grass.grassID = grassID
+
+    level:setCell(x, y, grass)
+
+    local curCell = Vector2(x, y)
+    for i = 1, math.random(6) do
+      local adjacent = getRandomWalkableAdjacent(level, curCell.x, curCell.y)
+
+      local grass = Grass()
+      grass.grassID = grassID
+  
+      level:setCell(adjacent.x, adjacent.y, grass)
+
+      curCell = adjacent
+    end
+
+    grassID = grassID + 1
   end
 
   local function spawnActor(room, actor, x, y)
@@ -136,7 +187,8 @@ function Populater(level, map)
   end
 
   local function populateRoom(room)
-
+    spawnGrass(room)
+    
     if #room._doors == 2 and not treasureRoom then
       populateTreasureRoom(room)
       return

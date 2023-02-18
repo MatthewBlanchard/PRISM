@@ -74,7 +74,7 @@ function Actor:removeComponent(component)
   end
 end
 
-function Actor:hasComponent(type, source)
+function Actor:hasComponent(type)
   for k, component in pairs(self.components) do
     if component:is(type) then
       return true
@@ -84,7 +84,7 @@ function Actor:hasComponent(type, source)
   return false
 end
 
-function Actor:getComponent(type, source)
+function Actor:getComponent(type)
   for k, component in pairs(self.components) do
     if component:is(type) then
       return component

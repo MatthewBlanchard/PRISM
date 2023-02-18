@@ -10,6 +10,7 @@ function Cost:__new(options)
   options = options or dummy
   self.cost = options.cost
   self.rarity = options.rarity or "common"
+  self.tags = options.tags or {}
 end
 
 function Cost:initialize(actor)

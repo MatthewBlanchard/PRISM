@@ -1,3 +1,6 @@
+-- Rewrite this in it's entirely.
+-- Some of the behaviors here are probably fine for simple enemies, but for more complex enemies, this is not going to cut it.
+
 local Controller = require "components.controller"
 local Vector2 = require "vector"
 
@@ -14,7 +17,7 @@ function AIController:initialize(actor)
 end
 
 function AIController.isPassable(actor, vec)
-  if actor.fov[vec.x][vec.y] == 1 then
+  if not actor.fov[vec.x][vec.y].passable then
     return false
   end
 
@@ -33,7 +36,7 @@ function AIController.getPassableDirection(actor)
   local x, y = actor.position.x, actor.position.y
   for i = -1, 1 do
     for j = -1, 1 do
-      if actor.fov[x+i][y+j] == 0 and not (i == 0 and j == 0) then
+      if AIController.isPassable(actor, Vector2(x+i, y+j)) and not (i == 0 and j == 0) then
         table.insert(options, {i, j})
       end
     end
@@ -55,9 +58,9 @@ function AIController.moveTowardObject(actor, target)
   local mx = target.position.x - actor.position.x > 0 and 1 or target.position.x - actor.position.x < 0 and - 1 or 0
   local my = target.position.y - actor.position.y > 0 and 1 or target.position.y - actor.position.y < 0 and - 1 or 0
 
-  if actor.fov[actor.position.x + mx][actor.position.x + my] == 0 then
-    local moveVec = Vector2(mx, my)
-    return actor:getAction(actions.Move)(actor, moveVec), moveVec
+  local moveVec = Vector2(actor.position.x + mx, actor.position.y + my)
+  if AIController.isPassable(actor, moveVec) then
+    return actor:getAction(actions.Move)(actor, Vector2(mx, my)), moveVec
   end
 
   local closestDist = target:getRange("box", actor)
@@ -97,9 +100,9 @@ function AIController.moveToward(actor, target, avoidCreatures)
   local mx = target.position.x - actor.position.x > 0 and 1 or target.position.x - actor.position.x < 0 and - 1 or 0
   local my = target.position.y - actor.position.y > 0 and 1 or target.position.y - actor.position.y < 0 and - 1 or 0
 
-  if actor.fov[actor.position.x + mx][actor.position.x + my] == 0 then
-    local moveVec = Vector2(mx, my)
-    return actor:getAction(actions.Move)(actor, moveVec), moveVec
+  local moveVec = Vector2(actor.position.x + mx, actor.position.y + my)
+  if AIController.isPassable(actor, moveVec) then
+    return actor:getAction(actions.Move)(actor, Vector2(mx, my)), moveVec
   end
 
   local closestDist = target:getRange("box", actor)
@@ -169,7 +172,7 @@ function AIController.moveAway(actor, target)
   local mx = target.position.x - actor.position.x > 0 and -1 or target.position.x - actor.position.x < 0 and 1 or 0
   local my = target.position.y - actor.position.y > 0 and -1 or target.position.y - actor.position.y < 0 and 1 or 0
 
-  if actor.fov[actor.position.x + mx][actor.position.x + my] == 0 then
+  if  AIController.isPassable(actor, Vector2(actor.position.x + mx, actor.position.y + my)) == 0 then
     local moveVec = Vector2(mx, my)
     return actor:getAction(actions.Move)(actor, moveVec), moveVec
   end
@@ -231,8 +234,9 @@ function AIController.getLightestTile(level, actor)
       if level.light[x] and level.light[x][y] then
         local lightval = ROT.Color.value(level.light[x][y])
 
-        if lightval > highestLightValue and AIController.isPassable(actor, {x = x, y = y}) and
-        level.map[x] and level.map[x][y] == 0 then
+        if lightval > highestLightValue and
+          AIController.isPassable(actor, Vector2(x, y))
+        then
           highestLightValue = lightval
           highest.x, highest.y = x, y
         end

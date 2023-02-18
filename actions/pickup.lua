@@ -5,20 +5,20 @@ targets.Pickup.name = "pickup"
 
 function targets.Pickup:validate(owner, actor)
   if actor == owner then
-    return false
+    return false -- can't pickup yourself even if you are an item!
   end
 
   for k, item in pairs(owner.inventory) do
     if item == actor then
-      return false
+      return false -- can't pick up an item if it's in your inventory!
     end
   end
 
   if owner.slots and owner.slots[actor.slot] == actor then
-    return false
+    return false -- can't pick up an item if it's equipped!
   end
 
-  return targets.Item.validate(self, owner, actor)
+  return targets.Item.validate(self, owner, actor) -- make sure the target is an item
 end
 
 local Pickup = Action:extend()
