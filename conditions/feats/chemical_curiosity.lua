@@ -6,7 +6,8 @@ ChemicalCuriosity.description = "When you drink a potion each of your wands gain
 
 ChemicalCuriosity:onAction(actions.Drink,
   function(self, level, actor, action)
-    for k, v in pairs(actor.inventory) do
+    local inventory_component = actor:getComponent(components.Inventory)
+    for k, v in pairs(inventory_component.inventory) do
       if v:hasComponent(components.Wand) then
         v:modifyCharges(1)
       end

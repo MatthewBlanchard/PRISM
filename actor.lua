@@ -1,7 +1,9 @@
 local Object = require "object"
 local Vector2 = require "vector"
 local Tiles = require "tiles"
-local Condition = require "condition"
+local Component = require "component"
+local Action = require "action"
+local Reaction = require "reaction"
 
 local Actor = Object:extend()
 Actor.passable = true
@@ -20,22 +22,24 @@ function Actor:__new()
 
   self.actions = self.actions or {}
   self.reactions = self.reactions or {}
-  self.innateConditions = self.innateConditions or {}
   self.conditions = {}
 
-  for k, v in pairs(self.innateConditions) do
-    self:applyCondition(v())
+  for k,v in pairs(self.actions) do
+    self.actions[k] = v:extend()
   end
 
   if self.components then
     local temp = {}
 
     for k, component in ipairs(self.components) do
+      assert(component:is(Component), "Actor " .. self.name .. " has a component that is not of Component type!")
+
       if not component:checkRequirements(self) then
-        error("Unsupported component added to actor!" .. self.name)
+        error("Not all requirements present for component " .. component.name .. " in actor " .. self.name .. "!")
       end
 
-      table.insert(temp, component)
+      -- BEWARE HACKS AHEAD
+      temp[k] = component
     end
 
     self.components = temp
@@ -44,6 +48,12 @@ function Actor:__new()
   end
 
   self:initializeComponents()
+end
+
+-- This is called when an actor is added to a level.
+function Actor:initialize(level)
+  -- you should implement this in your own actor for things like
+  -- applying conditions that are innate to the actor.
 end
 
 function Actor:isVisible()
@@ -58,6 +68,8 @@ function Actor:isVisible()
 end
 
 function Actor:addComponent(component)
+  assert(component:is(Component), "Expected argument component to be of type Component!")
+
   if not component:checkRequirements(self) then
     error("Unsupported component added to actor!")
   end
@@ -66,6 +78,8 @@ function Actor:addComponent(component)
 end
 
 function Actor:removeComponent(component)
+  assert(component:is(Component), "Expected argument component to be of type Component!")
+
   for i = 1, #self.components do
     if self.components[i]:is(component) then
       table.remove(self.components, i)
@@ -75,6 +89,8 @@ function Actor:removeComponent(component)
 end
 
 function Actor:hasComponent(type)
+  assert(type:is(Component), "Expected argument type to be inherited from Component!")
+
   for k, component in pairs(self.components) do
     if component:is(type) then
       return true
@@ -99,6 +115,8 @@ function Actor:initializeComponents()
 end
 
 function Actor:addAction(action)
+  assert(action:is(Action), "Expected argument action to be of type Action!")
+
   for k, v in pairs(self.actions) do
     if v:is(action) then
       error("Attempted to add existing action to actor!")
@@ -116,15 +134,29 @@ function Actor:removeAction(action)
   end
 end
 
-function Actor:getAction(action)
-  for k, v in pairs(self.actions) do
-    if v:is(action) then
-      return v
+function Actor:getAction(prototype)
+  assert(prototype:is(Action), "Expected argument prototype to be extended from Action!")
+
+  for _, action in pairs(self.actions) do
+    if action:is(prototype) then
+      return action
+    end
+  end
+
+  for _, component in pairs(self.components) do
+    if component.actions then 
+      for _, action in pairs(component.actions) do
+        if action:is(prototype) then
+          return action
+        end
+      end
     end
   end
 end
 
 function Actor:addReaction(reaction)
+  assert(reaction:is(Reaction), "Expected argument reaction to be of type Reaction!")
+
   table.insert(self.reactions, reaction)
 end
 
@@ -176,6 +208,9 @@ function Actor:getRange(type, actor)
 end
 
 function Actor:getRangeVec(type, vector)
+  print(vector.x, vector.y)
+  assert(vector.is and vector:is(Vector2), "Expected argument vector to be of type Vector2!")
+
   local pos = self.position
   if type == "box" then
     local xDist = math.abs(vector.x - pos.x)

@@ -47,10 +47,9 @@ WandOfFireball.name = "Wand of Fireball"
 WandOfFireball.description = "Blasts a small area with a ball of fire."
 WandOfFireball.color = {1, 0.6, 0.2, 1}
 WandOfFireball.char = Tiles["wand_gnarly"]
-WandOfFireball.stackable = false
 
 WandOfFireball.components = {
-  components.Item(),
+  components.Item{stackable = false},
   components.Usable(),
   components.Wand{
     maxCharges = 5,

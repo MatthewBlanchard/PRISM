@@ -50,6 +50,7 @@ end
 function SelectorPanel:draw()
   local position = self:getTargetPosition()
 
+  if not position then return end
   if not self.curTarget then return end
 
   if not self.blink then

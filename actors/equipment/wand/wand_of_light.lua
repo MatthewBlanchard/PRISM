@@ -53,10 +53,9 @@ local WandOfLight = Actor:extend()
 WandOfLight.name = "Wand of Light"
 WandOfLight.color = {0.7, 0.7, 0.7, 1}
 WandOfLight.char = Tiles["wand_pointy"]
-WandOfLight.stackable = false
 
 WandOfLight.components = {
-  components.Item(),
+  components.Item{stackable = false},
   components.Usable(),
   components.Wand{
     maxCharges = 5,

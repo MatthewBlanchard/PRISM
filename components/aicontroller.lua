@@ -1,12 +1,12 @@
 -- Rewrite this in it's entirely.
 -- Some of the behaviors here are probably fine for simple enemies, but for more complex enemies, this is not going to cut it.
 
-local Controller = require "components.controller"
+local Actor = require "actor"
+local Component = require "component"
 local Vector2 = require "vector"
 
-local AIController = Controller:extend()
+local AIController = Component:extend()
 AIController.name = "AIController"
-AIController.inputControlled = false
 
 function AIController:__new(options)
   self.act = options and options.act or self.act
@@ -64,8 +64,8 @@ function AIController.moveTowardObject(actor, target)
   end
 
   local closestDist = target:getRange("box", actor)
-  local closest = {x = actor.position.x, y = actor.position.y}
-  local current = {x = actor.position.x, y = actor.position.y}
+  local closest = Vector2(actor.position.x, actor.position.y)
+  local current = Vector2(actor.position.x, actor.position.y)
   for x = actor.position.x - 1, actor.position.x + 1 do
     for y = actor.position.y - 1, actor.position.y + 1 do
       current.x, current.y = x, y
@@ -106,8 +106,8 @@ function AIController.moveToward(actor, target, avoidCreatures)
   end
 
   local closestDist = target:getRange("box", actor)
-  local closest = {x = actor.position.x, y = actor.position.y}
-  local current = {x = actor.position.x, y = actor.position.y}
+  local closest = Vector2(actor.position.x, actor.position.y)
+  local current = Vector2(actor.position.x, actor.position.y)
   for x = actor.position.x - 1, actor.position.x + 1 do
     for y = actor.position.y - 1, actor.position.y + 1 do
       current.x, current.y = x, y
@@ -130,15 +130,10 @@ function AIController.moveToward(actor, target, avoidCreatures)
 end
 
 function AIController.crowdAround(actor, target, avoidCreatures)
-  if actor.position.x == target.position.x and actor.position.y and target.position.y then
-    local moveVec = Vector2(0, 0)
-    return actor:getAction(actions.Move)(actor, moveVec), moveVec
-  end
-
   local openTiles = {}
   for x = actor.position.x - 1, actor.position.x + 1 do
     for y = actor.position.y - 1, actor.position.y + 1 do
-      local current = {x = x, y = y}
+      local current = Vector2(x, y)
       if AIController.isPassable(actor, current) and not AIController.tileHasCreature(actor, current) then
         table.insert(openTiles, current)
       end
@@ -146,7 +141,7 @@ function AIController.crowdAround(actor, target, avoidCreatures)
   end
 
   local closest = math.huge
-  local closestVec = {x = actor.position.x, y = actor.position.y}
+  local closestVec = Vector2(actor.position.x, actor.position.y)
 
   for i = 1, #openTiles do
     local range = math.max(target:getRange("box", openTiles[i]), 1)
@@ -164,6 +159,7 @@ function AIController.crowdAround(actor, target, avoidCreatures)
   end
 
   local moveVec = Vector2(-(actor.position.x - closestVec.x), -(actor.position.y - closestVec.y))
+  print(moveVec.x, moveVec.y)
   return actor:getAction(actions.Move)(actor, moveVec), moveVec
 end
 
@@ -221,6 +217,10 @@ function AIController.closestSeenActorByType(actor, type)
       closest = v
       dist = v:getRange("box", actor)
     end
+  end
+
+  if closest then 
+    assert(closest:is(Actor))
   end
 
   return closest

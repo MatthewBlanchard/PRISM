@@ -2,7 +2,7 @@ local Condition = require "condition"
 
 local ChemicalCuriosity = Condition:extend()
 ChemicalCuriosity.name = "Spell Slinger"
-ChemicalCuriosity.description = "You zap faster and your zap attacks are more likely to hit!"
+ChemicalCuriosity.description = "You zap faster and your magic attacks are more likely to hit!"
 
 ChemicalCuriosity:onAction(actions.Zap,
   function(self, level, actor, action)

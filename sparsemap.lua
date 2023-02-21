@@ -13,7 +13,6 @@ end
 
 function SparseMap:insert(x, y, val)
     if not self[hash(x, y)] then self[hash(x, y)] = {} end
-    print(x, y, val.name)
 
     self[hash(x, y)][val] = true
 end

@@ -7,12 +7,7 @@ Drop.name = "drop"
 Drop.targets = {targets.Item}
 
 function Drop:perform(level)
-  for k, v in pairs(self.owner.inventory) do
-    if v == self.targetActors[1] then
-      level:moveActor(v, self.owner.position)
-      break
-    end
-  end
+  level:moveActor(self.targetActors[1], self.owner.position)
 end
 
 return Drop

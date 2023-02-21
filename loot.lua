@@ -18,14 +18,20 @@ local lootUtil = {}
 
 function lootUtil.generateBasePrice(actor)
   local price = 0
+  local rarity = 1
 
   for k, v in pairs(componentCost) do
-    if actor:hasComponent(k, "loot") then
+    if actor:hasComponent(k) then
       price = price + v
     end
   end
 
-  return price * rarityModifier[actor.rarity]
+  local cost = actor:getComponent(components.Cost)
+  if cost then
+    rarity = rarityModifier[cost.rarity]
+  end
+
+  return price * rarity
 end
 
 function lootUtil.generateLoot(comp, rarity)

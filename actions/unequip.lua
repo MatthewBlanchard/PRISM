@@ -5,9 +5,10 @@ Unequip.name = "unequip"
 Unequip.targets = {targets.Unequip}
 
 function Unequip:perform(level)
-  local equipment = self:getTarget(1)
+  local equipment = self:getTarget(1):getComponent(components.Equipment)
+  local equipper = self.owner:getComponent(components.Equipper)
 
-  self.owner.slots[equipment.slot] = false
+  equipper.slots[equipment.slot] = false
 end
 
 return Unequip

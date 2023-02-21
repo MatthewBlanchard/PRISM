@@ -4,7 +4,7 @@ local ThrowTarget = targets.Point:extend()
 ThrowTarget.name = "throwtarget"
 ThrowTarget.range = 6
 
-local Throw = Action()
+local Throw = Action:extend()
 Throw.name = "throw"
 Throw.range = 6
 Throw.targets = {targets.Item, ThrowTarget}

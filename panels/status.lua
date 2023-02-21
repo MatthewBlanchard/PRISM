@@ -23,8 +23,9 @@ function StatusPanel:draw()
     self:write(c, i + 1, 3, { .75, .75, .75, 1 }, bg)
   end
 
-  local statbonus = game.curActor:getStatBonus(game.curActor.wielded.stat)
-  self:write(game.curActor.wielded.name, 2, 4, { .75, .75, .75, 1 })
+  local attacker = game.curActor:getComponent(components.Attacker)
+  local statbonus = game.curActor:getStatBonus(attacker.wielded.stat)
+  self:write(attacker.wielded.name, 2, 4, { .75, .75, .75, 1 })
   self:write("AC: " .. game.curActor:getAC(), 2, 5, { .75, .75, .75, 1 })
 
   local i = 7

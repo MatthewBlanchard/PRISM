@@ -3,20 +3,24 @@ local Component = require "component"
 local Inventory = Component:extend()
 Inventory.name = "Inventory"
 
+Inventory.requirements = {
+  components.Stats
+}
+
+Inventory.actions = {
+  actions.Drop,
+  actions.Pickup,
+  actions.Throw
+}
+
 function Inventory:initialize(actor)
-  actor.hasItem = self.hasItem
-  actor.addItem = self.addItem
-  actor.removeItem = self.removeItem
-  actor.removeItemType = self.removeItemType
-  actor.hasItemType = self.hasItemType
-  actor.inventory = {}
-  actor:addAction(actions.Drop)
-  actor:addAction(actions.Pickup)
-  actor:addAction(actions.Throw)
+  self.inventory = {}
+  
+  print("WOWEEE", #self.actions)
 end
 
-function Inventory.hasItem(owner, item)
-  for k, v in pairs(owner.inventory) do
+function Inventory:hasItem(item)
+  for k, v in pairs(self.inventory) do
     if v == item then
       return k
     end
@@ -25,8 +29,8 @@ function Inventory.hasItem(owner, item)
   return false
 end
 
-function Inventory.hasItemType(owner, item)
-  for k, v in pairs(owner.inventory) do
+function Inventory:hasItemType(item)
+  for k, v in pairs(self.inventory) do
     if v:is(item) then
       return k
     end
@@ -35,24 +39,24 @@ function Inventory.hasItemType(owner, item)
   return false
 end
 
-function Inventory:addItem(owner, item)
-  if not Inventory.hasItem(owner, item) then
-    table.insert(owner.inventory, item)
+function Inventory:addItem(item)
+  if not Inventory.hasItem(self, item) then
+    table.insert(self.inventory, item)
   end
 end
 
-function Inventory.removeItem(owner, item)
-  for i = 1, #owner.inventory do
-    if owner.inventory[i] == item then
-      table.remove(owner.inventory, i)
+function Inventory:removeItem(item)
+  for i = 1, #self.inventory do
+    if self.inventory[i] == item then
+      table.remove(self.inventory, i)
     end
   end
 end
 
-function Inventory.removeItemType(owner, item)
-  for k, v in pairs(owner.inventory) do
+function Inventory:removeItemType(item)
+  for k, v in pairs(self.inventory) do
     if v:is(item) then
-      table.remove(owner.inventory, k)
+      table.remove(self.inventory, k)
       return
     end
   end

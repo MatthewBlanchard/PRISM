@@ -5,9 +5,10 @@ Equip.name = "equip"
 Equip.targets = {targets.Equipment}
 
 function Equip:perform(level)
-  local equipment = self:getTarget(1)
+  local equipper = self.owner:getComponent(components.Equipper)
+  local equipment = self:getTarget(1):getComponent(components.Equipment)
 
-  self.owner.slots[equipment.slot] = equipment
+  equipper:setSlot(equipment.slot, self:getTarget(1))
 end
 
 return Equip

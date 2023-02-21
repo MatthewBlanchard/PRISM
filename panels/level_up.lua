@@ -15,6 +15,7 @@ end
 
 function LevelUpPanel:handleKeyPress(keypress)
   local feat = self.options[keypress]
+  --[[
   if stat then
     local statLevel = game.curActor.levels[stat] + 1
     local feats = self.feats[stat][statLevel]
@@ -27,6 +28,7 @@ function LevelUpPanel:handleKeyPress(keypress)
       game.level:performAction(actions.Level(game.curActor, stat))
     end
   end
+  ]]--
 end
 
 return LevelUpPanel

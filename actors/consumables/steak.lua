@@ -3,7 +3,7 @@ local Tiles = require "tiles"
 
 local Steak = Actor:extend()
 Steak.name = "Steak"
-Steak.description = "A juicy and mysterious steak."
+Steak.description = "This steak looks like it's been marinated in mystery and seared with intrigue. Eat at your own risk, and prepare for a flavor adventure."
 Steak.color = {0.97, 0.33, 0.35, 1}
 Steak.char = Tiles["steak"]
 

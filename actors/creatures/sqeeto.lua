@@ -14,9 +14,9 @@ Sqeeto.components = {
   components.Stats{
     ATK = 0,
     MGK = 0,
-    PR = 1,
+    PR = 0,
     MR = 0,
-    maxHP = 4,
+    maxHP = 3,
     AC = 2
   },
 
@@ -45,10 +45,11 @@ function Sqeeto:act(level)
   end
 
   for k, v in pairs(self.seenActors) do
+    local light_component = v:getComponent(components.Light)
     if v:is(actors.Player) and self:getRange("box", v) == 1 then
       return self:getAction(actions.Attack)(self, v)
-    elseif v:hasComponent(components.Light) then
-      local lightVal = ROT.Color.value(v.light) * v.lightIntensity
+    elseif light_component then
+      local lightVal = ROT.Color.value(light_component.color) * light_component.intensity
 
       if lightVal > highest then
         highest = lightVal
@@ -74,7 +75,8 @@ function Sqeeto:act(level)
   end
 
   if self.actTarget then
-    if brightest > ROT.Color.value(self.actTarget.light) * self.actTarget.lightIntensity then
+    local light_component = self.actTarget:getComponent(components.Light)
+    if brightest > ROT.Color.value(light_component.color) * light_component.intensity then
       self.actTarget = nil
     else
       if math.random() > .75 then

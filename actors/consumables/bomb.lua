@@ -29,11 +29,15 @@ Explode:afterAction(actions.Throw,
 ):where(Condition.ownerIsTarget)
 
 local Bomb = Actor:extend()
+
 Bomb.name = "Bomb"
 Bomb.char = Tiles["bomb"]
 Bomb.color = {0.4, 0.4, 0.4, 1}
 Bomb.description = "A simple key. You wonder what it unlocks."
-Bomb.innateConditions = {Explode()}
+
+function Bomb:initialize()
+  self:applyCondition(Explode())
+end
 
 Bomb.components = {
   components.Item({stackable = true}),

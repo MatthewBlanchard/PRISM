@@ -21,9 +21,10 @@ EquipCondition:afterAction(actions.Unequip,
 
 EquipCondition:onAction(actions.Drop,
   function(self, level, actor, action)
-    local equipment = action:getTarget(1)
+    local equipment = action:getTarget(1):getComponent(components.Equipment)
+    local equipper = action.owner:getComponent(components.Equipper)
 
-    if not (action.owner.slots[equipment.slot] == equipment) then
+    if not (equipper.slots[equipment.slot] == equipment) then
       return
     end
 

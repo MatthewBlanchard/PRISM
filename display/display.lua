@@ -210,7 +210,7 @@ function Display:clear(c, x, y, w, h, fg, bg)
    c = c or ' '
    w = w or self.widthInChars
    local s = c:rep(w)
-   x = self:_validateX(x, s)
+   x = self:_validateX(x)
    y = self:_validateY(y)
    h = self:_validateHeight(y, h)
    fg = self:_validateForegroundColor(fg)
@@ -234,8 +234,8 @@ function Display:write(s, x, y, fg, bg)
    end
 
    util.assert(s, "Display:write() must have string as param")
-   x = self:_validateX(x, s)
-   y = self:_validateY(y, s)
+   x = self:_validateX(x)
+   y = self:_validateY(y)
    fg = self:_validateForegroundColor(fg)
    bg = self:_validateBackgroundColor(bg)
 
@@ -318,14 +318,6 @@ function Display:_writeValidatedString(s, x, y, fg, bg)
       self.foregroundColors[x + i - 1][y]= fg
       self.chars[x + i - 1][y]        = s:byte(i)
    end
-end
-
-function Display:_validateX(x, s)
-   x = x and x or 1
-   util.assert(x > 0 and x <= self.widthInChars, "X value must be between 0 and ", self.widthInChars)
-   util.assert((x + #s) - 1 <= self.widthInChars, "X value plus length of String must be between 0 and ",
-      self.widthInChars)
-   return x
 end
 
 function Display:_validateX(x)

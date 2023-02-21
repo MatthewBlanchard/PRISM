@@ -3,12 +3,6 @@ local Vector2 = require "vector"
 local Tiles = require "tiles"
 local Condition = require "condition"
 
-local Gloop = Actor:extend()
-
-Gloop.char = Tiles["gloop"]
-Gloop.name = "gloop"
-Gloop.color = {90 / 230, 161 / 230, 74 / 230}
-
 local Explode = Condition:extend()
 Explode.range = 1
 Explode.damage = "1d4"
@@ -35,6 +29,11 @@ Explode:afterAction(actions.Throw,
   end
 ):where(Condition.ownerIsTarget)
 
+local Gloop = Actor:extend()
+
+Gloop.char = Tiles["gloop"]
+Gloop.name = "gloop"
+Gloop.color = {90 / 230, 161 / 230, 74 / 230}
 
 Gloop.components = {
   components.Sight{ range = 2, fov = true, explored = false },
@@ -52,8 +51,9 @@ Gloop.components = {
   components.Animated()
 }
 
-Gloop.innateConditions = {Explode()}
-
+function Gloop:initialize()
+  self:applyCondition(Explode())
+end
 
 local actUtil = components.Aicontroller
 function Gloop:act(level)

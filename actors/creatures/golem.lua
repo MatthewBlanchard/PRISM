@@ -11,8 +11,7 @@ Golem.color = {0.4, 0.4, 0.8}
 Golem.components = {
   components.Sight{range = 5, fov = true, explored = false},
   components.Move{speed = 100, passable = false},
-  components.Stats
-  {
+  components.Stats {
     ATK = 2,
     MGK = 0,
     PR = 1,
@@ -23,9 +22,9 @@ Golem.components = {
   components.Aicontroller()
 }
 
-Golem.innateConditions = {
-  conditions.Shield()
-}
+function Golem:initialize() 
+  self:applyCondition(conditions.Shield())
+end
 
 local actUtil = components.Aicontroller
 function Golem:act(level)

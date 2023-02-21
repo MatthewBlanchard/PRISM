@@ -152,7 +152,7 @@ local function inflector(mode)
 
   local function categoryRule(list, singular, plural)
     local rulefunc = function(word)
-      lword = string.lower(word)
+      local lword = string.lower(word)
       for i, suffix in ipairs(list) do
         if endsWith(lword, suffix) then
           if not endsWith(lword, singular) then

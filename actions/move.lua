@@ -1,18 +1,22 @@
 local Action = require "action"
 
-local MoveAction = Action:extend()
-MoveAction.name = "move"
+local Move = Action:extend()
+Move.name = "move"
+Move.silent = true
+Move.targets = {targets.Point}
 
-function MoveAction:__new(owner, direction)
-  Action.__new(self, owner)
-  self.direction = direction
+function Move:__new(owner, direction)
+  print("DIRECTION", direction.x, direction.y)
+  Action.__new(self, owner, { direction })
 end
 
-function MoveAction:perform(level)
-  local newPosition = self.owner.position + self.direction
+function Move:perform(level)
+  local direction = self:getTarget(1)
+
+  local newPosition = self.owner.position + direction
   if level:getCellPassable(newPosition.x, newPosition.y) then
     level:moveActor(self.owner, newPosition)
   end
 end
 
-return MoveAction
+return Move

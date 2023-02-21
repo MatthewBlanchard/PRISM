@@ -13,7 +13,8 @@ function Drink:perform(level)
 end
 
 local Potion = Actor:extend()
-Potion.name = "Potion of Focus"
+Potion.name = "Risky Ristretto"
+Potion.description = "Risky Ristretto, the bold and daring potion that raises the stakes. Savor the rich blend and seize the moment with every critical strike."
 Potion.color = {0.5, 0.5, 0.5, 1}
 Potion.char = Tiles["potion"]
 

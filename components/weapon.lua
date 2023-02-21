@@ -7,7 +7,6 @@ Weapon.name = "Weapon"
 Weapon.requirements = {components.Item}
 
 function Weapon:__new(options)
-  self.name = options.name
   self.stat = options.stat
   self.dice = options.dice
   self.time = options.time or 100
@@ -16,13 +15,17 @@ function Weapon:__new(options)
 end
 
 function Weapon:initialize(actor)
-  actor.name = self.name
   actor.stat = self.stat
   actor.dice = self.dice
   actor.time = self.time
   actor.bonus = self.bonus
   actor.effects = self.effects
-  actor.stackable = false
+
+  local item_component = actor:getComponent(components.Item)
+  if item_component then
+    item_component.stackable = false
+  end
+  
   actor:applyCondition(conditions.Wield())
 end
 

@@ -52,9 +52,15 @@ function Light:__new(options)
 end
 
 function Light:initialize(actor)
-  actor.light = self.color
-  actor.lightIntensity = self.intensity
-  actor.lightEffect = self.effect
+  -- We clone the color table so that we can modify it without affecting the
+  -- original table in the parent object.
+  local color = {}
+
+  for k, v in pairs(self.color) do
+    color[k] = v
+  end
+
+  self.color = color
 end
 
 return Light

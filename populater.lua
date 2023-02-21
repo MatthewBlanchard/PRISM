@@ -13,11 +13,31 @@ local function randDirection()
   return Vector2(x, y)
 end
 
+local function randDirectionCardinal()
+  if math.random() > 0.5 then 
+    return Vector2(0, math.random(1, 2) * 2 - 3)
+  else
+    return Vector2(math.random(1, 2) * 2 - 3, 0)
+  end
+end
+
 local function getRandomWalkableAdjacent(level, x, y)
   local dir = randDirection()
 
   while not level:getCellPassable(x + dir.x, y + dir.y) do
     dir = randDirection()
+  end
+
+  local final = Vector2(x + dir.x, y + dir.y)
+
+  return final
+end
+
+local function getRandomWalkableAdjacentCardinal(level, x, y)
+  local dir = randDirectionCardinal()
+
+  while not level:getCellPassable(x + dir.x, y + dir.y) do
+    dir = randDirectionCardinal()
   end
 
   local final = Vector2(x + dir.x, y + dir.y)
@@ -48,7 +68,7 @@ function Populater(level, map)
 
     local curCell = Vector2(x, y)
     for i = 1, math.random(6) do
-      local adjacent = getRandomWalkableAdjacent(level, curCell.x, curCell.y)
+      local adjacent = getRandomWalkableAdjacentCardinal(level, curCell.x, curCell.y)
 
       local grass = Grass()
       grass.grassID = grassID
@@ -111,7 +131,6 @@ function Populater(level, map)
   local chestContents = {
     actors.Ring_of_protection,
     actors.Ring_of_vitality,
-    actors.Armor,
     actors.Cloak_of_invisibility,
     actors.Slippers_of_swiftness,
     actors.Wand_of_lethargy,
@@ -154,7 +173,7 @@ function Populater(level, map)
       product.position.y = shop.position.y
 
       product:setItem(item)
-      product:setPrice(actors.Shard, item.cost)
+      product:setPrice(actors.Shard, item:getComponent(components.Cost).cost)
       product:setShopkeep(shop)
       level:addActor(product)
     end
@@ -173,9 +192,11 @@ function Populater(level, map)
     local chest = actors.Chest()
     local key = actors.Key()
 
-    table.insert(chest.inventory, chestContents[math.random(#chestContents)]())
+    local chest_inventory = chest:getComponent(components.Inventory)
+    chest_inventory:addItem(chestContents[math.random(#chestContents)]())
 
-    chest:setKey(key)
+    local chest_lock = chest:getComponent(components.Lock)
+    chest_lock:setKey(key)
     spawnActor(room, chest)
     table.insert(toSpawn, key)
 

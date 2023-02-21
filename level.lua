@@ -1,7 +1,9 @@
 local Object = require "object"
+local Actor = require "actor"
 local Scheduler = require "scheduler"
 local populateMap = require "populater"
 local SparseMap = require "sparsemap"
+local Vector2 = require "vector"
 
 local Cell = require "cell"
 local Wall = require "cells/wall"
@@ -56,6 +58,8 @@ function Level:update()
 
     local actor = self.scheduler:next()
 
+    assert(actor == "tick" or actor:is(Actor), "Found a scheduler entry that wasn't an actor or tick.")
+
     if actor == "tick" then
       -- We found the special actor tick which triggers recurring condition effects
       -- like damage over time. It's also used to track durations.
@@ -67,7 +71,7 @@ function Level:update()
       end
 
       local action
-      if actor.inputControlled then
+      if actor:getComponent(components.Controller) then
         -- if we find a player controlled actor we set self.waitingFor and return it
         -- this hands things off to the interface which generates a command for
         -- the actor
@@ -114,15 +118,16 @@ end
 local lightinit = false
 function Level:updateLighting(effect, dt)
   for actor in self:eachActor(components.Light) do
+    local light_component = actor:getComponent(components.Light)
     local x, y = actor.position.x, actor.position.y
 
     local light
     -- Check if we should be manipulating the light with lightingEffects
     -- like flickering or pulsing.
-    if actor.lightEffect and effect then
-      light = cmul(actor.lightEffect(dt), actor.lightIntensity)
+    if light_component.effect and effect then
+      light = cmul(light_component.effect(dt), light_component.intensity)
     else
-      light = cmul(actor.light, actor.lightIntensity)
+      light = cmul(light_component.color, light_component.intensity)
     end
 
     -- We don't want to overwrite an exisitng light so if light exists in that cell
@@ -139,7 +144,7 @@ function Level:updateLighting(effect, dt)
   local stopIndex = 1
 
   if #self.temporaryLights > 0 then
-    for i = #self.temporaryLights, 1 do
+    for i = #self.temporaryLights, 1, -1 do
       local light = self.temporaryLights[i]
       local x, y, color = light(dt)
 
@@ -190,7 +195,7 @@ end
 
 function Level:resumeEffects()
   self.suppressEffect = false
-  coroutine.yield("effect", effect)
+  coroutine.yield("effect")
 end
 
 function Level:invalidateLighting(actor)
@@ -250,6 +255,10 @@ function Level:updateSeenActors(actor)
 end
 
 function Level:addActor(actor)
+  -- some sanity checks
+  assert(actor:is(Actor), "Attemped to add a non-actor object to the level with addActor")
+
+  actor:initialize(self)
   table.insert(self.actors, actor)
   self.sparseMap:insert(actor.position.x, actor.position.y, actor)
 
@@ -311,11 +320,11 @@ end
 
 function Level:destroyActor(actor)
   for invActor in self:eachActor() do
-    if invActor:hasComponent(components.Inventory) then
-      local hasItem = invActor:hasItem(actor)
-      if hasItem then
+    local inventory = invActor:getComponent(components.Inventory)
+    if inventory then
+      if inventory:hasItem(actor) then
         self:addActor(actor)
-        table.remove(invActor.inventory, hasItem)
+        inventory:removeItem(actor)
       end
     end
   end
@@ -344,7 +353,7 @@ function Level:checkLoseCondition()
   local foundPlayerActor = false
 
   for i, v in ipairs(self.actors) do
-    foundPlayerActor = foundPlayerActor or v.inputControlled
+    foundPlayerActor = foundPlayerActor or v:getComponent(components.Controller) ~= nil
   end
 
   -- set the shouldQuit flag which will be checked in Level.update
@@ -352,6 +361,8 @@ function Level:checkLoseCondition()
 end
 
 function Level:moveActor(actor, pos)
+  assert(pos.is and pos:is(Vector2), "Expected a Vector2 for pos in Level:moveActor.")
+
   local oldpos = actor.position
   -- we copy the position here so that the caller doesn't have to worry about
   -- allocating a new table
@@ -361,10 +372,10 @@ function Level:moveActor(actor, pos)
   -- from their inventory, and then add it to the level.
   local wasInventory = false
   for invActor in self:eachActor(components.Inventory) do
-    local hasItem = invActor:hasItem(actor)
-    if hasItem then
+    local inventory = invActor:getComponent(components.Inventory)
+    if inventory:hasItem(actor) then
       self:addActor(actor)
-      table.remove(invActor.inventory, hasItem)
+      inventory:removeItem(actor)
       wasInventory = true
     end
   end
@@ -380,7 +391,7 @@ function Level:moveActor(actor, pos)
     self.lighting:setFOV(self.fov)
   end
 
-  if actor.light or actor.blocksVision then
+  if actor:hasComponent(components.Light) or actor.blocksVision then
     self:updateLighting(false, self.dt)
   end
 
@@ -466,9 +477,11 @@ function Level:triggerActionEvents(onType, action)
 end
 
 function Level:getAOE(type, position, range)
+  assert(position:is(vector2) )
+  local seenActors = {}
+
   if type == "fov" then
     local fov = {}
-    local seenActors = {}
     self.fov:compute(position.x, position.y, range, self:getAOEFOVCallback(fov))
     for k, other in ipairs(self.actors) do
       if fov[other.position.x] and
@@ -481,10 +494,12 @@ function Level:getAOE(type, position, range)
     return fov, seenActors
   elseif type == "box" then
     for k, other in ipairs(self.actors) do
-      if other:getRange(position) <= range then
+      if other:getRange("box", position) <= range then
         table.insert(seenActors, other)
       end
     end
+
+    return nil, seenActors
   end
 end
 
@@ -492,21 +507,23 @@ function Level:addMessage(message, actor)
   -- if they specified an actor we check if they have a message component and
   -- send them and specifically them that message
   if actor and actor:hasComponent(components.Message) then
-    table.insert(actor.messages, message)
+    local message_component = actor:getComponent(components.Message)
+    message_component:add(message)
     return
   end
 
   -- if actor wasn't specified we send the message to each actor who can see the
   -- message's owner and has a message component
   for actor in self:eachActor(components.Message) do
+    local message_component = actor:getComponent(components.Message)
     if actor:hasComponent(components.Sight) then
       for k, v in ipairs(actor.seenActors) do
         if v == message.owner then
-          table.insert(actor.messages, message)
+          message_component:add(message)
         end
       end
     else
-      table.insert(actor.messages, message)
+      message_component:add(message)
     end
   end
 end
@@ -567,14 +584,7 @@ function Level:getCellVisibility(x, y)
   if self:getCell(x, y).opaque then
     return false
   else
-    print "SKEET"
-    for _, t in pairs(self.sparseMap) do
-      for actor, _ in ipairs(t) do
-        print(actor.name)
-      end
-    end
     for actor, _ in ipairs(self.sparseMap:get(x, y)) do
-      print(actor)
       if actor.blocksVision == true then
         return false
       end

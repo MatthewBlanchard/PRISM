@@ -57,8 +57,9 @@ function Message:update(dt)
   local actor = game.curActor
   local messageStack = {}
 
-  if actor:hasComponent(components.Message) then
-    for i, message in ipairs(actor.messages) do
+  local message_component = actor:getComponent(components.Message)
+  if message_component then
+    for i, message in ipairs(message_component.messages) do
       if type(message) == "string" then
         table.insert(messageStack, message)
       elseif message.targetActors and not message.silent then
@@ -71,7 +72,8 @@ function Message:update(dt)
       table.insert(self.messages, combine(messageStack, pop, Message.combos))
       pop = table.remove(messageStack, 1)
     end
-    actor.messages = {}
+
+    message_component.messages = {}
   end
 end
 

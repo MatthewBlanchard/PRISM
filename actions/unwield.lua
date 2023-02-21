@@ -7,7 +7,8 @@ Unwield.targets = {targets.Unwield}
 function Unwield:perform(level)
   local weapon = self:getTarget(1)
 
-  self.owner.wielded = self.owner.defaultAttack
+  local attacker = self.owner:getComponent(components.Attacker)
+  attacker.wielded = attacker.defaultAttack
 end
 
 return Unwield

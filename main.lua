@@ -1,3 +1,4 @@
+-- TODO: Refactor this! We need a World object that holds all of the loaded actors, actions, etc. and the current level.
 ROT = require 'rot/rot'
 MusicManager = require "musicmanager"
 vector22 = require "vector"
@@ -27,10 +28,10 @@ local function loadItems(directoryName, items, recurse)
   end
 end
 
-loadItems("components", components)
 targets = require "target"
 loadItems("actions", actions, false)
 loadItems("actions/reactions", reactions, true)
+loadItems("components", components)
 loadItems("conditions", conditions, true)
 loadItems("actors", actors, true)
 Loot = require "loot"
@@ -40,6 +41,11 @@ local Interface = require "interface"
 local Display = require "display.display"
 local Start = require "panels.start"
 
+for _, actor in ipairs(actors) do
+  for i, component in ipairs(actor.components) do
+    actor.component[i] = component:extend()
+  end
+end
 ------
 -- Global
 
@@ -74,10 +80,6 @@ function love.load()
 
   local player = game.Player
   game.curActor = player
-  table.insert(player.inventory, actors.Tiara_of_telepathy())
-  table.insert(player.inventory, actors.Jerkin_of_grease())
-  table.insert(player.inventory, actors.Wand_of_blastin())
-  table.insert(player.inventory, actors.Gloop())
 
   love.keyboard.setKeyRepeat(true)
 end

@@ -26,20 +26,19 @@ Explode:afterReaction(reactions.Die,
 
 local Barrel = Actor:extend()
 
-Barrel.innateConditions = {
-  Explode()
-}
-
 Barrel.char = Tiles["barrel"]
 Barrel.name = "barrel"
 Barrel.passable = false
 Barrel.blocksVision = false
 
 Barrel.components = {
-  components.Stats
-  {
+  components.Stats {
     maxHP = 1,
   }
 }
+
+function Barrel:initialize()
+  self:applyCondition(Explode())
+end
 
 return Barrel

@@ -13,7 +13,7 @@ function Drink:perform(level)
 end
 
 local Potion = Actor:extend()
-Potion.name = "Potion of Weight"
+Potion.name = "Echo Elixer"
 Potion.color = {0.5, 0.5, 0.5, 1}
 Potion.char = Tiles["potion"]
 

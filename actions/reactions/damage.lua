@@ -5,11 +5,13 @@ Damage.name = "damage"
 Damage.silent = true
 Damage.targets = {targets.Creature}-- dealer
 
-function Damage:__new(owner, targets, damage, source, type)
+function Damage:__new(owner, targets, damage, source)
+  print(owner, #targets, damage, source)
   Reaction.__new(self, owner, targets)
-  self.dealer = targets[1]
+  self.dealer = self:getTarget(1)
   self.damage = damage
   self.source = source
+
   if not self.source then
     print("No damage source for: " .. self.dealer.name .. " against " .. owner.name)
   end

@@ -15,10 +15,10 @@ Open.silent = true
 
 function Open:perform(level)
   local chest = self.targetActors[1]
-
-  if chest.key then
-    if chest:hasKey(self.owner) then
-      level:destroyActor(chest.key)
+  local lock_component = chest:getComponent(components.Lock)
+  if lock_component then
+    if lock_component:hasKey(self.owner) then
+      level:destroyActor(lock_component.key)
     else
       level:addMessage("The chest is locked!", self.owner)
       return nil
@@ -32,7 +32,8 @@ function Open:perform(level)
     message = "You unlock the chest"
   end
 
-  local item = chest.inventory[1]
+  local inventory = chest:getComponent(components.Inventory)
+  local item = inventory.inventory[1]
   if item then
     item.position.x = chest.position.x
     item.position.y = chest.position.y

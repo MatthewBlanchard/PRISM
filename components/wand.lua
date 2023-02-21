@@ -31,7 +31,7 @@ function Wand:modifyCharges(n)
     self.zap = hasZap
     self:removeUseAction(hasZap)
   elseif self.charges > 0 and not hasZap then
-    self:addUseAction(actor.zap)
+    self:addUseAction(self.zap)
   end
 end
 

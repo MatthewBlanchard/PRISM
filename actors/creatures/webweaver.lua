@@ -14,10 +14,10 @@ Webweaver.components = {
   components.Stats{
     ATK = 1,
     MGK = 0,
-    PR = 2,
+    PR = 1,
     MR = 0,
-    maxHP = 8,
-    AC = 3
+    maxHP = 5,
+    AC = 2
   },
 
   components.Attacker{
@@ -49,16 +49,18 @@ function Webweaver:act(level)
   end
 
   if target and self._lastTarget ~= target then
-      if target:is(actors.Sqeeto) then
-        level:addEffectAfterAction(effects.CharacterDynamic(self, 0, -1, Tiles["bubble_food"], {1, 1, 1}, .5))
-      elseif target:is(actors.Player) then
-        level:addEffectAfterAction(effects.CharacterDynamic(self, 0, -1, Tiles["bubble_angry"], {1, 1, 1}, .5))
-      end
+    if target:is(actors.Sqeeto) then
+      level:addEffectAfterAction(effects.CharacterDynamic(self, 0, -1, Tiles["bubble_food"], {1, 1, 1}, .5))
+    elseif target:is(actors.Player) then
+      level:addEffectAfterAction(effects.CharacterDynamic(self, 0, -1, Tiles["bubble_angry"], {1, 1, 1}, .5))
+    end
   end
 
   self._lastTarget = target
 
   if target then
+    assert(target:is(Actor))
+
     local targetRange = target:getRange("box", self)
     if targetRange == 1 then
       return self:getAction(actions.Attack)(self, target)

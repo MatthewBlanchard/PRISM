@@ -12,9 +12,11 @@ function Equipment:__new(options)
 end
 
 function Equipment:initialize(actor)
-  actor.slot = self.slot
-  actor.effects = self.effects
-  actor.stackable = false
+  local item_component = actor:getComponent(components.Item)
+  if item_component then
+    item_component.stackable = false
+  end
+
   actor:applyCondition(conditions.Equip())
 end
 

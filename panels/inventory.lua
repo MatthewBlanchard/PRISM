@@ -11,10 +11,11 @@ function InventoryPanel:__new(display, parent)
   self.indices = {}
 
   local count = 0
-  for i, v in ipairs(game.curActor.inventory) do
+  local inventory = game.curActor:getComponent(components.Inventory)
+  for i, v in ipairs(inventory.inventory) do
     local meta = getmetatable(v)
 
-    if not v.stackable then
+    if not v:getComponent(components.Item).stackable then
       self.items[v] = { v }
       count = count + 1
     elseif self.items[meta] then
@@ -51,7 +52,7 @@ function InventoryPanel:draw()
 end
 
 function InventoryPanel:update(dt)
-  if #game.curActor.inventory == 0 then
+  if #game.curActor:getComponent(components.Inventory).inventory == 0 then
     game.interface:pop()
   end
 end

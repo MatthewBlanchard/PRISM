@@ -3,7 +3,6 @@ local Reaction = require "reaction"
 local Heal = Reaction:extend()
 Heal.name = "heal"
 Heal.silent = true
-Heal.targets = {targets.Creature} -- dealer
 
 function Heal:__new(owner, targets, heal, source, type)
   Reaction.__new(self, owner, targets)

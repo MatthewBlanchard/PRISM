@@ -13,8 +13,10 @@ Shoot.name = "shoot"
 Shoot.targets = {targets.Item, BowTarget}
 
 function Shoot:perform(level)
-  if self.owner.hasItemType(self.owner, actors.Arrow) then 
-    self.owner.removeItemType(self.owner, actors.Arrow)
+  local inventory = self.owner:getComponent(components.Inventory)
+
+  if inventory:hasItemType(actors.Arrow) then 
+    inventory:removeItemType(actors.Arrow)
   else 
     return
   end
