@@ -15,7 +15,7 @@ function ItemPanel:__new(display, parent, target, x, y, w, h)
     end
   end
 
-  for k, action in pairs(game.curActor.actions) do
+  for k, action in pairs(game.curActor:getActions()) do
     if action:getNumTargets() > 0 and
         action:validateTarget(1, game.curActor, self.targetActor) and
         not action:is(actions.Attack) then
@@ -43,7 +43,8 @@ function ItemPanel:handleKeyPress(keypress)
   if chosenAction then
     if chosenAction:getNumTargets() == 1 then
       game.interface:reset()
-      game.interface:setAction(chosenAction(game.curActor, self.targetActor))
+      print(self.targetActor)
+      game.interface:setAction(chosenAction(game.curActor, {self.targetActor}))
     else
       self.currentAction = chosenAction
       game.interface:push(Selector(self.display, self, chosenAction, { self.targetActor }))

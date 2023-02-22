@@ -4,13 +4,7 @@ local Condition = require "condition"
 local Player = Actor:extend()
 Player.name = "Player"
 
-local lightEffect = components.Light.effects.flicker({ 0.8666, 0.4509, 0.0862, 1 }, .1, .1)
 Player.components = {
-  components.Light{
-    color = { 0.8666, 0.4509, 0.0862, 1},
-    intensity = 3,
-    effect = lightEffect
-  },
   components.Sight{ range = 30, fov = true, explored = true },
   components.Message(),
   components.Move{ speed = 100, passable = false },
@@ -42,6 +36,7 @@ Player.components = {
   components.Equipper {
     "body",
     "head",
+    "offhand",
     "ring",
     "feet",
     "cloak"

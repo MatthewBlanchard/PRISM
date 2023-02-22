@@ -63,11 +63,11 @@ function Webweaver:act(level)
 
     local targetRange = target:getRange("box", self)
     if targetRange == 1 then
-      return self:getAction(actions.Attack)(self, target)
+      return self:getAction(actions.Attack)(self, {target})
     elseif target:hasCondition(conditions.Slowed) then
       return actUtil.moveToward(self, target)
     elseif targetRange >= 2 and targetRange <= 4 then
-      return self:getAction(actions.Web)(self, target)
+      return self:getAction(actions.Web)(self, {target})
     elseif target:getRange("box", self) <= 2 then
       return actUtil.moveAway(self, target)
     else

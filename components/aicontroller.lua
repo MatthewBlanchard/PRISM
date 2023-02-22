@@ -17,6 +17,10 @@ function AIController:initialize(actor)
 end
 
 function AIController.isPassable(actor, vec)
+  if not actor.fov[vec.x] or not actor.fov[vec.x][vec.y] then
+    return false
+  end
+
   if not actor.fov[vec.x][vec.y].passable then
     return false
   end
@@ -40,6 +44,10 @@ function AIController.getPassableDirection(actor)
         table.insert(options, {i, j})
       end
     end
+  end
+
+  if #options < 1 then
+    return Vector2(love.math.random(-1, 1), love.math.random(-1, 1))
   end
 
   return Vector2(unpack(options[love.math.random(1, #options)]))
@@ -174,8 +182,8 @@ function AIController.moveAway(actor, target)
   end
 
   local furthestDist = target:getRange("box", actor)
-  local closest = {x = actor.position.x, y = actor.position.y}
-  local current = {x = actor.position.x, y = actor.position.y}
+  local closest = Vector2(actor.position.x, actor.position.y)
+  local current = Vector2(actor.position.x, actor.position.y)
   for x = actor.position.x - 1, actor.position.x + 1 do
     for y = actor.position.y - 1, actor.position.y + 1 do
       current.x, current.y = x, y
@@ -255,6 +263,7 @@ function AIController.moveTowardLight(level, actor)
 end
 
 function AIController.randomMove(level, actor)
+  assert(actor and actor.is and actor:is(Actor), "Expected actor to be an Actor")
   local moveVec = Vector2(ROT.RNG:random(1, 3) - 2, ROT.RNG:random(1, 3) - 2)
   return actor:getAction(actions.Move)(actor, moveVec), moveVec
 end

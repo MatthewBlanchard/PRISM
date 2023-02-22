@@ -8,6 +8,10 @@ local Vector2 = require "vector"
 local Cell = require "cell"
 local Wall = require "cells/wall"
 
+local function value(c)
+  return (c[1] + c[2] + c[3]) / 3
+end
+
 local Level = Object:extend()
 
 function Level:__new(map)
@@ -104,10 +108,46 @@ function Level:updateFOV(actor)
   -- check if actor.fov exists and if so we're gonna trash it and start anew
   -- TODO: find a better way to do this that doesn't trash the garbage collector
   if actor.fov then
+    local sightLimit = actor.sight
+
+    if self:getCell(actor.position.x, actor.position.y).sightLimit then
+      sightLimit = math.min(sightLimit, self:getCell(actor.position.x, actor.position.y).sightLimit)
+    end
+
     actor.fov = {}
-    self.fov:compute(actor.position.x, actor.position.y, actor.sight, self:getFOVCallback(actor))
+    self.fov:compute(actor.position.x, actor.position.y, sightLimit, self:getFOVCallback(actor))
+
+    for x, _ in pairs(actor.fov) do
+      for y, _ in pairs(actor.fov[x]) do
+        local lighting = self:getLightingAt(x, y, actor.fov, self.light)
+        if lighting then
+          local lightval = value(lighting)
+          if lightval ~= lightval or lightval < actor.darkvision then
+            actor.fov[x][y] = false
+          end
+        else 
+          if actor.darkvision ~= 0 then
+            actor.fov[x][y] = false
+          end
+        end    
+      end
+    end
+
+    self:updateExplored(actor)
+
     self:updateSeenActors(actor)
     self:updateScryActors(actor)
+  end
+end
+
+function Level:updateExplored(actor)
+  for x, _ in pairs(actor.fov) do
+    for y, _ in pairs(actor.fov[x]) do
+      if actor.explored then
+        if not actor.explored[x] then actor.explored[x] = {} end
+        actor.explored[x][y] = self:getCell(x, y)
+      end    
+    end
   end
 end
 
@@ -117,10 +157,9 @@ end
 
 local lightinit = false
 function Level:updateLighting(effect, dt)
-  for actor in self:eachActor(components.Light) do
-    local light_component = actor:getComponent(components.Light)
-    local x, y = actor.position.x, actor.position.y
-
+  local lights = {}
+  local function add_light(x, y, light_component)
+    assert(light_component.is and light_component:is(components.Light))
     local light
     -- Check if we should be manipulating the light with lightingEffects
     -- like flickering or pulsing.
@@ -137,6 +176,20 @@ function Level:updateLighting(effect, dt)
       self.lighting:setLight(x, y, ROT.Color.add(light, curLight))
     else
       self.lighting:setLight(x, y, light)
+    end
+  end
+
+  for actor in self:eachActor(components.Light) do
+    add_light(actor.position.x, actor.position.y, actor:getComponent(components.Light))
+  end
+
+  for actor in self:eachActor(components.Equipper) do
+    local equipper = actor:getComponent(components.Equipper)
+    
+    for k, v in pairs(equipper.slots) do
+      if v and v:getComponent(components.Light) then
+        add_light(actor.position.x, actor.position.y, v:getComponent(components.Light))
+      end
     end
   end
 
@@ -167,7 +220,7 @@ function Level:updateLighting(effect, dt)
   self.lighting:compute(callback)
 
   -- Once we've accumulated our light we clear the buffer of the existing lights.
-  for actor in self:eachActor(components.Light) do
+  for _, actor in pairs(self.actors) do
     self.lighting:setLight(actor.position.x, actor.position.y, nil)
   end
 
@@ -198,8 +251,8 @@ function Level:resumeEffects()
   coroutine.yield("effect")
 end
 
-function Level:invalidateLighting(actor)
-  if actor and not actor.blocksVision then return end
+function Level:invalidateLighting()
+  if not self.lighting or not self.lighting.setFOV then return end -- check if lighting is initialized
 
   -- This resets out lighting. rotLove doesn't offer a better way to do this.
   self.lighting:setFOV(self.fov)
@@ -272,6 +325,10 @@ function Level:addActor(actor)
     self:updateFOV(actor)
   end
 
+  if self:influencesLighting(actor) then
+    self:invalidateLighting()
+  end
+
   for seen in self:eachActor(components.Sight) do
     self:updateSeenActors(seen)
   end
@@ -314,6 +371,10 @@ function Level:removeActor(actor)
     self:updateFOV(sightActor)
   end
 
+  if self:influencesLighting(actor) then
+    self:invalidateLighting()
+  end
+
   -- We check to make sure there is a player controlled actor left.
   self:checkLoseCondition()
 end
@@ -331,9 +392,27 @@ function Level:destroyActor(actor)
 
   self:removeActor(actor)
 
-  if actor.blocksVision then
+  if self:influencesLighting(actor) then
     self:invalidateLighting()
   end
+end
+
+function Level:influencesLighting(actor)
+  local blocksVision = actor.blocksVision
+  local light_component = actor:getComponent(components.Light)
+  local equipper_component = actor:getComponent(components.Equipper)
+
+  local has_equipped_light = false
+  if equipper_component then
+    
+    for k, v in pairs(equipper_component.slots) do
+      if v and v:getComponent(components.Light) then
+        has_equipped_light = true
+      end
+    end
+  end
+
+  return blocksVision or light_component or has_equipped_light
 end
 
 function Level:getActorsAtPosition(x, y)
@@ -391,8 +470,8 @@ function Level:moveActor(actor, pos)
     self.lighting:setFOV(self.fov)
   end
 
-  if actor:hasComponent(components.Light) or actor.blocksVision then
-    self:updateLighting(false, self.dt)
+  if self:influencesLighting(actor) then
+    self:invalidateLighting()
   end
 
   for seen in self:eachActor(components.Sight) do
@@ -477,7 +556,7 @@ function Level:triggerActionEvents(onType, action)
 end
 
 function Level:getAOE(type, position, range)
-  assert(position:is(vector2) )
+  assert(position:is(Vector2) )
   local seenActors = {}
 
   if type == "fov" then
@@ -636,13 +715,44 @@ function Level:getVisibilityCallback()
   end
 end
 
-function Level:getFOVCallback(actor)
-  return function(x, y, z)
-    if actor.explored then
-      if not actor.explored[x] then actor.explored[x] = {} end
-      actor.explored[x][y] = self:getCell(x, y)
+function Level:getLightingAt(x, y, fov, light)
+  if fov[x] and fov[x][y] and not fov[x][y].opaque then
+    if light[x] and light[y] then
+      return light[x][y]
     end
 
+    return { 0, 0, 0 }
+  end
+
+  local finalCol = { 0, 0, 0 }
+  local cols = {}
+
+  for i = -1, 1, 1 do
+    for j = -1, 1, 1 do
+      if fov[x + i] and fov[x + i][y + j] and fov[x + i][y + j].passable then
+        if light[x + i] and light[x + i][y + j] then
+          table.insert(cols, light[x + i][y + j])
+        end
+      end
+    end
+  end
+
+  local count = #cols
+  for i = 1, count do
+    for j = 1, 3 do
+      finalCol[j] = finalCol[j] + cols[i][j]
+    end
+  end
+
+  for j = 1, 3 do
+    finalCol[j] = finalCol[j] / count
+  end
+
+  return finalCol
+end
+
+function Level:getFOVCallback(actor)
+  return function(x, y, z)
     if not actor.fov[x] then actor.fov[x] = {} end
     actor.fov[x][y] = self:getCell(x, y)
   end

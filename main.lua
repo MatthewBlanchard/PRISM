@@ -71,6 +71,7 @@ function love.load()
   game.viewDisplay = viewDisplay2x
   game.Player = actors.Player()
 
+
   local interface = Interface(display)
   interface:push(Start(display, interface))
   local level = Level(map)
@@ -80,6 +81,10 @@ function love.load()
 
   local player = game.Player
   game.curActor = player
+
+  table.insert(player:getComponent(components.Inventory).inventory, actors.Torch())
+  table.insert(player:getComponent(components.Inventory).inventory, actors.Dagger())
+  table.insert(player:getComponent(components.Inventory).inventory, actors.Wand_of_light())
 
   love.keyboard.setKeyRepeat(true)
 end

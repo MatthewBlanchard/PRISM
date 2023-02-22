@@ -33,7 +33,6 @@ function Attack:perform(level)
       dmg = dmg * 2
     end
 
-    print("OWNER", self.owner)
     local damage = defender:getReaction(reactions.Damage)(defender, {self.owner}, dmg)
 
     level:performAction(damage)

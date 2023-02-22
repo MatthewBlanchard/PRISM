@@ -69,36 +69,6 @@ local function shouldDrawExplored(explored, x, y)
   end
 end
 
-local function calculateLight(x, y, fov, light)
-  if fov[x][y].passable then return light[x][y] end
-
-  local finalCol = { 0, 0, 0 }
-  local cols = {}
-
-  for i = -1, 1, 1 do
-    for j = -1, 1, 1 do
-      if fov[x + i] and fov[x + i][y + j] and fov[x + i][y + j].passable then
-        if light[x + i] and light[x + i][y + j] then
-          table.insert(cols, light[x + i][y + j])
-        end
-      end
-    end
-  end
-
-  local count = #cols
-  for i = 1, count do
-    for j = 1, 3 do
-      finalCol[j] = finalCol[j] + cols[i][j]
-    end
-  end
-
-  for j = 1, 3 do
-    finalCol[j] = finalCol[j] / count
-  end
-
-  return finalCol
-end
-
 function Interface:draw()
   local fov = game.curActor.fov
   local explored = game.curActor.explored
@@ -117,16 +87,15 @@ function Interface:draw()
           -- do a bit of blending to keep it in line with the ambient
           -- fog of war
           local finalColor
-          local lightCol = calculateLight(x, y, fov, light)
+          local lightCol = game.level:getLightingAt(x, y, fov, light)
           local lightValue = value(lightCol)
-          local ambientValue = value({ .175, .375, .175 })
+          local ambientValue = game.curActor.darkvision
 
-          if lightValue < ambientValue then
-            local t = 1 - lightValue / ambientValue
-            finalColor = clerp(lightCol, ambientColor, t)
-          else
-            finalColor = lightCol
-          end
+          local t = math.min(1, math.max(lightValue - ambientValue, 0))
+          t = math.min(t / (1 - ambientValue), 1)
+          finalColor = clerp(ambientColor, lightCol, t*t)
+
+          if lightValue ~= lightValue then finalColor = ambientColor end
           self:writeOffset(fov[x][y].tile, x, y, finalColor)
         else
           self:writeOffset(fov[x][y].tile, x, y, ambientColor)
@@ -165,10 +134,17 @@ function Interface:draw()
       if conditional and conditional(actor) or true then
         local x, y = actor.position.x, actor.position.y
         if actorTable ~= scryActors and light[x] and light[x][y] then
-          local lightValue = math.min(value(light[x][y]), 0.5)
-          self:writeOffset(char, x, y, clerp(ambientColor, actor.color, lightValue / 0.5))
+          local ambientValue = game.curActor.darkvision
+
+          local finalColor
+          local lightCol = game.level:getLightingAt(x, y, fov, light)
+          local lightValue = value(lightCol)
+          local t = math.max(lightValue - ambientValue, 0)
+          t = math.min(t / (1 - ambientValue), 1)
+          finalColor = clerp(ambientColor, lightCol, t)
+          self:writeOffset(char, x, y, clerp(ambientColor, actor.color, t*t))
         else
-          self:writeOffset(char, x, y, actor.color)
+          self:writeOffset(char, x, y, ambientColor)
         end
       end
     end
@@ -271,7 +247,7 @@ function Interface:handleKeyPress(keypress)
       local item
       for k, i in pairs(game.curActor.seenActors) do
         if actions.Pickup:validateTarget(1, game.curActor, i) then
-          return self:setAction(game.curActor:getAction(actions.Pickup)(game.curActor, i))
+          return self:setAction(game.curActor:getAction(actions.Pickup)(game.curActor, {i}))
         end
       end
     end
@@ -299,7 +275,7 @@ function Interface:handleKeyPress(keypress)
           not love.keyboard.isDown("lctrl")
       then
         if not enemy.passable or love.keyboard.isDown("lshift") then
-          return self:setAction(enemy.defaultUseAction(game.curActor, enemy))
+          return self:setAction(enemy.defaultUseAction(game.curActor, { enemy }))
         end
       end
 

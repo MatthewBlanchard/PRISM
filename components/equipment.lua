@@ -8,7 +8,7 @@ Equipment.requirements = {components.Item}
 
 function Equipment:__new(options)
   self.slot = options.slot
-  self.effects = options.effects
+  self.effects = options.effects or {}
 end
 
 function Equipment:initialize(actor)

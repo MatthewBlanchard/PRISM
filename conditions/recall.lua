@@ -1,5 +1,6 @@
 local Condition = require "condition"
 local Tiles = require "tiles"
+local Vector2 = require "vector"
 
 local Recall = Condition:extend()
 Recall.name = "recall"
@@ -7,6 +8,7 @@ Recall.name = "recall"
 Recall:setDuration(2000)
 
 function Recall:setPosition(pos)
+  assert(pos.is and pos:is(Vector2), "Expected Vector2, got " .. type(pos))
   self.pos = pos
 end
 

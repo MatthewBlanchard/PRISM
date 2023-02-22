@@ -6,7 +6,6 @@ Move.silent = true
 Move.targets = {targets.Point}
 
 function Move:__new(owner, direction)
-  print("DIRECTION", direction.x, direction.y)
   Action.__new(self, owner, { direction })
 end
 

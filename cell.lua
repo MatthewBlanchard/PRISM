@@ -6,7 +6,8 @@ Cell.name = "Air" -- displayed in the user interface
 Cell.tile = Tiles["floor"]
 Cell.passable = true -- defines whether a cell is passable
 Cell.opaque = false -- defines whether a cell can be seen through
-Cell.movePenalty = 0
+Cell.sightLimit = nil -- if set to an integer an actor standing on this tile's sight range will be limited to this number
+Cell.movePenalty = 0 -- applies a penalty to speed when moving through this cell
 
 function Cell:__new()
 end

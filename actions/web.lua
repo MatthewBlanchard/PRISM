@@ -2,7 +2,7 @@ local Action = require "action"
 local Tiles = require "tiles"
 
 local WebTarget = targets.Creature:extend()
-WebTarget:setRange(3)
+WebTarget:setRange(4)
 
 local Web = Action:extend()
 Web.name = "web"

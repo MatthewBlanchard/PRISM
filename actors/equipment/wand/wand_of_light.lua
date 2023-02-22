@@ -12,7 +12,7 @@ Orb.name = "Orb of light"
 Orb.components = {
   components.Light{
     color = { 0.8, 0.8, 0.866, 1 },
-    intensity = 2.5
+    intensity = 5
   },
   components.Lifetime{ duration = 3000 }
 }
@@ -39,7 +39,7 @@ function Zap:perform(level)
   local fov, actors = level:getAOE("fov", target, self.aoeRange)
 
   for _, actor in ipairs(actors) do
-    if targets.Creature:checkRequirements(actor) then
+    if actor:getComponent(components.Stats) then
       if level:isScheduled(actor) then
         level:addEffect(effects.CharacterDynamic(actor, 0, -1, Tiles["bubble_stun"], {1, 1, 1}, .5))
         level:addScheduleTime(actor, 600)

@@ -27,6 +27,7 @@ function Target:validate(owner, toValidate)
 end
 
 local ActorTarget = Target:extend()
+ActorTarget.rtype = "box"
 
 function ActorTarget:__new(range)
   Target.__new(self, range)
@@ -38,7 +39,6 @@ function ActorTarget:validate(owner, actor)
 
   if owner == actor and not self.canTargetSelf then return false end
 
-  print(self.range)
   if self.range == 0 then
     local inventory = owner:getComponent(components.Inventory)
     if inventory and inventory:hasItem(actor) then
@@ -49,7 +49,6 @@ function ActorTarget:validate(owner, actor)
       range = true
     end
   else
-    print(owner:getRange(self.rtype, actor), self.range)
     range = owner:getRange(self.rtype, actor) <= self.range
   end
 
@@ -59,9 +58,6 @@ end
 local PointTarget = Target:extend()
 
 function PointTarget:validate(owner, vec2)
-  for k,v in pairs(vec2) do print(k,v) end
-  assert(vec2.is and vec2:is(Vector2), "Invalid target for PointTarget (expected Vector2, got " .. type(vec2) .. ")")
-
   return owner:getRange(self.rtype, vec2)
 end
 
@@ -75,11 +71,6 @@ targets.Point = PointTarget
 targets.Creature = targets.Actor:extend()
 
 function targets.Creature:validate(owner, actor)
-  print "YEET"
-
-  if not ActorTarget.validate(self, owner, actor) then
-    print "NOPE"
-  end
   return ActorTarget.validate(self, owner, actor) and actor:hasComponent(components.Stats)
 end
 
@@ -104,7 +95,7 @@ function targets.Equipment:validate(owner, actor)
   local equipper = owner:getComponent(components.Equipper)
   local equipment = actor:getComponent(components.Equipment)
   local hasSlot = equipment and equipper and equipper:hasSlot(equipment.slot) or false
-  local slotEmpty = equipper and equipper:getSlot(equipment.slot) == false 
+  local slotEmpty = equipment and equipper and equipper:getSlot(equipment.slot) == false 
 
   return targets.Item.validate(self, owner, actor) and hasSlot and slotEmpty
 end
@@ -122,8 +113,9 @@ end
 targets.Unequip = targets.Item:extend()
 
 function targets.Unequip:validate(owner, actor)
+  local equipper = owner:getComponent(components.Equipper)
   local equipment = actor:getComponent(components.Equipment)
-  local isEquipped = equipment and owner.slots[equipment.slot] == actor
+  local isEquipped = equipment and equipper and equipper.slots[equipment.slot] == actor
   return targets.Item.validate(self, owner, actor) and isEquipped
 end
 

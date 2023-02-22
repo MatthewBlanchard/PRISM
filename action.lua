@@ -4,16 +4,14 @@ local Action = Object:extend()
 Action.time = 100
 
 function Action:__new(owner, targets)
-  print(#targets, targets[1].x, targets[1].y)
   self.owner = owner
   self.name = self.name or "ERROR"
   self.targets = self.targets or {}
   self.targetActors = targets or {}
 
-  print(#self.targetActors)
   assert(#self.targetActors == #self.targets, "Invalid number of targets for action " .. self.name .. " expected " .. #self.targets .. " got " .. #self.targetActors)
   for i, target in ipairs(self.targets) do
-    assert(target:validate(owner, self.targets[i]), "Invalid target " .. i .. " for action " .. self.name)
+    assert(target:validate(owner, self.targetActors[i]), "Invalid target " .. i .. " for action " .. self.name)
   end
 end
 

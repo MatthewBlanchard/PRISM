@@ -24,7 +24,9 @@ function Equipper:initialize()
   self.slots = {} 
   
   for k, v in pairs(tmp) do
-    self.slots[k] = v
+    print(k, v)
+    assert(type(v) == "string", "Equipper slot name must be a string!")
+    self.slots[v] = false
   end
 end
 

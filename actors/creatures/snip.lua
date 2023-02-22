@@ -21,7 +21,7 @@ Snip.color = {0.97, 0.93, 0.55, 1}
 
 Snip.components = {
   components.Sight{ range = 6, fov = true, explored = false },
-  components.Move{speed = 100, passable = true},
+  components.Move{speed = 200, passable = true},
   components.Stats{
     ATK = 0,
     MGK = 0,
@@ -54,7 +54,7 @@ function Snip:act(level)
     return actUtil.crowdAround(self, target, true)
   end
 
-  return actUtil.randomMove(self)
+  return actUtil.randomMove(level, self)
 end
 
 return Snip

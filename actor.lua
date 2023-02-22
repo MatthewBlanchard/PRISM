@@ -114,6 +114,24 @@ function Actor:initializeComponents()
   end
 end
 
+function Actor:getActions()
+  local total_actions = {}
+
+  for k, action in pairs(self.actions) do
+    table.insert(total_actions, action)
+  end
+
+  for k, component in pairs(self.components) do
+    if component.actions then
+      for k, action in pairs(component.actions) do
+        table.insert(total_actions, action)
+      end
+    end
+  end
+
+  return total_actions
+end
+
 function Actor:addAction(action)
   assert(action:is(Action), "Expected argument action to be of type Action!")
 
@@ -135,7 +153,7 @@ function Actor:removeAction(action)
 end
 
 function Actor:getAction(prototype)
-  assert(prototype:is(Action), "Expected argument prototype to be extended from Action!")
+  assert(prototype:is(Action), "Expected argument prototype to be of type Action!")
 
   for _, action in pairs(self.actions) do
     if action:is(prototype) then
@@ -208,7 +226,6 @@ function Actor:getRange(type, actor)
 end
 
 function Actor:getRangeVec(type, vector)
-  print(vector.x, vector.y)
   assert(vector.is and vector:is(Vector2), "Expected argument vector to be of type Vector2!")
 
   local pos = self.position

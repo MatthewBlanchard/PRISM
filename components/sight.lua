@@ -7,6 +7,7 @@ function Sight:__new(options)
   self.range = options.range
   self.fov = options.fov
   self.explored = options.explored
+  self.darkvision = options.darkvision or 0.25
 end
 
 function Sight:initialize(actor)
@@ -14,6 +15,7 @@ function Sight:initialize(actor)
   actor.sight = self.range
   actor.seenActors = {}
   actor.scryActors = {}
+  actor.darkvision = self.darkvision
 
   if self.fov then
     actor.fov = {}

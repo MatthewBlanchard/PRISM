@@ -9,7 +9,7 @@ Sqeeto.name = "sqeeter"
 Sqeeto.color = {0.8, 0.7, 0.09}
 
 Sqeeto.components = {
-  components.Sight{ range = 4, fov = true, explored = false },
+  components.Sight{ range = 4, fov = true, explored = false, darkvision = 0.25 },
   components.Move{ speed = 100, passable = false},
   components.Stats{
     ATK = 0,
