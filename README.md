@@ -37,4 +37,7 @@ We welcome contributions to PRISM! Open an issue or pull request to begin a disc
 We would like to thank the following people for their contributions to PRISM:
 
 Rynelf
+
+Dim
+
 Matthew Blanchard
