@@ -3,11 +3,12 @@ local Condition = require "condition"
 
 local Player = Actor:extend()
 Player.name = "Player"
+Player.passable = false
 
 Player.components = {
   components.Sight{ range = 30, fov = true, explored = true },
   components.Message(),
-  components.Move{ speed = 100, passable = false },
+  components.Move{ speed = 100 },
   components.Inventory(),
   components.Wallet{ autoPick = true },
   components.Controller{ inputControlled = true },

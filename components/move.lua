@@ -10,7 +10,6 @@ Move.actions = {
 
 function Move:__new(options)
   self.speed = options.speed
-  self.passable = options.passable or false
 end
 
 function Move:initialize(actor)
@@ -22,10 +21,6 @@ function Move:initialize(actor)
   self.actions = { 
     moveAction
   }
-
-  -- TODO: The entire passable system needs to be reworked so that there's
-  -- a collider component that signals whether or not an actor is passable
-  actor.passable = self.passable
 end
 
 return Move

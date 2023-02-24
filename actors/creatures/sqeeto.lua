@@ -7,10 +7,11 @@ local Sqeeto = Actor:extend()
 Sqeeto.char = Tiles["sqeeto"]
 Sqeeto.name = "sqeeter"
 Sqeeto.color = {0.8, 0.7, 0.09}
+Sqeeto.passable = false
 
 Sqeeto.components = {
   components.Sight{ range = 4, fov = true, explored = false, darkvision = 0.25 },
-  components.Move{ speed = 100, passable = false},
+  components.Move{ speed = 100 },
   components.Stats{
     ATK = 0,
     MGK = 0,

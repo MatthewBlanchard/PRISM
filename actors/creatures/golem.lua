@@ -7,10 +7,11 @@ local Golem = Actor:extend()
 Golem.char = Tiles["golem"]
 Golem.name = "crystal golem"
 Golem.color = {0.4, 0.4, 0.8}
+Golem.passable = false
 
 Golem.components = {
   components.Sight{range = 5, fov = true, explored = false},
-  components.Move{speed = 100, passable = false},
+  components.Move{speed = 100},
   components.Stats {
     ATK = 2,
     MGK = 0,

@@ -30,9 +30,10 @@ function Pickup:perform(level)
   local target = self.targetActors[1]
   level:removeActor(target)
 
-  local currency = self.owner:getComponent(components.Currency)
-  if currency then 
-    self.owner:deposit(getmetatable(target), target.worth)
+  local wallet_component = self.owner:getComponent(components.Wallet)
+  local currency_component = target:getComponent(components.Currency)
+  if wallet_component and currency_component then 
+    self.owner:deposit(getmetatable(target), currency_component.worth)
   else
     local inventory = self.owner:getComponent(components.Inventory)
     inventory:addItem(target)
