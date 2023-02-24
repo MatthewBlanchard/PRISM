@@ -5,9 +5,6 @@ local Sellable = Component:extend()
 Sellable.name = "Sellable"
 
 function Sellable:initialize(actor)
-  actor.setShopkeep = self.setShopkeep
-  actor.setPrice = self.setPrice
-  actor.setItem = self.setItem
 end
 
 function Sellable:setShopkeep(actor)
