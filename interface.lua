@@ -88,12 +88,12 @@ function Interface:draw()
           -- fog of war
           local finalColor
           local lightCol = game.level:getLightingAt(x, y, fov, light)
-          local lightValue = value(lightCol)
+          local lightValue = math.min(value(lightCol), 1)
           local ambientValue = game.curActor.darkvision
 
           local t = math.min(1, math.max(lightValue - ambientValue, 0))
           t = math.min(t / (1 - ambientValue), 1)
-          finalColor = clerp(ambientColor, lightCol, t*t)
+          finalColor = clerp(ambientColor, lightCol, t)
 
           if lightValue ~= lightValue then finalColor = ambientColor end
           self:writeOffset(fov[x][y].tile, x, y, finalColor)
@@ -136,13 +136,12 @@ function Interface:draw()
         if actorTable ~= scryActors and light[x] and light[x][y] then
           local ambientValue = game.curActor.darkvision
 
-          local finalColor
           local lightCol = game.level:getLightingAt(x, y, fov, light)
           local lightValue = value(lightCol)
           local t = math.max(lightValue - ambientValue, 0)
           t = math.min(t / (1 - ambientValue), 1)
           finalColor = clerp(ambientColor, lightCol, t)
-          self:writeOffset(char, x, y, clerp(ambientColor, actor.color, t*t))
+          self:writeOffset(char, x, y, clerp(ambientColor, actor.color, t))
         else
           self:writeOffset(char, x, y, ambientColor)
         end
