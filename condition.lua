@@ -38,6 +38,12 @@ function Event:where(condFunc)
   table.insert(self.conditionals, condFunc)
 end
 
+
+-- A condition is an event handler that is attached to an actor.
+-- It can listen to events such as an actor taking an action, moving, or a tick of time.
+-- This can be used for things like buffs, debuffs, poisons, and other actor specific mechanics.
+-- If you need to handle events more
+
 local Condition = Object:extend()
 
 Condition.onActions = {}

@@ -104,8 +104,6 @@ function Actor:__new()
   self:initializeComponents()
 end
 
---- Called when an Actor is added to a level. This function is
---- deprecated and will be removed in the future.
 function Actor:initialize(level)
   -- you should implement this in your own actor for things like
   -- applying conditions that are innate to the actor.
