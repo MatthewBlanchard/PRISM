@@ -9,6 +9,10 @@ Webweaver.name = "weaver"
 Webweaver.color = {0.7, 0.7, 0.9}
 Webweaver.passable = false
 
+Webweaver.actions = {
+  actions.Web
+}
+
 Webweaver.components = {
   components.Sight{ range = 8, fov = true, explored = false },
   components.Move{ speed = 75 },
@@ -30,9 +34,6 @@ Webweaver.components = {
     }
   },
 
-  components.Intrinsic{
-    action = actions.Web
-  },
   components.Aicontroller(),
   components.Animated()
 }
