@@ -15,11 +15,14 @@ local Reaction = require "reaction"
 -- @type Actor
 local Actor = Object:extend()
 
---- A collection of the actor's innate actions.
+--- A collection of the actor's innate actions. This is used mostly for
+--- actions that are 'instrinsic' to the actor, such as a spider casting a web.
+--- It might be better to use a component for this, and I may change it in the future.
 -- @tfield table actions
 Actor.actions = nil
 
---- A collection of the actor's innate reactions.
+--- A collection of the actor's innate reactions. This is hardly ever used
+--- and marked for removal.
 -- @tfield table reactions
 Actor.reactions = nil
 
@@ -86,14 +89,16 @@ function Actor:__new()
     local temp = {}
 
     for k, component in ipairs(self.components) do
+      -- Catch any components that are not of the Component type on initialization to prevent errors later.
       assert(component:is(Component), "Actor " .. self.name .. " has a component that is not of Component type!")
 
       if not component:checkRequirements(self) then
         error("Not all requirements present for component " .. component.name .. " in actor " .. self.name .. "!")
       end
 
-      -- BEWARE HACKS AHEAD
-      temp[k] = component
+      -- This is a hack to prevent components from being shared between actors by copying
+      -- the prototype's 
+      temp[k] = component:new()
     end
 
     self.components = temp
@@ -104,25 +109,32 @@ function Actor:__new()
   self:initializeComponents()
 end
 
+--- Called after an actor is added to a level and it's components are initialized.
+-- @function Actor:initialize
+-- @tparam Level level The level the actor is being added to.
 function Actor:initialize(level)
   -- you should implement this in your own actor for things like
   -- applying conditions that are innate to the actor.
 end
 
--- A utility function that returns a bool if the actor is visible
-function Actor:isVisible()
-  local visible = not self.visible
-  for k, cond in pairs(self:getConditions()) do
-    if cond.isVisible then
-      visible = visible or not cond.isVisible()
-    end
-  end
 
-  return not visible
+-- 
+-- Components 
+--
+
+
+--- Initializes the actor's components.
+-- @function Actor:initializeComponents
+function Actor:initializeComponents()
+  for k, component in ipairs(self.components) do
+    component:initialize(self)
+  end
 end
 
--- Adds a component to the actor. This function will check if the component's
--- prerequisites are met and will throw an error if they are not.
+--- Adds a component to the actor. This function will check if the component's
+--- prerequisites are met and will throw an error if they are not.
+-- @function Actor:addComponent
+-- @tparam Component component The component to add to the actor.
 function Actor:addComponent(component)
   assert(component:is(Component), "Expected argument component to be of type Component!")
 
@@ -133,8 +145,10 @@ function Actor:addComponent(component)
   table.insert(self.components, component)
 end
 
--- Removes a component from the actor. This function will throw an error if the
--- component is not present on the actor.
+--- Removes a component from the actor. This function will throw an error if the
+--- component is not present on the actor.
+-- @function Actor:removeComponent
+-- @tparam Component component The component to remove from the actor.
 function Actor:removeComponent(component)
   assert(component:is(Component), "Expected argument component to be of type Component!")
 
@@ -146,7 +160,9 @@ function Actor:removeComponent(component)
   end
 end
 
--- Returns a bool indicating whether the actor has a component of the given type.
+--- Returns a bool indicating whether the actor has a component of the given type.
+-- @function Actor:hasComponent
+-- @tparam Component type The prototype of the component to check for.
 function Actor:hasComponent(type)
   assert(type:is(Component), "Expected argument type to be inherited from Component!")
 
@@ -168,12 +184,11 @@ function Actor:getComponent(type)
   end
 end
 
--- Initializes all of the actor's components.
-function Actor:initializeComponents()
-  for k, component in ipairs(self.components) do
-    component:initialize(self)
-  end
-end
+
+--
+-- Actions
+--
+
 
 -- Get a list of actions from the actor and all of it's components.
 function Actor:getActions()
@@ -255,6 +270,12 @@ function Actor:getReaction(reaction)
   end
 end
 
+
+--
+-- Conditions
+--
+
+
 -- Attaches a condition to the actor. If the actor already has a condition of
 -- the same type and the condition is not stackable, the old condition will be
 -- removed.
@@ -296,7 +317,12 @@ function Actor:getConditions()
   return self.conditions
 end
 
--- utility functions
+
+--
+-- Utility
+--
+
+
 function Actor:getRange(type, actor)
   return self:getRangeVec(type, actor.position or actor)
 end
@@ -312,6 +338,20 @@ function Actor:getRangeVec(type, vector)
   else
     return math.sqrt(math.pow(pos.x - vector.x, 2) + math.pow(pos.y - vector.y, 2))
   end
+end
+
+--- A utility function that returns a bool if the actor is visible.
+-- @function Actor:isVisible
+-- @treturn boolean
+function Actor:isVisible()
+  local visible = not self.visible
+  for k, cond in pairs(self:getConditions()) do
+    if cond.isVisible then
+      visible = visible or not cond.isVisible()
+    end
+  end
+
+  return not visible
 end
 
 return Actor
