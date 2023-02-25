@@ -172,9 +172,10 @@ function Populater(level, map)
       product.position.x = shop.position.x + i*2
       product.position.y = shop.position.y
 
-      product:setItem(item)
-      product:setPrice(actors.Shard, item:getComponent(components.Cost).cost)
-      product:setShopkeep(shop)
+      local sellable_component = product:getComponent(components.Sellable)
+      sellable_component:setItem(item)
+      sellable_component:setPrice(actors.Shard, item:getComponent(components.Cost).cost)
+      sellable_component:setShopkeep(shop)
       level:addActor(product)
     end
   end
