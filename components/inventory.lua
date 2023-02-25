@@ -3,10 +3,6 @@ local Component = require "component"
 local Inventory = Component:extend()
 Inventory.name = "Inventory"
 
-Inventory.requirements = {
-  components.Stats
-}
-
 Inventory.actions = {
   actions.Drop,
   actions.Pickup,
@@ -15,8 +11,6 @@ Inventory.actions = {
 
 function Inventory:initialize(actor)
   self.inventory = {}
-  
-  print("WOWEEE", #self.actions)
 end
 
 function Inventory:hasItem(item)
