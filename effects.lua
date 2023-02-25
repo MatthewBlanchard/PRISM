@@ -13,7 +13,7 @@ effects.HealEffect = function(actor, heal)
     local color = { .1, 1, .1, 1 }
     interface:effectWriteOffset(actor.char, actor.position.x, actor.position.y, color)
     interface:effectWriteOffset(tostring(heal), actor.position.x + 1, actor.position.y, color)
-    if t > .4 then return true end
+    if t > 0.4 then return true end
   end
 end
 
@@ -25,7 +25,7 @@ effects.PoisonEffect = function(actor, damage)
     local color = { .1, .7, .1, 1 }
     interface:effectWriteOffset(Tiles["pointy_poof"], actor.position.x, actor.position.y, color)
     interface:effectWriteOffset(tostring(damage), actor.position.x + 1, actor.position.y, color)
-    if t > .2 then return true end
+    if t > 0.2 then return true end
   end
 end
 
@@ -71,7 +71,7 @@ effects.DamageEffect = function(source, actor, dmg, hit)
     end
 
     t = t + dt
-    if t > 1 then return true end
+    if t > 0.3 then return true end
   end
 end
 
