@@ -11,16 +11,13 @@ function Sight:__new(options)
 end
 
 function Sight:initialize(actor)
-  actor.getRevealedActors = self.getRevealedActors
-  actor.sight = self.range
-  actor.seenActors = {}
-  actor.scryActors = {}
-  actor.darkvision = self.darkvision
+  self.seenActors = {}
+  self.scryActors = {}
 
   if self.fov then
-    actor.fov = {}
+    self.fov = {}
     if self.explored then
-      actor.explored = {}
+      self.explored = {}
     end
   end
 end
