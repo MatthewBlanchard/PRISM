@@ -15,10 +15,14 @@ end
 local Level = Object:extend()
 
 function Level:__new(map)
+  self.systems = {}
   self.actors = {}
+
+  -- TO DELETE:
   self.light = {}
   self.effectlight = {}
   self.temporaryLights = {}
+  self.fov = ROT.FOV.Recursive(self:getVisibilityCallback())
   self.effects = {}
 
   self.scheduler = Scheduler()
@@ -29,7 +33,6 @@ function Level:__new(map)
 
   self.sparseMap = SparseMap() -- holds a sparse map of actors in the scene by position
 
-  self.fov = ROT.FOV.Recursive(self:getVisibilityCallback())
 
   -- let's create our map and fill it with the info from the supplied
   -- rotLove map
@@ -39,7 +42,7 @@ function Level:__new(map)
   map:create(self:getMapCallback())
   populateMap(self, map)
 
-  -- Some initialization on the lighting
+  -- TO DELETE Some initialization on the lighting
   self.lighting = ROT.Lighting(self:getLightReflectivityCallback(), { range = 50, passes = 3 })
   self.lighting:setFOV(self.fov)
   self:updateLighting(false, 0)
@@ -65,8 +68,9 @@ function Level:update()
     assert(actor == "tick" or actor:is(Actor), "Found a scheduler entry that wasn't an actor or tick.")
 
     if actor == "tick" then
-      -- We found the special actor tick which triggers recurring condition effects
-      -- like damage over time. It's also used to track durations.
+      -- Tick is used by various Conditions and Systems to keep track of time
+      -- and durations. A hunger System might use it to tick down a hunger
+      -- meter. A poison condition might deal damage every tick.
       self.scheduler:addTime(actor, 100)
       self:triggerActionEvents("onTicks")
     else
@@ -119,17 +123,10 @@ function Level:updateFOV(actor)
 
     for x, _ in pairs(actor.fov) do
       for y, _ in pairs(actor.fov[x]) do
-        local lighting = self:getLightingAt(x, y, actor.fov, self.light)
-        if lighting then
-          local lightval = value(lighting)
-          if lightval ~= lightval or lightval < actor.darkvision then
-            actor.fov[x][y] = false
-          end
-        else 
-          if actor.darkvision ~= 0 then
-            actor.fov[x][y] = false
-          end
-        end    
+        local lightval = value(self:getLightingAt(x, y, actor.fov, self.light) or {0, 0, 0})
+        if lightval < actor.darkvision or lightval ~= lightval then
+          actor.fov[x][y] = false
+        end
       end
     end
 
@@ -294,15 +291,18 @@ function Level:grassCheck(actor, other)
 end
 
 function Level:updateSeenActors(actor)
-  actor.seenActors = {}
+  local sight_component = actor:getComponent(components.Sight)
+  if not sight_component then return end
+
+  sight_component.seenActors = {}
 
   for k, other in ipairs(self.actors) do
     if (other:isVisible() or actor == other) and
-        actor.fov[other.position.x] and
-        actor.fov[other.position.x][other.position.y] and
-        self:grassCheck(actor, other)
+      sight_component.fov[other.position.x] and
+      sight_component.fov[other.position.x][other.position.y] and
+      self:grassCheck(actor, other)
     then
-      table.insert(actor.seenActors, other)
+      table.insert(sight_component.seenActors, other)
     end
   end
 end
