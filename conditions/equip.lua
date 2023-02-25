@@ -3,36 +3,6 @@ local Condition = require "condition"
 local EquipCondition = Condition:extend()
 EquipCondition.name = "equipped"
 
-EquipCondition:afterAction(actions.Equip,
-  function(self, level, actor, action)
-    local light = action:getTarget(1):getComponent(components.Light)
-    local equipment = actor:getComponent(components.Equipment)
-
-    for k, effect in pairs(equipment.effects) do
-      action.owner:applyCondition(effect)
-    end
-
-    if light then
-      level:invalidateLighting()
-    end
-  end
-):where(Condition.ownerIsTarget)
-
-EquipCondition:afterAction(actions.Unequip,
-  function(self, level, actor, action)
-    local light = action:getTarget(1):getComponent(components.Light)
-    local equipment = actor:getComponent(components.Equipment)
-
-    for k, effect in pairs(equipment.effects) do
-      action.owner:removeCondition(effect)
-    end
-    
-    if light then
-      level:invalidateLighting()
-    end
-  end
-):where(Condition.ownerIsTarget)
-
 EquipCondition:onAction(actions.Drop,
   function(self, level, actor, action)
     local light = action:getTarget(1):getComponent(components.Light)
