@@ -1,3 +1,6 @@
+--- Core module
+-- @module Core
+
 local Object = require "object"
 local Vector2 = require "vector"
 local Tiles = require "tiles"
@@ -5,21 +8,72 @@ local Component = require "component"
 local Action = require "action"
 local Reaction = require "reaction"
 
+--- Represents entities in the game, including the player, enemies, and items.
+--- Actors are composed of Components that define their state and behavior.
+--- For example, an actor may have a Sight component that determines their field of vision, explored tiles, and other related aspects.
+--- The Sight System handles the mechanics of an actor's sight.
+-- @type Actor
 local Actor = Object:extend()
-Actor.passable = true
-Actor.visible = true
-Actor.color = { 1, 1, 1, 1 }
-Actor.emissive = false
-Actor.char = Tiles["player"]
-Actor.name = "actor"
-Actor.conjugate = true
-Actor.heshe = "it"
-Actor.aan = "a"
 
+--- A collection of the actor's innate actions.
+-- @tfield table actions
+Actor.actions = nil
+
+--- A collection of the actor's innate reactions.
+-- @tfield table reactions
+Actor.reactions = nil
+
+-- An actor's Conditions, event handlers that modify the actor's state and actions.
+-- @tfield table conditions
+Actor.conditions = nil
+
+--- The position of the actor on the map.
+-- @tfield Vector2 position
+Actor.position = nil
+
+--- The name of the actor.
+-- @tfield string name
+Actor.name = "actor"
+
+--- Defines whether the actor can be moved through.
+-- @tfield boolean passable
+Actor.passable = true
+
+--- Defines whether the actor can be seen.
+-- @tfield boolean passable
+Actor.visible = true 
+
+--- Defines the actor's base color.
+-- @tfield table color
+Actor.color = { 1, 1, 1, 1 }
+
+--- Defines whether the actor's color should be used instead of it's lit color.
+-- @tfield boolean emissive
+Actor.emissive = false
+
+--- Defines the actor's offset in the sprite sheet.
+-- @field offset integer
+Actor.char = Tiles["player"]
+
+--- Whether to conjugate verbs when referring to the actor.
+-- @tfield conjugate boolean
+Actor.conjugate = true 
+
+--- The pronoun to use when referring to the actor.
+-- @tfield string pronoun
+Actor.pronoun = "it" -- the pronoun for the actor
+
+--- The article to use when referring to the actor.
+-- @tfield string article
+Actor.article = "a" -- the article for the actor
+
+
+--- Constructor for an actor.
+-- Initializes and copies the actor's fields from it's prototype.
+-- @function Actor:__new
 function Actor:__new()
   self.position = Vector2(1, 1)
   self.lposition = self.position
-
   self.actions = self.actions or {}
   self.reactions = self.reactions or {}
   self.conditions = {}
@@ -50,12 +104,14 @@ function Actor:__new()
   self:initializeComponents()
 end
 
--- This is called when an actor is added to a level.
+--- Called when an Actor is added to a level. This function is
+--- deprecated and will be removed in the future.
 function Actor:initialize(level)
   -- you should implement this in your own actor for things like
   -- applying conditions that are innate to the actor.
 end
 
+-- A utility function that returns a bool if the actor is visible
 function Actor:isVisible()
   local visible = not self.visible
   for k, cond in pairs(self:getConditions()) do
@@ -67,6 +123,8 @@ function Actor:isVisible()
   return not visible
 end
 
+-- Adds a component to the actor. This function will check if the component's
+-- prerequisites are met and will throw an error if they are not.
 function Actor:addComponent(component)
   assert(component:is(Component), "Expected argument component to be of type Component!")
 
@@ -77,6 +135,8 @@ function Actor:addComponent(component)
   table.insert(self.components, component)
 end
 
+-- Removes a component from the actor. This function will throw an error if the
+-- component is not present on the actor.
 function Actor:removeComponent(component)
   assert(component:is(Component), "Expected argument component to be of type Component!")
 
@@ -88,6 +148,7 @@ function Actor:removeComponent(component)
   end
 end
 
+-- Returns a bool indicating whether the actor has a component of the given type.
 function Actor:hasComponent(type)
   assert(type:is(Component), "Expected argument type to be inherited from Component!")
 
@@ -100,6 +161,7 @@ function Actor:hasComponent(type)
   return false
 end
 
+-- Returns the first component of the given type that the actor has.
 function Actor:getComponent(type)
   for k, component in pairs(self.components) do
     if component:is(type) then
@@ -108,12 +170,14 @@ function Actor:getComponent(type)
   end
 end
 
+-- Initializes all of the actor's components.
 function Actor:initializeComponents()
   for k, component in ipairs(self.components) do
     component:initialize(self)
   end
 end
 
+-- Get a list of actions from the actor and all of it's components.
 function Actor:getActions()
   local total_actions = {}
 
@@ -132,6 +196,8 @@ function Actor:getActions()
   return total_actions
 end
 
+-- Add an action to the actor. This function will throw an error if the action
+-- is already present on the actor.
 function Actor:addAction(action)
   assert(action:is(Action), "Expected argument action to be of type Action!")
 
@@ -143,6 +209,7 @@ function Actor:addAction(action)
   table.insert(self.actions, action)
 end
 
+-- Remove an action from the actor. 
 function Actor:removeAction(action)
   for k, v in pairs(self.actions) do
     if v:is(action) then
@@ -152,6 +219,8 @@ function Actor:removeAction(action)
   end
 end
 
+-- Get's an action from the actor. This function will check the actor's actions
+-- and all of it's components for the action.
 function Actor:getAction(prototype)
   assert(prototype:is(Action), "Expected argument prototype to be of type Action!")
 
@@ -172,12 +241,14 @@ function Actor:getAction(prototype)
   end
 end
 
+-- Adds a reaction to the actor.
 function Actor:addReaction(reaction)
   assert(reaction:is(Reaction), "Expected argument reaction to be of type Reaction!")
 
   table.insert(self.reactions, reaction)
 end
 
+-- Gets the first reaction of the given type that the actor has.
 function Actor:getReaction(reaction)
   for k, v in pairs(self.reactions) do
     if v:is(reaction) then
@@ -186,6 +257,9 @@ function Actor:getReaction(reaction)
   end
 end
 
+-- Attaches a condition to the actor. If the actor already has a condition of
+-- the same type and the condition is not stackable, the old condition will be
+-- removed.
 function Actor:applyCondition(condition)
   if self:hasCondition(getmetatable(condition)) and condition.stackable == false then
     self:removeCondition(condition)
@@ -195,6 +269,7 @@ function Actor:applyCondition(condition)
   condition.owner = self
 end
 
+-- Checks if the actor has a condition of the given type.
 function Actor:hasCondition(condition)
   for i = 1, #self.conditions do
     if self.conditions[i]:is(condition) then
@@ -205,6 +280,8 @@ function Actor:hasCondition(condition)
   return false
 end
 
+-- Removes a condition from the actor. Returns a bool indicating whether the
+-- condition was removed.
 function Actor:removeCondition(condition)
   for i = 1, #self.conditions do
     if self.conditions[i]:is(condition) then
@@ -216,6 +293,7 @@ function Actor:removeCondition(condition)
   return false
 end
 
+-- Returns a list of all conditions that the actor has.
 function Actor:getConditions()
   return self.conditions
 end
