@@ -1,8 +1,9 @@
 -- TODO: Refactor this! We need a World object that holds all of the loaded actors, actions, etc. and the current level.
-ROT = require 'rot/rot'
+ROT = require 'lib/rot/rot'
 MusicManager = require "musicmanager"
 vector22 = require "vector"
 
+systems = {}
 conditions = {}
 reactions = {}
 actions = {}
@@ -34,6 +35,7 @@ loadItems("actions/reactions", reactions, true)
 loadItems("components", components)
 loadItems("conditions", conditions, true)
 loadItems("actors", actors, true)
+loadItems("systems", systems, true)
 Loot = require "loot"
 
 local Level = require "level"
@@ -75,6 +77,11 @@ function love.load()
   local interface = Interface(display)
   interface:push(Start(display, interface))
   local level = Level(map)
+  level:addSystem(systems.Message())
+  level:addSystem(systems.Effects())
+  level:addSystem(systems.Lighting())
+  level:addSystem(systems.Sight())
+  level:addSystem(systems.Equipment())
 
   game.level = level
   game.interface = interface
@@ -103,12 +110,11 @@ local updateCoroutine
 game.waiting = false
 local animations = true
 function love.update(dt)
-  game.level:updateEffectLighting(dt)
   game.music:update(dt)
   game.interface:update(dt, game.level)
 
   if not updateCoroutine then
-    updateCoroutine = coroutine.create(game.level.update)
+    updateCoroutine = coroutine.create(game.level.run)
   end
 
   local awaitedAction = game.interface:getAction()
@@ -117,8 +123,9 @@ function love.update(dt)
   if game.waiting and not awaitedAction then return end
   game.waiting = false
 
+  local effects = game.level:getSystem("Effects")
   -- don't advance game state while we're rendering effects please
-  if #game.level.effects ~= 0 then return end
+  if effects and #effects.effects ~= 0 then return end
 
   local success, ret, effect = coroutine.resume(updateCoroutine, game.level, awaitedAction)
   if not game.interface.animating and success and ret == "effect" then
@@ -146,9 +153,7 @@ function love.update(dt)
       game.level.effects = {}
       game.interface.animating = true
     end
-  end
-
-  if coroutine.status(updateCoroutine) == "dead" then
+  elseif coroutine.status(updateCoroutine) == "dead" then
     -- The coroutine has not stopped running and returned "descend".
     -- It's time for us to load a new level.
     if ret == "descend" then
