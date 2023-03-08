@@ -1,6 +1,6 @@
 # PRISM
 
-PRISM is an open source MIT licensed roguelike engine and example game written in Lua. The example game "Beneath the Garden" is used as a testbed for the featureset of the engine.
+PRISM is an open source permissively licensed roguelike engine and example game written in Lua. The example game "Beneath the Garden" is used as a testbed for the featureset of the engine.
 
 ## Getting Started
 
@@ -12,7 +12,7 @@ To get started with PRISM, follow these steps:
 
 ## Features
 
-PRISM's goal is to be a flexible, hackable, open source roguelike engine. To this end it was designed with a very unopinionated entity/component system, and an action system heavily inspired by [Bob Nystrom's talk on roguelike architecture](https://youtu.be/JxI3Eu5DPwE).
+PRISM's goal is to be a flexible, hackable, open source roguelike engine. To this end it was designed with a very unopinionated actor/component system, and an action system heavily inspired by [Bob Nystrom's talk on roguelike architecture](https://youtu.be/JxI3Eu5DPwE).
 
 * All actors are made of the same stuff. From the player to a potion they are all Actors composed with Components. This allows for some really interesting mechanics like parsnip people you can eat, or little slimes that explode when thrown.
 * Code for features is neatly encapsulated in Actions, Components, and Conditions and it's easy to add new features without going too deeply into systems.

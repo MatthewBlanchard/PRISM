@@ -16,8 +16,6 @@ function Equipment:initialize(actor)
   if item_component then
     item_component.stackable = false
   end
-
-  actor:applyCondition(conditions.Equip())
 end
 
 return Equipment

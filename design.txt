@@ -1,0 +1,98 @@
+Generic
+    You get a discount at stores.
+    You know the location of the staircase.
+    You move faster.
+    You get +1 hp per level.
+
+Fighter
+    Passive
+        You get +2 hp per level.
+    Active
+        Second Wind
+        Action Surge
+        Shout
+
+    Themes
+        General Subtheme
+            +1 AC -5 MS
+                    
+        Food/Healing Subtheme
+            -- think about interesting food abilites & sources
+
+        Second Wind
+            +1 ATK when second wind is active
+            +1 Charge of Second Wind
+            +Time to second wind
+            Feats that proc on and 
+
+        Action Surge
+            +AC while dual wielding
+            +Attack speed while dual wielding
+            You may wield medium weapons in your offhand.
+            All movespeed penalties from armor below -10 are mitigated.
+
+        Shout
+            Enemies within range of your shout get -1 AC/ATK/MGK etc.
+            "Elemental mastery" style feats that give shout a specific debuff and open feats to do with that debuff like fear, slow, etc.
+
+
+
+Rogue
+    Passive
+        You have improved darkvision. You move slightly faster.
+    Active
+        Stealth
+        Poison
+        Sprint
+
+    Themes
+        Generic Theme
+            You can see traps next you.
+            You have a 25% chance of opening a locked chest.
+            Your footsteps make less noise.
+
+        Stealth
+            Cold Blooded - Mosquitos and other similar mobs can't see you. You crit 5% more often.
+            You move 5 faster while invisible.
+            Attacks initiated while unseen by the target deals an additional ATK min 1.
+            While unseen you move 5 faster. You open and close chests and doors faster.
+
+        Poison
+            You quaff potions is faster. Whenever you drink a potion your attack speed increases.
+            Throwing potions is faster. Increase area of effect by 1.
+
+        Sprint 
+            Your sprint also provides +30 attack speed.
+            Weapon attacks at range 3 or greater deal additional DMG.
+            Each time you hit an enemy you previously did not you gain stacking attack speed.
+
+Wizard
+    Passive
+        You and wands you have in your inventory gain charges when descending.
+
+    Active
+        Zap
+        Polymorph
+        Misty Step
+
+    Themes
+        Generic
+            Zap time is faster.
+            While you have no weapons or armor with a ms penalty equipped you get +PB MGK
+            You gain an extra an use of signature spell PB - 1
+
+        Zap
+            Zap gains an additional target.
+            Elemental masteries that each give zap a unique upgrade and damage type and unlock other feats.
+            Gain PB hit points when you zap.
+
+
+        Polymorph
+            Additional options when polymorphing similar to elemental masteries that specialize polymorph.
+            Additional duration on non-damaging concentrating spell effects.
+
+        Misty Step
+            After misty stepping the next attack < 80 time is 0 time.
+            Whenever you attack with a < 80 speed weapon the next misty step is 0 time.
+            Elemental trail feats that customize/unlock further feats that leave a trail.
+            Increased range on position target spell effects.

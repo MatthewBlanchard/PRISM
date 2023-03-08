@@ -17,15 +17,20 @@ function AIController:initialize(actor)
 end
 
 function AIController.isPassable(actor, vec)
-  if not actor.fov[vec.x] or not actor.fov[vec.x][vec.y] then
+  local sight_component = actor:getComponent(components.Sight)
+  if not sight_component then
     return false
   end
 
-  if not actor.fov[vec.x][vec.y].passable then
+  if not sight_component.fov[vec.x] or not sight_component.fov[vec.x][vec.y] then
     return false
   end
 
-  for _, seen in ipairs(actor.seenActors) do
+  if not sight_component.fov[vec.x][vec.y].passable then
+    return false
+  end
+
+  for _, seen in ipairs(sight_component.seenActors) do
     if seen.position.x == vec.x and seen.position.y == vec.y and not seen.passable and seen ~= actor then
       return false
     end
@@ -95,7 +100,12 @@ function AIController.move(actor, moveVec)
 end
 
 function AIController.tileHasCreature(actor, current)
-  for _, seen in ipairs(actor.seenActors) do
+  local sight_component = actor:getComponent(components.Sight)
+  if not sight_component then
+    return false
+  end
+
+  for _, seen in ipairs(sight_component.seenActors) do
     if seen.position.x == current.x and seen.position.y == current.y  then
       return true
     end
@@ -167,7 +177,6 @@ function AIController.crowdAround(actor, target, avoidCreatures)
   end
 
   local moveVec = Vector2(-(actor.position.x - closestVec.x), -(actor.position.y - closestVec.y))
-  print(moveVec.x, moveVec.y)
   return actor:getAction(actions.Move)(actor, moveVec), moveVec
 end
 
@@ -176,7 +185,7 @@ function AIController.moveAway(actor, target)
   local mx = target.position.x - actor.position.x > 0 and -1 or target.position.x - actor.position.x < 0 and 1 or 0
   local my = target.position.y - actor.position.y > 0 and -1 or target.position.y - actor.position.y < 0 and 1 or 0
 
-  if  AIController.isPassable(actor, Vector2(actor.position.x + mx, actor.position.y + my)) == 0 then
+  if AIController.isPassable(actor, Vector2(actor.position.x + mx, actor.position.y + my)) == 0 then
     local moveVec = Vector2(mx, my)
     return actor:getAction(actions.Move)(actor, moveVec), moveVec
   end
@@ -201,15 +210,21 @@ function AIController.moveAway(actor, target)
 end
 
 function AIController.canSeeActor(actor, target)
-  for k, v in pairs(actor.seenActors) do
-    if v == actor then return true end
+  local sight_component = actor:getComponent(components.Sight)
+  if not sight_component then return false end
+
+  for k, v in pairs(sight_component.seenActors) do
+    if v == target then return true end
   end
 
   return false
 end
 
 function AIController.canSeeActorType(actor, type)
-  for k, v in pairs(actor.seenActors) do
+  local sight_component = actor:getComponent(components.Sight)
+  if not sight_component then return false end
+
+  for k, v in pairs(sight_component.seenActors) do
     if v:is(type) then return true end
   end
 
@@ -218,9 +233,12 @@ end
 
 
 function AIController.closestSeenActorByType(actor, type)
+  local sight_component = actor:getComponent(components.Sight)
+  if not sight_component then return end
+
   local closest
   local dist = math.huge
-  for k, v in pairs(actor.seenActors) do
+  for _, v in pairs(sight_component.seenActors) do
     if v:is(type) and v:getRange("box", actor) < dist then
       closest = v
       dist = v:getRange("box", actor)
@@ -237,10 +255,15 @@ end
 function AIController.getLightestTile(level, actor)
   local highestLightValue = 0
   local highest = {x = actor.position.x, y = actor.position.y}
+
+  local light_system = level:getSystem("light")
+  if not light_system then return highest.x, highest.y, highestLightValue end
+
   for x = actor.position.x - 1, actor.position.x + 1 do
     for y = actor.position.y - 1, actor.position.y + 1 do
-      if level.light[x] and level.light[x][y] then
-        local lightval = ROT.Color.value(level.light[x][y])
+      local light_value = light_system:at(x, y)
+      if light_value then
+        local lightval = ROT.Color.value(light_value)
 
         if lightval > highestLightValue and
           AIController.isPassable(actor, Vector2(x, y))

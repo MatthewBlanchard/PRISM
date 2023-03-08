@@ -40,21 +40,27 @@ function Sqeeto:act(level)
   local highestActor = nil
   local wowFactor = false
 
+  local effect_system = level:getSystem("Effects")
   local function playAnim(animateBool, actor)
     if not animateBool then return end
-    level:addEffectAfterAction(effects.CharacterDynamic(actor, 0, -1, Tiles["bubble_surprise"], {1, 1, 1}, .5))
+    effect_system:addEffectAfterAction(effects.CharacterDynamic(actor, 0, -1, Tiles["bubble_surprise"], {1, 1, 1}, .5))
   end
+  
+  local sight_component = self:getComponent(components.Sight)
+  if sight_component then
+    for k, v in pairs(sight_component.seenActors) do
+      local lighting_system = level:getSystem("Lighting")
+      print(v.name)
+      if v:is(actors.Player) and self:getRange("box", v) == 1 then
+        return self:getAction(actions.Attack)(self, v)
+      elseif lighting_system then
+        local lightVal = ROT.Color.value(lighting_system:getLightingAt(v.position.x, v.position.y, sight_component.fov))
+        print("light value", lightVal)
 
-  for k, v in pairs(self.seenActors) do
-    local light_component = v:getComponent(components.Light)
-    if v:is(actors.Player) and self:getRange("box", v) == 1 then
-      return self:getAction(actions.Attack)(self, v)
-    elseif light_component then
-      local lightVal = ROT.Color.value(light_component.color) * light_component.intensity
-
-      if lightVal > highest then
-        highest = lightVal
-        highestActor = v
+        if lightVal > highest then
+          highest = lightVal
+          highestActor = v
+        end
       end
     end
   end
@@ -71,13 +77,16 @@ function Sqeeto:act(level)
   end
 
   if spider then
-    level:addEffect(effects.CharacterDynamic(self, 0, -1, Tiles["bubble_lines"], {1, 1, 1}, .5))
+    if effect_system then
+      effect_system:addEffect(effects.CharacterDynamic(self, 0, -1, Tiles["bubble_lines"], {1, 1, 1}, .5))
+    end
     return actUtil.moveAway(self, spider)
   end
 
   if self.actTarget then
+    print(self.actTarget.name)
     local light_component = self.actTarget:getComponent(components.Light)
-    if brightest > ROT.Color.value(light_component.color) * light_component.intensity then
+    if not light_component or brightest > ROT.Color.value(light_component.color) * light_component.intensity then
       self.actTarget = nil
     else
       if math.random() > .75 then

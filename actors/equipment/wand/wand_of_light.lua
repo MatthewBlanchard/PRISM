@@ -40,9 +40,9 @@ function Zap:perform(level)
 
   for _, actor in ipairs(actors) do
     if actor:getComponent(components.Stats) then
-      if level:isScheduled(actor) then
+      if actor:hasComponent(components.Stats) then
         level:addEffect(effects.CharacterDynamic(actor, 0, -1, Tiles["bubble_stun"], {1, 1, 1}, .5))
-        level:addScheduleTime(actor, 600)
+        level.scheduler:addTime(actor, 600)
       end
     end
   end

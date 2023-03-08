@@ -135,7 +135,7 @@ function love.update(dt)
   end
 
   if success == false then
-    error(ret .. debug.traceback(updateCoroutine))
+    error(ret .. "\n" .. debug.traceback(updateCoroutine))
   end
 
   game.interface.effects = {}

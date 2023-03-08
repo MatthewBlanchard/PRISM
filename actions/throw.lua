@@ -13,7 +13,8 @@ function Throw:perform(level)
   local thrown = self.targetActors[1]
   local point = self.targetActors[2]
 
-  level:addEffect(effects.throw(thrown, self.owner, point))
+  local effects_system = level:getSystem("Effects")
+  effects_system:addEffect(effects.throw(thrown, self.owner, point))
   level:moveActor(thrown, point)
 end
 

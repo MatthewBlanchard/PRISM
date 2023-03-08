@@ -50,11 +50,12 @@ function Webweaver:act(level)
     target = player
   end
 
-  if target and self._lastTarget ~= target then
+  local effects_system = level:getSystem("Effects")
+  if target and self._lastTarget ~= target and effects_system then
     if target:is(actors.Sqeeto) then
-      level:addEffectAfterAction(effects.CharacterDynamic(self, 0, -1, Tiles["bubble_food"], {1, 1, 1}, .5))
+      effects_system:addEffectAfterAction(effects.CharacterDynamic(self, 0, -1, Tiles["bubble_food"], {1, 1, 1}, .5))
     elseif target:is(actors.Player) then
-      level:addEffectAfterAction(effects.CharacterDynamic(self, 0, -1, Tiles["bubble_angry"], {1, 1, 1}, .5))
+      effects_system:addEffectAfterAction(effects.CharacterDynamic(self, 0, -1, Tiles["bubble_angry"], {1, 1, 1}, .5))
     end
   end
 

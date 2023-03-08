@@ -23,7 +23,10 @@ function Interface:update(dt)
   self.dt = dt
   self.messagePanel:update(dt)
 
-  game.level:updateEffectLighting(dt)
+  local lighting = game.level:getSystem("lighting")
+  if lighting then
+    lighting:rebuildLighting(game.level, dt)
+  end
 
   if not self:peek() then return end
   self:peek():update(dt)
@@ -69,27 +72,30 @@ local function shouldDrawExplored(explored, x, y)
   end
 end
 
+local ambientColor = { .175, .175, .175 }
 function Interface:draw()
-  local fov = game.curActor.fov
-  local explored = game.curActor.explored
-  local seenActors = game.curActor.seenActors
-  local scryActors = game.curActor.scryActors
-  local light = game.level.effectlight
-  local ambientColor = { .175, .175, .175 }
+  local sight_component = game.curActor:getComponent(components.Sight)
+  local fov = sight_component.fov
+  local explored = sight_component.explored
+  local seenActors = sight_component.seenActors
+  local scryActors = sight_component.scryActors
+
+  local lighting_system = game.level:getSystem("Lighting")
+  local light = lighting_system.__lightMap
+  local ambientValue = sight_component.darkvision
 
   local viewX, viewY = game.viewDisplay.widthInChars, game.viewDisplay.heightInChars
   local sx, sy = game.curActor.position.x, game.curActor.position.y
   for x = sx - viewX, sx + viewX do
     for y = sy - viewY, sy + viewY do
       if fov[x] and fov[x][y] then
-        if light[x] and light[x][y] then
+        local lightCol = lighting_system:getLightingAt(x, y, fov, light)
+        if lightCol then
           -- okay we're gonna first establish our light color and then
           -- do a bit of blending to keep it in line with the ambient
           -- fog of war
           local finalColor
-          local lightCol = game.level:getLightingAt(x, y, fov, light)
           local lightValue = math.min(value(lightCol), 1)
-          local ambientValue = game.curActor.darkvision
 
           local t = math.min(1, math.max(lightValue - ambientValue, 0))
           t = math.min(t / (1 - ambientValue), 1)
@@ -134,13 +140,11 @@ function Interface:draw()
       if conditional and conditional(actor) or true then
         local x, y = actor.position.x, actor.position.y
         if actorTable ~= scryActors and light[x] and light[x][y] then
-          local ambientValue = game.curActor.darkvision
-
-          local lightCol = game.level:getLightingAt(x, y, fov, light)
+          local lightCol = lighting_system:getLightingAt(x, y, fov, light)
           local lightValue = value(lightCol)
           local t = math.max(lightValue - ambientValue, 0)
           t = math.min(t / (1 - ambientValue), 1)
-          finalColor = clerp(ambientColor, lightCol, t)
+          local finalColor = clerp(ambientColor, lightCol, t)
           self:writeOffset(char, x, y, clerp(ambientColor, actor.color, t))
         else
           self:writeOffset(char, x, y, ambientColor)
@@ -172,26 +176,23 @@ function Interface:draw()
     end
   )
 
-  -- now we draw the player
-  local actor = game.curActor
-  if light[actor.position.x] and light[actor.position.x][actor.position.y] then
-    local lightValue = math.min(value(light[actor.position.x][actor.position.y]), 0.5)
-    self:writeOffset(getAnimationChar(actor), actor.position.x, actor.position.y,
-      clerp(ambientColor, actor.color, lightValue / 0.5))
-  end
+  drawActors({game.curActor}, function ()
+    return true
+  end)
 
+  local effect_system = game.level:getSystem("Effects")
   if not self.animating then
-    game.level.effects = {}
+    effect_system.effects = {}
   end
 
-  if #game.level.effects ~= 0 then
-    for i = #game.level.effects, 1, -1 do
-      local curEffect = game.level.effects[i]
+  if #effect_system.effects ~= 0 then
+    for i = #effect_system.effects, 1, -1 do
+      local curEffect = effect_system.effects[i]
       self._curEffectDone = true
       local done = curEffect(self.dt, self) or self._curEffectDone
 
       if done then
-        table.remove(game.level.effects, i)
+        table.remove(effect_system.effects, i)
       end
     end
   end
@@ -210,7 +211,8 @@ Interface.movementTranslation = {
   a = Vector2(-1, 0),
   d = Vector2(1, 0),
 
-  -- diagonal
+  -- diagonal disable these and change the target in the Move action
+  -- if you want to disable diagonal movement
   q = Vector2(-1, -1),
   e = Vector2(1, -1),
   z = Vector2(-1, 1),
@@ -218,7 +220,7 @@ Interface.movementTranslation = {
 }
 
 Interface.keybinds = {
-  i = "inventory",
+  ["tab"] = "inventory",
   p = "pickup",
   l = "log",
   m = "map"
@@ -243,8 +245,9 @@ function Interface:handleKeyPress(keypress)
     end
 
     if self.keybinds[keypress] == "pickup" then
+      local sight_component = game.curActor:getComponent(components.Sight)
       local item
-      for k, i in pairs(game.curActor.seenActors) do
+      for k, i in pairs(sight_component.seenActors) do
         if actions.Pickup:validateTarget(1, game.curActor, i) then
           return self:setAction(game.curActor:getAction(actions.Pickup)(game.curActor, {i}))
         end
@@ -260,8 +263,9 @@ function Interface:handleKeyPress(keypress)
   if self.movementTranslation[keypress] and game.curActor:hasComponent(components.Move) then
     local targetPosition = game.curActor.position + self.movementTranslation[keypress]
 
+    local sight_component = game.curActor:getComponent(components.Sight)
     local enemy
-    for k, actor in pairs(game.curActor.seenActors) do
+    for k, actor in pairs(sight_component.seenActors) do
       if actor.position == targetPosition then
         enemy = actor
       end

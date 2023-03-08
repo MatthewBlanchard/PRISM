@@ -58,15 +58,15 @@ Actor.emissive = false
 -- @field offset integer
 Actor.char = Tiles["player"]
 
---- Whether to conjugate verbs when referring to the actor.
+--- Whether to conjugate verbs when referring to the actor. Currently non-functional.
 -- @tfield conjugate boolean
 Actor.conjugate = true 
 
---- The pronoun to use when referring to the actor.
+--- The pronoun to use when referring to the actor. Currently non-functional.
 -- @tfield string pronoun
 Actor.pronoun = "it" -- the pronoun for the actor
 
---- The article to use when referring to the actor.
+--- The article to use when referring to the actor. Currently non-functional.
 -- @tfield string article
 Actor.article = "a" -- the article for the actor
 
@@ -98,7 +98,7 @@ function Actor:__new()
 
       -- This is a hack to prevent components from being shared between actors by copying
       -- the prototype's 
-      temp[k] = component:new()
+      temp[k] = component
     end
 
     self.components = temp
@@ -109,7 +109,8 @@ function Actor:__new()
   self:initializeComponents()
 end
 
---- Called after an actor is added to a level and it's components are initialized.
+--- Called after an actor is added to a level and it's components are initialized. This will
+--- happen either at level start or when an actor is spawned.
 -- @function Actor:initialize
 -- @tparam Level level The level the actor is being added to.
 function Actor:initialize(level)
@@ -123,7 +124,8 @@ end
 --
 
 
---- Initializes the actor's components.
+--- Initializes the actor's components. Components shouldn't need a reference to the
+--- level so this is called in Actor:__new.
 -- @function Actor:initializeComponents
 function Actor:initializeComponents()
   for k, component in ipairs(self.components) do
@@ -140,6 +142,10 @@ function Actor:addComponent(component)
 
   if not component:checkRequirements(self) then
     error("Unsupported component added to actor!")
+  end
+
+  if self:hasComponent(component) then
+    error("Actor already has component " .. component.name .. "!")
   end
 
   table.insert(self.components, component)

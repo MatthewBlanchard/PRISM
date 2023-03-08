@@ -43,7 +43,6 @@ function ItemPanel:handleKeyPress(keypress)
   if chosenAction then
     if chosenAction:getNumTargets() == 1 then
       game.interface:reset()
-      print(self.targetActor)
       game.interface:setAction(chosenAction(game.curActor, {self.targetActor}))
     else
       self.currentAction = chosenAction

@@ -38,7 +38,7 @@ Gloop.passable = true
 
 Gloop.components = {
   components.Sight{ range = 2, fov = true, explored = false },
-  components.Move{speed = 100},
+  components.Move{ speed = 100 },
   components.Stats{
     ATK = 0,
     MGK = 0,
@@ -58,12 +58,12 @@ end
 
 local actUtil = components.Aicontroller
 function Gloop:act(level)
-  for _, actor in ipairs(self.seenActors) do
-    if actor:is(actors.Player) then
-      level:addEffectAfterAction(effects.CharacterDynamic(self, 0, -1, Tiles["bubble_lines"], {1, 1, 1}, .5))
+  local effects_system = level:getSystem("Effects")
+  local seen_player = actUtil.closestSeenActorByType(self, actors.Player)
+  if seen_player and effects_system then
+      effects_system:addEffectAfterAction(effects.CharacterDynamic(self, 0, -1, Tiles["bubble_lines"], {1, 1, 1}, .5))
       self._meanderDirection = nil
-      return actUtil.moveAway(self, actor)
-    end
+      return actUtil.moveAway(self, seen_player)
   end
 
   if not self._meanderDirection or

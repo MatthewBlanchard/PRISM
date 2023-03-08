@@ -26,4 +26,15 @@ function Sight:getRevealedActors()
   return self.seenActors
 end
 
+function Sight:setCellExplored(x, y, explored)
+  if self.explored then
+    self.explored[x] = self.explored[x] or {}
+    self.explored[x][y] = explored
+  end
+end
+
+function Sight:canSeeCell(x, y)
+  return self.fov[x] and self.fov[x][y]
+end
+
 return Sight

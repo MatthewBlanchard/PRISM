@@ -12,7 +12,11 @@ function Web:perform(level)
   local creature = self:getTarget(1)
 
   creature:applyCondition(conditions.Slowed)
-  level:addEffect(effects.CharacterDynamic(creature, 0, 0, Tiles["web"], {1, 1, 1}, .5))
+
+  local effects_system = level:getSystem("Effects")
+  if effects_system then
+    effects_system:addEffect(effects.CharacterDynamic(creature, 0, 0, Tiles["web"], {1, 1, 1}, .5))
+  end
 end
 
 return Web

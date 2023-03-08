@@ -111,10 +111,12 @@ function targets.Weapon:validate(owner, actor)
 end
 
 targets.Unequip = targets.Item:extend()
+targets.Unequip.range = math.huge -- Target is bounded by being equipped so we can set range to infinite
 
 function targets.Unequip:validate(owner, actor)
   local equipper = owner:getComponent(components.Equipper)
   local equipment = actor:getComponent(components.Equipment)
+  
   local isEquipped = equipment and equipper and equipper.slots[equipment.slot] == actor
   return targets.Item.validate(self, owner, actor) and isEquipped
 end

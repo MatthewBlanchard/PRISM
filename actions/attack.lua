@@ -39,7 +39,10 @@ function Attack:perform(level)
     return
   end
 
-  level:addEffect(effects.DamageEffect(self.owner.position, defender, dmg, false))
+  local effects_system = level:getSystem("Effects")
+  if effects_system then
+    effects_system:addEffect(effects.DamageEffect(self.owner.position, defender, dmg, false))
+  end
 end
 
 return Attack

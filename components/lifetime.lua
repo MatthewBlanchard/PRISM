@@ -1,5 +1,7 @@
 local Component = require "component"
 
+--- THe lifetime component is a simple utility component that applies a lifetime condition to an actor,
+--- removing it at the end of the duration.
 local Lifetime = Component:extend()
 Lifetime.name = "Lifetime"
 

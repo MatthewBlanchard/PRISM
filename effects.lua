@@ -156,7 +156,7 @@ effects.ExplosionEffect = function(fov, origin, range, colors)
     end
 
     if t > duration then return true end
-    return false, { x, y, }
+    return false
   end
 end
 

@@ -48,9 +48,10 @@ function Snip:act(level)
   local player = actUtil.closestSeenActorByType(self, actors.Player)
   local target = player or snip
 
+  local effects_system = level:getSystem("Effects")
   if target then
-    if self:getRange("box", target) < 3 and target == player then
-      level:addEffectAfterAction(effects.CharacterDynamic(self, 0, -1, Tiles["bubble_music"], {1, 1, 1}, .5))
+    if self:getRange("box", target) < 3 and target == player and effects_system then
+      effects_system:addEffectAfterAction(effects.CharacterDynamic(self, 0, -1, Tiles["bubble_music"], {1, 1, 1}, .5))
     end
     return actUtil.crowdAround(self, target, true)
   end

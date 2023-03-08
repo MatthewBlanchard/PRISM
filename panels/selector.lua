@@ -163,25 +163,28 @@ function SelectorPanel:moveTarget(direction)
 end
 
 function SelectorPanel:getValidTargets(index)
+  local sight_component = game.curActor:getComponent("Sight")
+  if not sight_component then return {} end
+
   local targets = {}
 
   if self.action.targets[index]:is(targets.Point) then
-    return game.curActor.seenActors
+    return sight_component.seenActors
   end
 
   for i = 1, #game.curActor.seenActors do
-    if self.action:validateTarget(index, game.curActor, game.curActor.seenActors[i]) then
+    if self.action:validateTarget(index, game.curActor, sight_component.seenActors[i]) then
       local isTargeted = false
 
       for j = 1, #self.targets do
-        isTargeted = self.targets[j] == game.curActor.seenActors[i]
+        isTargeted = self.targets[j] == sight_component.seenActors[i]
         if isTargeted then
           break
         end
       end
 
       if not isTargeted then
-        table.insert(targets, game.curActor.seenActors[i])
+        table.insert(targets, sight_component.seenActors[i])
       end
     end
   end

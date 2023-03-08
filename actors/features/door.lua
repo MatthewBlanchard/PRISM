@@ -14,15 +14,10 @@ Open.targets = {targetDoor}
 
 function Open:perform(level)
   local door = self.targetActors[1]
-  if door.passable then
-    door.char = Tiles["door"]
-  else
-    door.char = Tiles["door_open"]
-  end
 
+  door.char = door.passable and Tiles["door"] or Tiles["door_open"]
   door.passable = not door.passable
   door.blocksVision = not door.passable
-  game.level:invalidateLighting()
 end
 
 local Door = Actor:extend()

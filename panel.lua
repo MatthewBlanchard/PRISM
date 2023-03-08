@@ -98,7 +98,8 @@ function Panel:effectWriteOffset(toWrite, x, y, fg, bg)
     return
   end
 
-  if not game.curActor.fov[x] or not game.curActor.fov[x][y] then
+  local sight_component = game.curActor:getComponent(components.Sight)
+  if not sight_component.fov[x] or not sight_component.fov[x][y] then
     return
   end
 
@@ -115,7 +116,8 @@ function Panel:effectWriteOffsetUI(toWrite, x, y, ofx, ofy, fg, bg)
     return
   end
 
-  if not game.curActor.fov[x] or not game.curActor.fov[x][y] then
+  local sight_component = game.curActor:getComponent(components.Sight)
+  if not sight_component.fov[x] or not sight_component.fov[x][y] then
     return
   end
 
